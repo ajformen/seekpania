@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "343176589750",
+    "project_id": "challenge-seekpania",
+    "storage_bucket": "challenge-seekpania.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:343176589750:android:d16fd65fdcf13e3fc75117",
+        "android_client_info": {
+          "package_name": "com.example.challenge_seekpania"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "343176589750-u5srnlip3k65fb6ttg9v1uaaqdnc9a87.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.challenge_seekpania",
+            "certificate_hash": "4710a6ea0c97351e4881ff1b45199c755f1f24d9"
+          }
+        },
+        {
+          "client_id": "343176589750-2jjr0206rotets9vbl7hbqq681hl0hu8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAv9kJpQFVzNk8sMA85EUE__B2O9UEMACo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "343176589750-2jjr0206rotets9vbl7hbqq681hl0hu8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
