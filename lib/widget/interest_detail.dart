@@ -10,7 +10,7 @@ class InterestDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final interestId = ModalRoute.of(context).settings.arguments as String;
+    final interestId = ModalRoute.of(context)!.settings.arguments as String;
     final loadedInterest = Provider.of<Interests>(context).findById(interestId);
     return Scaffold(
       appBar: header(context, titleText: loadedInterest.title),

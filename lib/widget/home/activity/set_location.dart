@@ -6,18 +6,18 @@ class SetLocation extends StatefulWidget {
 }
 
 class _SetLocationState extends State<SetLocation> {
-  String location;
+  String? location;
 
   TextEditingController locationController = TextEditingController();
 
   final _form = GlobalKey<FormState>();
 
   _submit() {
-    final isValid = _form.currentState.validate();
+    final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
-    _form.currentState.save();
+    _form.currentState!.save();
     print('SAVED');
     Navigator.pop(context, locationController.text);
   }
@@ -91,7 +91,7 @@ class _SetLocationState extends State<SetLocation> {
             keyboardType: TextInputType.multiline,
             // focusNode: _editNotesFocusNode,
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter location.';
               }
 

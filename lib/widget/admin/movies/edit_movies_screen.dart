@@ -21,16 +21,16 @@ class _EditMoviesScreenState extends State<EditMoviesScreen> {
   var _isLoading = false;
 
   Future<void> _saveForm() async {
-    final isValid = _form.currentState.validate();
+    final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
-    _form.currentState.save();
+    _form.currentState!.save();
     setState(() {
       _isLoading = true;
     });
     if (_editedMovies.id != null) {
-      await Provider.of<Movies>(context, listen: false).updateMovies(_editedMovies.id, _editedMovies);
+      await Provider.of<Movies>(context, listen: false).updateMovies(_editedMovies.id!, _editedMovies);
     } else {
       try {
         await Provider.of<Movies>(context, listen: false).addMovies(_editedMovies);
@@ -48,11 +48,11 @@ class _EditMoviesScreenState extends State<EditMoviesScreen> {
   void didChangeDependencies() {
     if (_isInit) {
       // gameId IS NULL FIX THIS!
-      final movieId = ModalRoute.of(context).settings.arguments as String;
+      final movieId = ModalRoute.of(context)!.settings.arguments as String;
       if (movieId != null) {
         _editedMovies = Provider.of<Movies>(context, listen: false).findById(movieId);
         _initValues = {
-          'title': _editedMovies.title,
+          'title': _editedMovies.title.toString(),
         };
       }
     }
@@ -88,7 +88,7 @@ class _EditMoviesScreenState extends State<EditMoviesScreen> {
                 ),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return 'Please provide the name of the game.';
                   }
                   return null;

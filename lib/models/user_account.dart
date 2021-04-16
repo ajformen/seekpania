@@ -5,21 +5,21 @@ import 'package:flutter/foundation.dart';
 import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
 
 class UserAccount with ChangeNotifier{
-  final String id;
-  final String email;
-  final String photoURL;
-  final String firstName;
-  final String lastName;
-  final String gender;
-  final String genderCustom;
-  final String status;
-  final String city;
-  final String country;
-  final String countryDialCode;
-  final String birthDate;
-  final int age;
-  final String currentLocation;
-  bool isFavorite;
+  final String? id;
+  final String? email;
+  final String? photoURL;
+  final String? firstName;
+  final String? lastName;
+  final String? gender;
+  final String? genderCustom;
+  final String? status;
+  final String? city;
+  final String? country;
+  final String? countryDialCode;
+  final String? birthDate;
+  final int? age;
+  final String? currentLocation;
+  bool? isFavorite;
   final dynamic favorites;
 
   UserAccount({
@@ -44,7 +44,7 @@ class UserAccount with ChangeNotifier{
   factory UserAccount.fromDocument(DocumentSnapshot doc) {
     final d = doc.data();
     return UserAccount(
-      id: d['id'],
+      id: d!['id'],
       email: d['email'],
       photoURL: d['photoUrl'],
       firstName: d['firstName'],
@@ -65,8 +65,8 @@ class UserAccount with ChangeNotifier{
   Future<void> toggleFavoriteStatus(UserAccount accountUser) async {
     final user = FirebaseAuth.instance.currentUser;
     UserAccount currentUser;
-    currentUser = UserAccount(id: user.uid);
-    String accountUserID = accountUser.id;
+    currentUser = UserAccount(id: user!.uid);
+    String accountUserID = accountUser.id!;
     final usersRef = FirebaseFirestore.instance.collection('users');
     // isFavorite = favorites[userId] == true;
     try {

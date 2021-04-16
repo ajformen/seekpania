@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 
 class InterestBox extends StatefulWidget {
-  String interest;
+  final String interest;
 
   InterestBox(this.interest);
 
@@ -18,12 +18,12 @@ class InterestBox extends StatefulWidget {
 
 class _InterestBoxState extends State<InterestBox> {
 
-  UserAccount currentUser;
+  late UserAccount currentUser;
   final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-    currentUser = UserAccount(id: user.uid);
+    currentUser = UserAccount(id: user!.uid);
     return Container(
       padding: EdgeInsets.symmetric(
         vertical: 5,

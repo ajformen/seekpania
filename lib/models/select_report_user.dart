@@ -2,13 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class SelectReportUser with ChangeNotifier {
-  final String id;
-  final String feedback;
-  final String reportedUserId;
-  final String reportedUserName;
-  final String senderId;
-  final String senderName;
-  final String senderEmail;
+  final String? id;
+  final String? feedback;
+  final String? reportedUserId;
+  final String? reportedUserName;
+  final String? senderId;
+  final String? senderName;
+  final String? senderEmail;
 
   SelectReportUser({
     this.id,
@@ -23,7 +23,7 @@ class SelectReportUser with ChangeNotifier {
   factory SelectReportUser.fromDocument(DocumentSnapshot doc) {
     final d = doc.data();
     return SelectReportUser(
-      id: d['id'],
+      id: d!['id'],
       feedback: d['feedback'],
       reportedUserId: d['reportedUserId'],
       reportedUserName: d['reportedUserName'],

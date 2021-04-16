@@ -15,8 +15,8 @@ class Musics with ChangeNotifier {
   final user = FirebaseAuth.instance.currentUser;
   final usersRef = FirebaseFirestore.instance.collection('users');
   final musicRef = FirebaseFirestore.instance.collection('music');
-  UserAccount currentUser;
-  SelectMusic theMusic;
+  late UserAccount currentUser;
+  late SelectMusic theMusic;
 
   List<SelectMusic> _items = [
     // SelectGames(
@@ -103,7 +103,7 @@ class Musics with ChangeNotifier {
 
   Future<void> fetchMusicInterests() async {
     try {
-      currentUser = UserAccount(id:  FirebaseAuth.instance.currentUser.uid);
+      currentUser = UserAccount(id:  FirebaseAuth.instance.currentUser!.uid);
       print('USER IS');
       print(currentUser.id);
       // QuerySnapshot snapshot = await gamesRef.doc(currentUser.id).collection('gamesAdded').where('creatorId', isEqualTo: '$currentUser.id').orderBy('timestamp').get();
@@ -122,7 +122,7 @@ class Musics with ChangeNotifier {
 
   Future<void> fetchAndSetMusic() async {
     try {
-      currentUser = UserAccount(id: user.uid);
+      currentUser = UserAccount(id: user!.uid);
       print('USER IS');
       print(currentUser.id);
       // QuerySnapshot snapshot = await gamesRef.doc(currentUser.id).collection('gamesAdded').where('creatorId', isEqualTo: '$currentUser.id').orderBy('timestamp').get();
@@ -142,7 +142,7 @@ class Musics with ChangeNotifier {
   }
 
   Future<void> addMusic(SelectMusic music) async{
-    currentUser = UserAccount(id: user.uid);
+    currentUser = UserAccount(id: user!.uid);
     theMusic = SelectMusic(id: musicId);
     DocumentSnapshot doc = await usersRef.doc(currentUser.id).get();
     currentUser = UserAccount.fromDocument(doc);

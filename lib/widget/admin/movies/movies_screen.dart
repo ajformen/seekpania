@@ -37,7 +37,7 @@ class MoviesScreen extends StatelessWidget {
                       delegate: SearchPage<SelectMovies>(
                         searchLabel: 'Search Movies',
                         builder: (movie) => ListTile(
-                          title: Text(movie.title),
+                          title: Text(movie.title!),
                           trailing: Container(
                             width: 100,
                             child: Row(
@@ -61,7 +61,7 @@ class MoviesScreen extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.delete),
                                   onPressed: () async {
-                                    await Provider.of<Movies>(context, listen: false).deleteMovies(movie.id);
+                                    await Provider.of<Movies>(context, listen: false).deleteMovies(movie.id!);
                                   },
                                   color: Theme.of(context).errorColor,
                                 ),
@@ -70,7 +70,7 @@ class MoviesScreen extends StatelessWidget {
                           ),
                         ),
                         filter: (game) => [
-                          game.title,
+                          game.title.toString(),
                         ],
                         items: moviesData.items,
                       )
@@ -101,8 +101,8 @@ class MoviesScreen extends StatelessWidget {
                 itemBuilder: (_, i) => Column(
                   children: [
                     MoviesItem(
-                      movieData.items[i].id,
-                      movieData.items[i].title,
+                      movieData.items[i].id!,
+                      movieData.items[i].title!,
                     ),
                     Divider(color: Color(0xff9933ff)),
                   ],

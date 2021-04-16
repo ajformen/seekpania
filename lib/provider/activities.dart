@@ -12,8 +12,8 @@ class Activities with ChangeNotifier {
   final user = FirebaseAuth.instance.currentUser;
   final usersRef = FirebaseFirestore.instance.collection('users');
   final activityFeedRef = FirebaseFirestore.instance.collection('feeds');
-  UserAccount currentUser;
-  SelectActivity selectActivity;
+  UserAccount? currentUser;
+  SelectActivity? selectActivity;
 
   List<SelectActivity> _items = [];
 
@@ -45,19 +45,19 @@ class Activities with ChangeNotifier {
 
   Future<void> fetchFaveUsers(String currentUserID) async{
     try {
-      currentUser = UserAccount(id:  FirebaseAuth.instance.currentUser.uid);
+      currentUser = UserAccount(id:  FirebaseAuth.instance.currentUser!.uid);
       DocumentSnapshot faveLists = await usersRef.doc(currentUserID).get();
-      Map favorites = faveLists.data()['favorites'] as Map;
+      Map favorites = faveLists.data()!['favorites'] as Map;
 
       List<String> userIds = [];
       List<UserAccount> users = [];
       favorites.forEach((userId, selected) {
-        if (selected && userId != currentUser.id) {
+        if (selected && userId != currentUser!.id) {
           userIds.add(userId);
         }
       });
       await Future.forEach(userIds, (userId) async {
-        DocumentSnapshot userDoc = await usersRef.doc(userId).get();
+        DocumentSnapshot userDoc = await usersRef.doc(userId.toString()).get();
         print(userDoc.data());
         final user = UserAccount.fromDocument(userDoc);
         print('--------------');
@@ -76,9 +76,9 @@ class Activities with ChangeNotifier {
   Future<void> fetchSpecificActivity(String currentUserID, String activityID) async{
     try {
 
-      currentUser = UserAccount(id:  FirebaseAuth.instance.currentUser.uid);
+      currentUser = UserAccount(id:  FirebaseAuth.instance.currentUser!.uid);
       DocumentSnapshot gameDoc = await usersRef.doc(currentUserID).collection('activities').doc(activityID).get();
-      Map going = gameDoc.data()['going'] as Map;
+      Map going = gameDoc.data()!['going'] as Map;
 
       List<String> userIds = [];
       List<UserAccount> users = [];
@@ -87,12 +87,12 @@ class Activities with ChangeNotifier {
         //   userIds.add(userId);
         // }
         // this one is not working
-        if ((selected && userId != currentUser.id) || (selected && userId == currentUser.id)) {
+        if ((selected && userId != currentUser!.id) || (selected && userId == currentUser!.id)) {
           userIds.add(userId);
         }
       });
       await Future.forEach(userIds, (userId) async {
-        DocumentSnapshot userDoc = await usersRef.doc(userId).get();
+        DocumentSnapshot userDoc = await usersRef.doc(userId.toString()).get();
         print(userDoc.data());
         final user = UserAccount.fromDocument(userDoc);
         print('--------------');
@@ -126,15 +126,15 @@ class Activities with ChangeNotifier {
   }
 
   Future<void> createActivity(SelectActivity activity) async{
-    currentUser = UserAccount(id: user.uid);
+    currentUser = UserAccount(id: user!.uid);
     selectActivity = SelectActivity(id: activity.id);
-    DocumentSnapshot doc = await usersRef.doc(currentUser.id).get();
+    DocumentSnapshot doc = await usersRef.doc(currentUser!.id).get();
     currentUser = UserAccount.fromDocument(doc);
     try{
       // gamesRef.doc(currentUser.id).collection('gamesAdded').doc(theGame.id).set({
       // usersRef.doc(currentUser.id).collection('activities').doc(userId).collection('invitation').doc(selectInvite.id).set({
-      usersRef.doc(currentUser.id).collection('activities').doc(selectActivity.id).set({
-        'id': selectActivity.id,
+      usersRef.doc(currentUser!.id).collection('activities').doc(selectActivity!.id).set({
+        'id': selectActivity!.id,
         'caption': activity.caption,
         'interestName': activity.interestName,
         'meetUpType': activity.meetUpType,
@@ -145,16 +145,16 @@ class Activities with ChangeNotifier {
         'location': activity.location,
         'invitationLink': activity.invitationLink,
         'notes': activity.notes,
-        'creatorId': currentUser.id,
-        'creatorName': currentUser.firstName,
-        'creatorPhoto': currentUser.photoURL,
+        'creatorId': currentUser!.id,
+        'creatorName': currentUser!.firstName,
+        'creatorPhoto': currentUser!.photoURL,
         'timestamp': timestamp,
         'type': 'invitation',
         // 'invitation_status': 'pending',
         'going': {},
       });
       final newActivity = SelectActivity(
-        id: selectActivity.id,
+        id: selectActivity!.id,
         caption: activity.caption,
       );
       _items.add(newActivity);
@@ -170,7 +170,7 @@ class Activities with ChangeNotifier {
 
   Future<void> deleteActivity(String id) async {
     // final existingGameIndex = _items.indexWhere((invite) => invite.id == id);
-    await usersRef.doc(currentUser.id).collection('activities').doc(id).delete();
+    await usersRef.doc(currentUser!.id).collection('activities').doc(id).delete();
     // _items.removeWhere((game) => game.id == id);
     // _items.removeAt(existingGameIndex);
     notifyListeners();

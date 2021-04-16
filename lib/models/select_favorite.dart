@@ -6,8 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SelectFavorite with ChangeNotifier {
-  final String id;
-  bool isFavorite;
+  final String? id;
+  bool? isFavorite;
   final dynamic favorites;
 
   SelectFavorite({
@@ -18,16 +18,17 @@ class SelectFavorite with ChangeNotifier {
 
   factory SelectFavorite.fromDocument(DocumentSnapshot doc) {
     return SelectFavorite(
-      id: doc.data()['id'],
+      id: doc.data()!['id'],
       favorites: doc['favorites'],
+      isFavorite: false,
     );
   }
 
   Future<void> toggleFavoriteStatus() async {
     final user = FirebaseAuth.instance.currentUser;
     UserAccount currentUser;
-    currentUser = UserAccount(id: user.uid);
-    String currentUserID = currentUser.id;
+    currentUser = UserAccount(id: user!.uid);
+    String currentUserID = currentUser.id!;
     // final gamesRef = FirebaseFirestore.instance.collection('games');
     final usersRef = FirebaseFirestore.instance.collection('users');
     isFavorite = favorites[currentUserID] == true;
@@ -37,14 +38,14 @@ class SelectFavorite with ChangeNotifier {
       //   'isSelected': isSelected,
       // });
       // if = true & false; else if = false & true --- IS WORKING FINE EXCEPT THE FIRST TAP THE TOGGLE WONT SELECT BUT VALUE TRUE FALSE IS CORRECT
-      if (isFavorite) {
+      if (isFavorite!) {
         await usersRef.doc(id).update({
           'favorites.$currentUserID': false,
         });
         favorites[currentUserID] = false;
         //....
         // await usersRef.doc(currentUser.id).collection('interests').doc(id).delete();
-      } else if (!isFavorite) {
+      } else if (!isFavorite!) {
         await usersRef.doc(id).update({
           'favorites.$currentUserID' : true
         });

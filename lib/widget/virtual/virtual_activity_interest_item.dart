@@ -17,12 +17,12 @@ class VirtualActivityInterestItem extends StatefulWidget {
 }
 
 class _VirtualActivityInterestItemState extends State<VirtualActivityInterestItem> {
-  UserAccount currentUser;
+  UserAccount? currentUser;
   final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-    currentUser = UserAccount(id: user.uid);
+    currentUser = UserAccount(id: user!.uid);
     return Column(
       children: [
         ListTile(

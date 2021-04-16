@@ -25,16 +25,16 @@ class _EditEventScreenState extends State<EditEventScreen> {
   // }
 
   Future<void> _saveForm() async {
-    final isValid = _form.currentState.validate();
+    final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
-    _form.currentState.save();
+    _form.currentState!.save();
     setState(() {
       _isLoading = true;
     });
     if (_editedEvent.id != null) {
-      await Provider.of<LiveEvents>(context, listen: false).updateLiveEvent(_editedEvent.id, _editedEvent);
+      await Provider.of<LiveEvents>(context, listen: false).updateLiveEvent(_editedEvent.id!, _editedEvent);
     } else {
       try {
         await Provider.of<LiveEvents>(context, listen: false).addLiveEvent(_editedEvent);
@@ -52,11 +52,11 @@ class _EditEventScreenState extends State<EditEventScreen> {
   void didChangeDependencies() {
     if (_isInit) {
       // gameId IS NULL FIX THIS!
-      final eventId = ModalRoute.of(context).settings.arguments as String;
+      final eventId = ModalRoute.of(context)!.settings.arguments as String;
       if (eventId != null) {
         _editedEvent = Provider.of<LiveEvents>(context, listen: false).findById(eventId);
         _initValues = {
-          'title': _editedEvent.title,
+          'title': _editedEvent.title.toString(),
         };
       }
     }
@@ -92,7 +92,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                 ),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return 'Please provide the name of the game.';
                   }
                   return null;

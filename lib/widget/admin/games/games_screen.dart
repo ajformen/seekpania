@@ -37,7 +37,7 @@ class GamesScreen extends StatelessWidget {
                         delegate: SearchPage<SelectGames>(
                           searchLabel: 'Search Games',
                           builder: (game) => ListTile(
-                            title: Text(game.title),
+                            title: Text(game.title!),
                             trailing: Container(
                               width: 100,
                               child: Row(
@@ -61,7 +61,7 @@ class GamesScreen extends StatelessWidget {
                                   IconButton(
                                     icon: Icon(Icons.delete),
                                     onPressed: () async {
-                                      await Provider.of<Games>(context, listen: false).deleteGame(game.id);
+                                      await Provider.of<Games>(context, listen: false).deleteGame(game.id!);
                                     },
                                     color: Theme.of(context).errorColor,
                                   ),
@@ -70,7 +70,7 @@ class GamesScreen extends StatelessWidget {
                             ),
                           ),
                           filter: (game) => [
-                            game.title,
+                            game.title.toString(),
                           ],
                           items: gamesData.items,
                         )
@@ -108,8 +108,8 @@ class GamesScreen extends StatelessWidget {
                 itemBuilder: (_, i) => Column(
                   children: [
                     GameItem(
-                      gamesData.items[i].id,
-                      gamesData.items[i].title,
+                      gamesData.items[i].id!,
+                      gamesData.items[i].title!,
                     ),
                     Divider(color: Color(0xff9933ff)),
                   ],

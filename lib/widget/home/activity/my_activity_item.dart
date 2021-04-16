@@ -27,12 +27,12 @@ class MyActivityItem extends StatefulWidget {
 }
 
 class _MyActivityItemState extends State<MyActivityItem> {
-  UserAccount currentUser;
+  late UserAccount currentUser;
   final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-    currentUser = UserAccount(id: user.uid);
+    currentUser = UserAccount(id: user!.uid);
     return Column(
       children: [
         ListTile(

@@ -24,7 +24,7 @@ class _FavoritesState extends State<Favorites> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Activities>(context).fetchFaveUsers(user.uid).then((_) {
+      Provider.of<Activities>(context).fetchFaveUsers(user!.uid).then((_) {
         setState(() {
           _isLoading = false;
         });

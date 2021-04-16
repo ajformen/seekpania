@@ -10,7 +10,7 @@ class PeopleGoingItem extends StatefulWidget {
   // final String id;
   //
   // PeopleGoingItem(this.id);
-  final UserAccount user;
+  final UserAccount? user;
 
   PeopleGoingItem({this.user});
 
@@ -19,35 +19,35 @@ class PeopleGoingItem extends StatefulWidget {
 }
 
 class _PeopleGoingItemState extends State<PeopleGoingItem> {
-  UserAccount currentUser;
+  late UserAccount currentUser;
   final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-    currentUser = UserAccount(id: user.uid);
+    currentUser = UserAccount(id: user!.uid);
     return Column(
       children: [
         ListTile(
           leading: CircleAvatar(
-            backgroundImage: NetworkImage(widget.user.photoURL),
+            backgroundImage: NetworkImage(widget.user!.photoURL!),
             maxRadius: 25,
           ),
           title: Padding(
             padding: EdgeInsets.only(left: 10.0),
             child: Text(
-              widget.user.firstName,
+              widget.user!.firstName!,
               // style: TextStyle(
               //   color: Color(0xffff3366),
               // ),
             ),
           ),
           onTap: () {
-            print(widget.user.id);
+            print(widget.user!.id);
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        ViewOtherUsersProfile(user: widget.user)
+                        ViewOtherUsersProfile(user: widget.user!)
                 )
             );
           },

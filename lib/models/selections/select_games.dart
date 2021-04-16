@@ -6,9 +6,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SelectGames with ChangeNotifier {
-  final String id;
-  final String title;
-  bool isSelected;
+  final String? id;
+  final String? title;
+  bool? isSelected;
   final dynamic selects;
 
   SelectGames({
@@ -20,24 +20,24 @@ class SelectGames with ChangeNotifier {
 
   factory SelectGames.fromDocument(DocumentSnapshot doc) {
     return SelectGames(
-      id: doc.data()['id'],
-      title: doc.data()['title'],
+      id: doc.data()!['id'],
+      title: doc.data()!['title'],
       // isSelected: doc.data()['isSelected'],
       selects: doc['selects'],
     );
   }
 
-  factory SelectGames.fromDocument2(DocumentSnapshot doc) {
-    return SelectGames(
-      title: doc.data()['title'],
-    );
-  }
+  // factory SelectGames.fromDocument2(DocumentSnapshot doc) {
+  //   return SelectGames(
+  //     title: doc.data()['title'],
+  //   );
+  // }
 
   Future<void> toggleSelectedStatus() async {
     final user = FirebaseAuth.instance.currentUser;
     UserAccount currentUser;
-    currentUser = UserAccount(id: user.uid);
-    String currentUserID = currentUser.id;
+    currentUser = UserAccount(id: user!.uid);
+    String currentUserID = currentUser.id!;
     final gamesRef = FirebaseFirestore.instance.collection('games');
     final usersRef = FirebaseFirestore.instance.collection('users');
     // isSelected = !isSelected;
@@ -48,14 +48,14 @@ class SelectGames with ChangeNotifier {
       //   'isSelected': isSelected,
       // });
       // if = true & false; else if = false & true --- IS WORKING FINE EXCEPT THE FIRST TAP THE TOGGLE WONT SELECT BUT VALUE TRUE FALSE IS CORRECT
-      if (isSelected) {
+      if (isSelected!) {
         await gamesRef.doc(id).update({
           'selects.$currentUserID': false,
         });
         selects[currentUserID] = false;
         //....
         await usersRef.doc(currentUser.id).collection('interests').doc(id).delete();
-      } else if (!isSelected) {
+      } else if (!isSelected!) {
         await gamesRef.doc(id).update({
           'selects.$currentUserID' : true
         });

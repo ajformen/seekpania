@@ -6,8 +6,8 @@ class SelectInterest with ChangeNotifier {
   // bool isSelected;
 
   SelectInterest({
-    this.id,
-    this.title,
+    required this.id,
+    required this.title,
     // this.isSelected = false,
 });
 

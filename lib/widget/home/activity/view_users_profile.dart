@@ -10,7 +10,7 @@ import 'package:challenge_seekpania/widget/interest_box.dart';
 
 class ViewUsersProfile extends StatefulWidget {
 
-  final String userId;
+  final String? userId;
 
   ViewUsersProfile({this.userId});
 
@@ -20,8 +20,8 @@ class ViewUsersProfile extends StatefulWidget {
 
 class _ViewUsersProfileState extends State<ViewUsersProfile> {
   final usersRef = FirebaseFirestore.instance.collection('users');
-  UserAccount currentUser;
-  String gender;
+  late UserAccount currentUser;
+  String? gender;
 
   var _isInit = true;
   var _isLoading = false;
@@ -33,7 +33,7 @@ class _ViewUsersProfileState extends State<ViewUsersProfile> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Interest>(context).fetchAllInterests(widget.userId).then((_) {
+      Provider.of<Interest>(context).fetchAllInterests(widget.userId!).then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -58,7 +58,7 @@ class _ViewUsersProfileState extends State<ViewUsersProfile> {
   );
 
   viewInterest() {
-    final interests = Provider.of<Interest>(context, listen: false).userInterests.map((g) => InterestBox(g.title)).toList();
+    final interests = Provider.of<Interest>(context, listen: false).userInterests.map((g) => InterestBox(g.title!)).toList();
     // final liveEvents = Provider.of<LiveEvents>(context, listen: false).eventItems.map((g) => InterestBox(g.title)).toList();
     // final interests = games;
 
@@ -83,13 +83,13 @@ class _ViewUsersProfileState extends State<ViewUsersProfile> {
     // print(result);
 
     return Scaffold(
-      body: FutureBuilder(
+      body: FutureBuilder<DocumentSnapshot>(
         future: usersRef.doc(widget.userId).get(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return buildLoading();
           }
-          currentUser = UserAccount.fromDocument(snapshot.data);
+          currentUser = UserAccount.fromDocument(snapshot.data!);
           if (currentUser.gender == 'Non-Binary') {
             gender = currentUser.genderCustom;
           } else {
@@ -110,7 +110,7 @@ class _ViewUsersProfileState extends State<ViewUsersProfile> {
                             bottomLeft: Radius.circular(20),
                           ),
                           child: Image.network(
-                            currentUser.photoURL,
+                            currentUser.photoURL!,
                             // 's400-c/$userPhoto',
                             // 'https://lh3.googleusercontent.com/a-/AOh14GjZwVeyNas_d37ucE1zyFcth-1b33CYoXU8lEUj=s400-c',
                             width: 390,

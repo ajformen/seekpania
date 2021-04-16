@@ -15,8 +15,8 @@ class Movies with ChangeNotifier {
   final user = FirebaseAuth.instance.currentUser;
   final usersRef = FirebaseFirestore.instance.collection('users');
   final moviesRef = FirebaseFirestore.instance.collection('movies');
-  UserAccount currentUser;
-  SelectMovies theMovies;
+  late UserAccount currentUser;
+  late SelectMovies theMovies;
 
   List<SelectMovies> _items = [
     // SelectGames(
@@ -103,7 +103,7 @@ class Movies with ChangeNotifier {
 
   Future<void> fetchMoviesInterests() async {
     try {
-      currentUser = UserAccount(id:  FirebaseAuth.instance.currentUser.uid);
+      currentUser = UserAccount(id:  FirebaseAuth.instance.currentUser!.uid);
       print('USER IS');
       print(currentUser.id);
       // QuerySnapshot snapshot = await gamesRef.doc(currentUser.id).collection('gamesAdded').where('creatorId', isEqualTo: '$currentUser.id').orderBy('timestamp').get();
@@ -122,7 +122,7 @@ class Movies with ChangeNotifier {
 
   Future<void> fetchAndSetMovies() async {
     try {
-      currentUser = UserAccount(id: user.uid);
+      currentUser = UserAccount(id: user!.uid);
       print('USER IS');
       print(currentUser.id);
       // QuerySnapshot snapshot = await gamesRef.doc(currentUser.id).collection('gamesAdded').where('creatorId', isEqualTo: '$currentUser.id').orderBy('timestamp').get();
@@ -142,7 +142,7 @@ class Movies with ChangeNotifier {
   }
 
   Future<void> addMovies(SelectMovies movies) async{
-    currentUser = UserAccount(id: user.uid);
+    currentUser = UserAccount(id: user!.uid);
     theMovies = SelectMovies(id: moviesId);
     DocumentSnapshot doc = await usersRef.doc(currentUser.id).get();
     currentUser = UserAccount.fromDocument(doc);

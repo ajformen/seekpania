@@ -14,9 +14,9 @@ class LiveEvents with ChangeNotifier {
   String eventId = Uuid().v4();
   final usersRef = FirebaseFirestore.instance.collection('users');
   final liveEventsRef = FirebaseFirestore.instance.collection('liveEvents');
-  UserAccount currentUser;
-  SelectLiveEvent theEvent;
-  DisplayInterests disInterests;
+  late UserAccount currentUser;
+  late SelectLiveEvent theEvent;
+  late DisplayInterests disInterests;
 
   List<SelectLiveEvent> _items = [
     // SelectLiveEvent(
@@ -73,7 +73,7 @@ class LiveEvents with ChangeNotifier {
 
   Future<void> fetchLiveEventInterests() async {
     try {
-      currentUser = UserAccount(id:  FirebaseAuth.instance.currentUser.uid);
+      currentUser = UserAccount(id:  FirebaseAuth.instance.currentUser!.uid);
       print('USER IS');
       print(currentUser.id);
       // QuerySnapshot snapshot = await gamesRef.doc(currentUser.id).collection('gamesAdded').where('creatorId', isEqualTo: '$currentUser.id').orderBy('timestamp').get();
@@ -92,7 +92,7 @@ class LiveEvents with ChangeNotifier {
 
   Future<void> fetchAndSetLiveEvents() async {
     try {
-      currentUser = UserAccount(id: user.uid);
+      currentUser = UserAccount(id: user!.uid);
       print('USER IS');
       print(currentUser.id);
       // QuerySnapshot snapshot = await gamesRef.doc(currentUser.id).collection('gamesAdded').where('creatorId', isEqualTo: '$currentUser.id').orderBy('timestamp').get();
@@ -112,7 +112,7 @@ class LiveEvents with ChangeNotifier {
   }
 
   Future<void> addLiveEvent(SelectLiveEvent event) async{
-    currentUser = UserAccount(id: user.uid);
+    currentUser = UserAccount(id: user!.uid);
     theEvent = SelectLiveEvent(id: eventId);
     DocumentSnapshot doc = await usersRef.doc(currentUser.id).get();
     currentUser = UserAccount.fromDocument(doc);

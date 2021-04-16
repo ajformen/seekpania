@@ -135,14 +135,14 @@ class _TimelineState extends State<Timeline> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: usersRef.doc(user.uid).get(),
+    return FutureBuilder<DocumentSnapshot>(
+      future: usersRef.doc(user!.uid).get(),
       //   future: usersRef.doc(widget.timelineID).get(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return buildLoading();
         }
-        UserAccount currentUser = UserAccount.fromDocument(snapshot.data);
+        UserAccount currentUser = UserAccount.fromDocument(snapshot.data!);
         print('TIMELINE CURRENT USER ID: ');
         print(currentUser.id);
         print(currentUser.firstName);
@@ -154,7 +154,7 @@ class _TimelineState extends State<Timeline> {
         // print('YOUR CURRENT LOCATION');
         // print(location);
 
-        List<Widget> _widgetOptions = [CreateActivity(), Notifications(), Messaging(), Account(accountID: currentUser?.id)];
+        List<Widget> _widgetOptions = [CreateActivity(), Notifications(), Messaging(), Account(accountID: currentUser.id)];
         return Scaffold(
           body: PageView(
             children: <Widget>[

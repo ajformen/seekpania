@@ -27,7 +27,7 @@ class _PointsScreenState extends State<PointsScreen> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Rate>(context).fetchCurrentUserPoints(user.uid).then((_) {
+      Provider.of<Rate>(context).fetchCurrentUserPoints(user!.uid).then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -110,7 +110,7 @@ class _PointsScreenState extends State<PointsScreen> {
   }
 
   viewPoints() {
-    final points = Provider.of<Rate>(context, listen: false).userPoints.map((g) => PointsItem(g.id, g.rate)).toList();
+    final points = Provider.of<Rate>(context, listen: false).userPoints.map((g) => PointsItem(g.id!, g.rate!)).toList();
 
     return _isLoading ? Center(
       child: CircularProgressIndicator(),

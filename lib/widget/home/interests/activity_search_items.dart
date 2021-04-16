@@ -11,8 +11,8 @@ import 'package:challenge_seekpania/provider/activities.dart';
 import 'package:challenge_seekpania/widget/profile/UsersProfile.dart';
 
 class ActivitySearchItems extends StatefulWidget {
-  final UserAccount user;
-  final SelectActivity activity;
+  final UserAccount? user;
+  final SelectActivity? activity;
   // final String caption;
   // final String participants;
 
@@ -45,7 +45,7 @@ class _ActivitySearchItemsState extends State<ActivitySearchItems> {
         ListTile(
           leading: GestureDetector(
             child: CircleAvatar(
-              backgroundImage: NetworkImage(widget.user.photoURL),
+              backgroundImage: NetworkImage(widget.user!.photoURL!),
               maxRadius: 25,
             ),
             onTap: () {
@@ -53,7 +53,7 @@ class _ActivitySearchItemsState extends State<ActivitySearchItems> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          UsersProfile(user: widget.user)
+                          UsersProfile(user: widget.user!)
                   )
               );
             },
@@ -62,7 +62,7 @@ class _ActivitySearchItemsState extends State<ActivitySearchItems> {
             padding: EdgeInsets.only(left: 10.0),
             child: GestureDetector(
               child: Text(
-                '${widget.user.firstName}',
+                '${widget.user!.firstName}',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.deepPurple,
@@ -73,7 +73,7 @@ class _ActivitySearchItemsState extends State<ActivitySearchItems> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            UsersProfile(user: widget.user)
+                            UsersProfile(user: widget.user!)
                     )
                 );
               },
@@ -88,7 +88,7 @@ class _ActivitySearchItemsState extends State<ActivitySearchItems> {
               ),
             ),
             onTap: () async {
-              await Provider.of<Invitations>(context, listen: false).addInvite(widget.activity, widget.user.id);
+              await Provider.of<Invitations>(context, listen: false).addInvite(widget.activity!, widget.user!.id!);
 
               setState(() {
                 isSelected = true;

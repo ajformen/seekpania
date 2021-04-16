@@ -6,18 +6,18 @@ class EditMeetUpNotes extends StatefulWidget {
 }
 
 class _EditMeetUpNotesState extends State<EditMeetUpNotes> {
-  String notes;
+  late String notes;
 
   TextEditingController notesController = TextEditingController();
 
   final _form = GlobalKey<FormState>();
 
   _submit() {
-    final isValid = _form.currentState.validate();
+    final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
-    _form.currentState.save();
+    _form.currentState!.save();
     print('SAVED');
     Navigator.pop(context, notesController.text);
   }
@@ -91,7 +91,7 @@ class _EditMeetUpNotesState extends State<EditMeetUpNotes> {
           keyboardType: TextInputType.multiline,
           // focusNode: _editNotesFocusNode,
           validator: (value) {
-            if (value.isEmpty) {
+            if (value!.isEmpty) {
               return 'Please enter location.';
             }
 
@@ -99,7 +99,7 @@ class _EditMeetUpNotesState extends State<EditMeetUpNotes> {
           },
           controller: notesController,
           onSaved: (value) {
-            notes = value;
+            notes = value!;
           }
         ),
       ),

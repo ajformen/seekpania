@@ -12,8 +12,8 @@ class Report with ChangeNotifier {
   final user = FirebaseAuth.instance.currentUser;
   final usersRef = FirebaseFirestore.instance.collection('users');
   final reportUsersRef = FirebaseFirestore.instance.collection('reportedUsers');
-  UserAccount currentUser;
-  SelectReportUser selectReport;
+  late UserAccount currentUser;
+  late SelectReportUser selectReport;
 
   List<SelectReportUser> _items = [];
 
@@ -22,7 +22,7 @@ class Report with ChangeNotifier {
   }
 
   Future<void> createReport(SelectReportUser report, userId, userName) async{
-    currentUser = UserAccount(id: user.uid);
+    currentUser = UserAccount(id: user!.uid);
     selectReport = SelectReportUser(id: rateId);
     DocumentSnapshot doc = await usersRef.doc(currentUser.id).get();
     currentUser = UserAccount.fromDocument(doc);

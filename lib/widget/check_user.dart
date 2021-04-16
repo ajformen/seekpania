@@ -60,7 +60,7 @@ class _CheckUserState extends State<CheckUser> {
     // 1) check if user exists in users collection in database (according to their id)
     // final GoogleSignInAccount user = googleSignIn.currentUser;
     final user = FirebaseAuth.instance.currentUser;
-    DocumentSnapshot doc = await usersRef.doc(user.uid).get();
+    DocumentSnapshot doc = await usersRef.doc(user!.uid).get();
 
     if (!doc.exists) {
       // 2) if the user doesn't exist, then we want to take them to the create account page
@@ -78,7 +78,7 @@ class _CheckUserState extends State<CheckUser> {
               // backgroundGradient: LinearGradient(
               //   colors: [Colors.indigo, Colors.deepPurple],
               // ),
-              backgroundColor: Colors.grey[850],
+              backgroundColor: Colors.grey[850]!,
               child: FlashBar(
                 message: Text('Login successful',
                   style: TextStyle(

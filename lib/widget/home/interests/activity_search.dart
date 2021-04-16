@@ -15,9 +15,9 @@ import 'package:challenge_seekpania/widget/home/activity/my_activity.dart';
 
 class ActivitySearch extends StatefulWidget {
 
-  final String searchID;
-  final String searchType;
-  final SelectActivity activity;
+  final String? searchID;
+  final String? searchType;
+  final SelectActivity? activity;
   // final String caption;
   // final String participants;
 
@@ -31,7 +31,7 @@ class ActivitySearch extends StatefulWidget {
 class _ActivitySearchState extends State<ActivitySearch> {
   final user = FirebaseAuth.instance.currentUser;
   final usersRef = FirebaseFirestore.instance.collection('users');
-  UserAccount currentUserID;
+  late UserAccount currentUserID;
 
   var _isInit = true;
   var _isLoading = false;
@@ -39,9 +39,9 @@ class _ActivitySearchState extends State<ActivitySearch> {
   @override
   void initState() {
     print('CAPTION');
-    print(widget.activity.caption);
+    print(widget.activity!.caption);
     print('PARTICIPANTS');
-    print(widget.activity.participants);
+    print(widget.activity!.participants);
     super.initState();
   }
 
@@ -51,7 +51,7 @@ class _ActivitySearchState extends State<ActivitySearch> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Interest>(context).fetchUsersInterests(widget.searchID, widget.searchType).then((_) {
+      Provider.of<Interest>(context).fetchUsersInterests(widget.searchID!, widget.searchType!).then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -80,7 +80,7 @@ class _ActivitySearchState extends State<ActivitySearch> {
         children: [
           IconButton(
             onPressed: () async {
-              await Provider.of<Activities>(context, listen: false).deleteActivity(widget.activity.id);
+              await Provider.of<Activities>(context, listen: false).deleteActivity(widget.activity!.id!);
               Navigator.pop(context);
             },
             icon: Icon(
@@ -123,7 +123,7 @@ class _ActivitySearchState extends State<ActivitySearch> {
   displaySearchUsers() {
     // final interests = Provider.of<Interest>(context, listen: false).gameItems.map((g) => ActivityInterestItem(g.id, g.title)).toList();
     // final users = Provider.of<Interest>(context, listen: false).interestItems.map((user) => ActivitySearchItems(user: user, caption: widget.caption, participants: widget.participants)).toList();
-    final users = Provider.of<Interest>(context, listen: false).interestItems.map((user) => ActivitySearchItems(user: user, activity: widget.activity)).toList();
+    final users = Provider.of<Interest>(context, listen: false).interestItems.map((user) => ActivitySearchItems(user: user, activity: widget.activity!)).toList();
 
     return Expanded(
       child: users.length == 0 ? noUsers() : ListView(

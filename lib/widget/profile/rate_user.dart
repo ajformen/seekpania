@@ -9,7 +9,7 @@ import 'package:challenge_seekpania/provider/rate.dart';
 
 class RateUser extends StatefulWidget {
 
-  final UserAccount user;
+  final UserAccount? user;
 
   RateUser({this.user});
 
@@ -28,8 +28,8 @@ class _RateUserState extends State<RateUser> {
   bool isFiveSelected = false;
   bool isNoRate = false;
 
-  String feedback;
-  int rate;
+  String? feedback;
+  int? rate;
 
   TextEditingController feedbackController = TextEditingController();
 
@@ -48,7 +48,7 @@ class _RateUserState extends State<RateUser> {
       return;
     }
 
-    _form.currentState.save();
+    _form.currentState!.save();
     print('SAVED');
     print(rate);
     print(feedbackController.text);
@@ -63,7 +63,7 @@ class _RateUserState extends State<RateUser> {
       feedback: feedbackController.text,
     );
 
-    await Provider.of<Rate>(context, listen: false).createRating(_editedRate, widget.user.id);
+    await Provider.of<Rate>(context, listen: false).createRating(_editedRate, widget.user!.id);
 
     Navigator.pop(context);
     Fluttertoast.showToast(
@@ -129,7 +129,7 @@ class _RateUserState extends State<RateUser> {
           bottomLeft: Radius.circular(20),
         ),
         child: Image.network(
-          widget.user.photoURL,
+          widget.user!.photoURL!,
           width: 360,
           height: 300,
           fit: BoxFit.cover,
@@ -152,7 +152,7 @@ class _RateUserState extends State<RateUser> {
                   height: 40.0,
                   decoration: new BoxDecoration(
                     border: Border.all(
-                      color: isOneSelected ? Colors.deepPurple[900] : Colors.black,
+                      color: isOneSelected ? Colors.deepPurple[900]! : Colors.black,
                     ),
                     color: isOneSelected ? Colors.deepPurple[900] : Colors.white,
                     shape: BoxShape.circle,
@@ -192,7 +192,7 @@ class _RateUserState extends State<RateUser> {
                   height: 40.0,
                   decoration: new BoxDecoration(
                     border: Border.all(
-                      color: isTwoSelected ? Colors.deepPurple[900] : Colors.black,
+                      color: isTwoSelected ? Colors.deepPurple[900]! : Colors.black,
                     ),
                     color: isTwoSelected ? Colors.deepPurple[900] : Colors.white,
                     shape: BoxShape.circle,
@@ -231,7 +231,7 @@ class _RateUserState extends State<RateUser> {
                   height: 40.0,
                   decoration: new BoxDecoration(
                     border: Border.all(
-                      color: isThreeSelected ? Colors.deepPurple[900] : Colors.black,
+                      color: isThreeSelected ? Colors.deepPurple[900]! : Colors.black,
                     ),
                     color: isThreeSelected ? Colors.deepPurple[900] : Colors.white,
                     shape: BoxShape.circle,
@@ -269,7 +269,7 @@ class _RateUserState extends State<RateUser> {
                   height: 40.0,
                   decoration: new BoxDecoration(
                     border: Border.all(
-                      color: isFourSelected ? Colors.deepPurple[900] : Colors.black,
+                      color: isFourSelected ? Colors.deepPurple[900]! : Colors.black,
                     ),
                     color: isFourSelected ? Colors.deepPurple[900] : Colors.white,
                     shape: BoxShape.circle,
@@ -307,7 +307,7 @@ class _RateUserState extends State<RateUser> {
                   height: 40.0,
                   decoration: new BoxDecoration(
                     border: Border.all(
-                      color: isFiveSelected ? Colors.deepPurple[900] : Colors.black,
+                      color: isFiveSelected ? Colors.deepPurple[900]! : Colors.black,
                     ),
                     color: isFiveSelected ? Colors.deepPurple[900] : Colors.white,
                     shape: BoxShape.circle,
@@ -384,7 +384,7 @@ class _RateUserState extends State<RateUser> {
             keyboardType: TextInputType.multiline,
             // focusNode: _editNotesFocusNode,
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter your feedback.';
               }
 

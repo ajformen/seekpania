@@ -4,6 +4,7 @@ import 'package:challenge_seekpania/widget/edit_profile.dart';
 import 'package:challenge_seekpania/models/user_account.dart';
 import 'package:challenge_seekpania/page/header.dart';
 import 'package:challenge_seekpania/page/home_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -22,7 +23,7 @@ import 'check_user.dart';
 
 
 class Profile extends StatefulWidget {
-  final String profileID;
+  final String? profileID;
 
   Profile({this.profileID});
 
@@ -32,12 +33,12 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   int id = 0;
-  int age;
+  int? age;
   DateTime currentYear = DateTime.now();
-  DateTime formatBirthDate;
-  String dateOfBirth;
-  String gender;
-  UserAccount currentUser;
+  DateTime? formatBirthDate;
+  String? dateOfBirth;
+  String? gender;
+  UserAccount? currentUser;
 
   final user = FirebaseAuth.instance.currentUser;
 
@@ -102,7 +103,7 @@ class _ProfileState extends State<Profile> {
   Future<void> _refreshInterests() async {
     // await Provider.of<Games>(context, listen: false).fetchGameInterests();
     // await Provider.of<LiveEvents>(context, listen: false).fetchLiveEventInterests();
-    await Provider.of<Interest>(context, listen: false).fetchCurrentUserInterests(user.uid);
+    await Provider.of<Interest>(context, listen: false).fetchCurrentUserInterests(user!.uid);
   }
 
   interest() {
@@ -130,7 +131,7 @@ class _ProfileState extends State<Profile> {
     // final games = Provider.of<Games>(context, listen: false).gameItems.map((g) => InterestBox(g.title)).toList();
     // final liveEvents = Provider.of<LiveEvents>(context, listen: false).eventItems.map((g) => InterestBox(g.title)).toList();
     // final interests = games + liveEvents;
-    final interests = Provider.of<Interest>(context, listen: false).currentUserInterests.map((g) => InterestBox(g.title)).toList();
+    final interests = Provider.of<Interest>(context, listen: false).currentUserInterests.map((g) => InterestBox(g.title!)).toList();
 
     // return _isLoading ? buildLoading() : Wrap(
     //   spacing: 8,
@@ -180,7 +181,7 @@ class _ProfileState extends State<Profile> {
   // }
 
   editProfile() {
-    bool isProfileOwner = currentUser.id == widget.profileID;
+    bool isProfileOwner = currentUser!.id == widget.profileID;
     if (isProfileOwner) {
       Navigator.push(
           context,
@@ -188,29 +189,29 @@ class _ProfileState extends State<Profile> {
               builder: (context) =>
                   EditProfile(currentUserID: currentUser?.id,
                       theCountry: currentUser?.countryDialCode,
-                      thePhoto: user?.photoURL)
+                      thePhoto: user!.photoURL)
           )
       ).then(onGoBack);
     }
   }
 
   buildProfileHeader() {
-    return FutureBuilder(
+    return FutureBuilder<DocumentSnapshot>(
       future: usersRef.doc(widget.profileID).get(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return buildLoading();
         }
-        currentUser = UserAccount.fromDocument(snapshot.data);
+        currentUser = UserAccount.fromDocument(snapshot.data!);
         // age = currentYear.year - int.parse(currentUser.birthDate);
         // print(DateFormat("y").format(currentUser.birthDate));
         // formatBirthDate = DateTime.parse(currentUser.birthDate);
         // age = currentYear.year - formatBirthDate.year;
         // dateOfBirth = DateFormat('MMMM-dd-yyyy').format(DateTime.parse(currentUser.birthDate));
-        if (currentUser.gender == 'Non-Binary') {
-          gender = currentUser.genderCustom;
+        if (currentUser!.gender == 'Non-Binary') {
+          gender = currentUser!.genderCustom;
         } else {
-          gender = currentUser.gender;
+          gender = currentUser!.gender;
         }
         return Container(
           // alignment: Alignment.center,
@@ -235,7 +236,7 @@ class _ProfileState extends State<Profile> {
                       children: [
                         SizedBox(height: 20.0),
                         Text(
-                          currentUser.firstName,
+                          currentUser!.firstName!,
                           style: TextStyle(
                               fontSize: 25.0,
                               color: Colors.deepPurple,
@@ -247,7 +248,7 @@ class _ProfileState extends State<Profile> {
                           children: <Widget>[
                             Text(
                               // '$age, ',
-                              currentUser.age.toString(),
+                              currentUser!.age.toString(),
                               style: TextStyle(
                                 fontSize: 13.0,
                                 color: Colors.grey[400],
@@ -275,7 +276,7 @@ class _ProfileState extends State<Profile> {
                               ),
                             ),
                             Text(
-                              currentUser.status,
+                              currentUser!.status!,
                               style: TextStyle(
                                 fontSize: 13.0,
                                 color: Colors.grey[400],
@@ -287,7 +288,7 @@ class _ProfileState extends State<Profile> {
                         Row(
                           children: [
                             Text(
-                              currentUser.city,
+                              currentUser!.city!,
                               style: TextStyle(
                                 fontSize: 13.0,
                                 color: Colors.grey[400],
@@ -303,7 +304,7 @@ class _ProfileState extends State<Profile> {
                         children: [
                           CircleAvatar(
                             maxRadius: 55,
-                            backgroundImage: NetworkImage(user.photoURL),
+                            backgroundImage: NetworkImage(user!.photoURL!),
                           ),
                         ],
                       ),
@@ -460,7 +461,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  currentUser.country,
+                  currentUser!.country!,
                   style: TextStyle(
                     fontSize: 13.0,
                     color: Colors.black,
@@ -477,7 +478,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  currentUser.city,
+                  currentUser!.city!,
                   style: TextStyle(
                     fontSize: 13.0,
                     color: Colors.black,
@@ -494,7 +495,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  currentUser.status,
+                  currentUser!.status!,
                   style: TextStyle(
                     fontSize: 13.0,
                     color: Colors.black,
@@ -529,7 +530,7 @@ class _ProfileState extends State<Profile> {
                 SizedBox(height: 8),
                 Text(
                   // dateOfBirth.toString(),
-                  currentUser.birthDate,
+                  currentUser!.birthDate!,
                   style: TextStyle(
                     fontSize: 13.0,
                     color: Colors.black,
@@ -546,7 +547,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  currentUser.email,
+                  currentUser!.email!,
                   style: TextStyle(
                     fontSize: 13.0,
                     color: Colors.black,

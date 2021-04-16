@@ -11,15 +11,15 @@ import 'package:challenge_seekpania/widget/home/activity/set_location.dart';
 import 'package:challenge_seekpania/widget/home/interests/activity_search.dart';
 
 class SetLocationNotes extends StatefulWidget {
-  final String searchID;
-  final String interestName;
-  final String searchType;
-  final String caption;
-  final String companionType;
-  final int participants;
-  final String scheduleType;
-  final String dateFormat;
-  final String timeFormat;
+  final String? searchID;
+  final String? interestName;
+  final String? searchType;
+  final String? caption;
+  final String? companionType;
+  final int? participants;
+  final String? scheduleType;
+  final String? dateFormat;
+  final String? timeFormat;
 
   SetLocationNotes({this.searchID, this.interestName, this.searchType, this.caption, this.companionType, this.participants, this.scheduleType, this.dateFormat, this.timeFormat});
 
@@ -31,8 +31,8 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
   String activityID = Uuid().v4();
   var _editedActivity;
 
-  String location;
-  String notes;
+  String? location;
+  String? notes;
 
   TextEditingController notesController = TextEditingController();
 
@@ -68,7 +68,7 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
       notes: notes,
     );
 
-    _form.currentState.save();
+    _form.currentState!.save();
 
     print(activityID);
     print(widget.interestName);
@@ -90,7 +90,7 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
         MaterialPageRoute(
             builder: (context) =>
             // ActivitySearch(searchID: widget.interestID, searchType: widget.type, caption: caption, participants: participants)
-            ActivitySearch(searchID: widget.searchID, searchType: widget.searchType, activity: _editedActivity)
+            ActivitySearch(searchID: widget.searchID!, searchType: widget.searchType!, activity: _editedActivity)
         )
     );
   }
@@ -239,7 +239,7 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
                       keyboardType: TextInputType.multiline,
                       // focusNode: _editNotesFocusNode,
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Please enter location.';
                         }
 
@@ -401,7 +401,7 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
                       keyboardType: TextInputType.multiline,
                       // focusNode: _editNotesFocusNode,
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Please enter location.';
                         }
 

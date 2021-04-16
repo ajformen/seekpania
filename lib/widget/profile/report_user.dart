@@ -9,7 +9,7 @@ import 'package:challenge_seekpania/provider/report.dart';
 
 class ReportUser extends StatefulWidget {
 
-  final UserAccount user;
+  final UserAccount? user;
 
   ReportUser({this.user});
 
@@ -21,19 +21,19 @@ class _ReportUserState extends State<ReportUser> {
 
   var _editedReport;
 
-  String feedback;
+  String? feedback;
 
   TextEditingController feedbackController = TextEditingController();
 
   final _form = GlobalKey<FormState>();
 
   _submit() async{
-    final isValid = _form.currentState.validate();
+    final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
 
-    _form.currentState.save();
+    _form.currentState!.save();
     print('SAVED');
     print(feedbackController.text);
 
@@ -42,7 +42,7 @@ class _ReportUserState extends State<ReportUser> {
       feedback: feedbackController.text,
     );
 
-    await Provider.of<Report>(context, listen: false).createReport(_editedReport, widget.user.id, widget.user.firstName);
+    await Provider.of<Report>(context, listen: false).createReport(_editedReport, widget.user!.id, widget.user!.firstName);
 
     Navigator.pop(context);
     Fluttertoast.showToast(
@@ -106,7 +106,7 @@ class _ReportUserState extends State<ReportUser> {
           bottomLeft: Radius.circular(20),
         ),
         child: Image.network(
-          widget.user.photoURL,
+          widget.user!.photoURL!,
           width: 360,
           height: 300,
           fit: BoxFit.cover,
@@ -132,7 +132,7 @@ class _ReportUserState extends State<ReportUser> {
             keyboardType: TextInputType.multiline,
             // focusNode: _editNotesFocusNode,
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter your feedback.';
               }
 

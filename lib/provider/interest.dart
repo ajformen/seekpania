@@ -14,9 +14,9 @@ class Interest with ChangeNotifier {
   final musicRef = FirebaseFirestore.instance.collection('music');
   final moviesRef = FirebaseFirestore.instance.collection('movies');
   String intId = Uuid().v4();
-  Map selects;
-  UserAccount currentUser;
-  DisplayInterests disInterest;
+  late Map selects;
+  late UserAccount currentUser;
+  late DisplayInterests disInterest;
 
   List<DisplayInterests> _items = [];
 
@@ -80,21 +80,21 @@ class Interest with ChangeNotifier {
 
   Future<void> fetchUsersInterests(String interestId, String searchType) async {
     try {
-      currentUser = UserAccount(id:  FirebaseAuth.instance.currentUser.uid);
+      currentUser = UserAccount(id:  FirebaseAuth.instance.currentUser!.uid);
       // QuerySnapshot searchUsersList = await gamesRef.where('id', isEqualTo: '$interestId').where('selects', isEqualTo: 'true').get();
       // QuerySnapshot searchInterestType = await usersRef.doc(currentUser.id).collection('interests').where('id', isEqualTo: interestId).get();
       if (searchType == 'games') {
         DocumentSnapshot gameDoc = await gamesRef.doc(interestId).get();
-        selects = gameDoc.data()['selects'] as Map;
+        selects = gameDoc.data()!['selects'] as Map;
       } else if (searchType == 'liveEvents') {
         DocumentSnapshot eventDoc = await liveEventsRef.doc(interestId).get();
-        selects = eventDoc.data()['selects'] as Map;
+        selects = eventDoc.data()!['selects'] as Map;
       } else if (searchType == 'music') {
         DocumentSnapshot musicDoc = await musicRef.doc(interestId).get();
-        selects = musicDoc.data()['selects'] as Map;
+        selects = musicDoc.data()!['selects'] as Map;
       } else if (searchType == 'movies') {
         DocumentSnapshot moviesDoc = await moviesRef.doc(interestId).get();
-        selects = moviesDoc.data()['selects'] as Map;
+        selects = moviesDoc.data()!['selects'] as Map;
       }
       // DocumentSnapshot gameDoc = await gamesRef.doc(interestId).get();
       // Map selects = gameDoc.data()['selects'] as Map;
@@ -107,7 +107,7 @@ class Interest with ChangeNotifier {
         }
       });
       await Future.forEach(userIds, (userId) async {
-        DocumentSnapshot userDoc = await usersRef.doc(userId).get();
+        DocumentSnapshot userDoc = await usersRef.doc(userId.toString()).get();
         print(userDoc.data());
         final user = UserAccount.fromDocument(userDoc);
         print('--------------');

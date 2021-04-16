@@ -15,7 +15,7 @@ import 'package:challenge_seekpania/widget/home/activity/my_activity.dart';
 import 'package:challenge_seekpania/widget/account.dart';
 
 class ViewActivity extends StatefulWidget {
-  final SelectInvite user;
+  final SelectInvite? user;
 
   ViewActivity({this.user});
 
@@ -25,7 +25,7 @@ class ViewActivity extends StatefulWidget {
 
 class _ViewActivityState extends State<ViewActivity> {
   final user = FirebaseAuth.instance.currentUser;
-  UserAccount currentUser;
+  late UserAccount currentUser;
   var _editedActivityInvite;
   var _isLoading = false;
 
@@ -59,7 +59,7 @@ class _ViewActivityState extends State<ViewActivity> {
             onTap: () => {
               // Navigator.of(context).pop(context),
               Navigator.push(context, MaterialPageRoute(builder: (_) {
-                return ViewUsersProfile(userId: widget.user.creatorId);
+                return ViewUsersProfile(userId: widget.user!.creatorId!);
               }))
             }
         ),
@@ -73,7 +73,7 @@ class _ViewActivityState extends State<ViewActivity> {
           ),
           onTap: () => {
             Navigator.push(context, MaterialPageRoute(builder: (_) {
-              return InvitationDetails(user: widget.user);
+              return InvitationDetails(user: widget.user!);
             }))
           },
         ),
@@ -101,7 +101,7 @@ class _ViewActivityState extends State<ViewActivity> {
                     borderRadius: BorderRadius.circular(20),
                     child: Image.network(
                       // 'https://i.pinimg.com/originals/40/f2/2d/40f22d2f7b06086fe24527467bf0a8af.jpg',
-                      widget.user.creatorPhoto,
+                      widget.user!.creatorPhoto!,
                       width: 366,
                       height: 550,
                       fit: BoxFit.cover,
@@ -127,7 +127,7 @@ class _ViewActivityState extends State<ViewActivity> {
                           children: <Widget>[
                             Text(
                               // 'Have coffee with me',
-                              widget.user.caption,
+                              widget.user!.caption!,
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -136,7 +136,7 @@ class _ViewActivityState extends State<ViewActivity> {
                             SizedBox(height: 5.0,),
                             Text(
                               // 'Bae Suzy, 26',
-                              widget.user.creatorName,
+                              widget.user!.creatorName!,
                               style: TextStyle(
                                 fontSize: 16,
                               ),
@@ -160,8 +160,8 @@ class _ViewActivityState extends State<ViewActivity> {
                       setState(() {
                         _isLoading = true;
                       });
-                      currentUser = UserAccount(id: user.uid);
-                      invite.pressDeclined(widget.user.id, currentUser.id);
+                      currentUser = UserAccount(id: user!.uid);
+                      invite.pressDeclined(widget.user!.id, currentUser.id);
                       setState(() {
                         _isLoading = false;
                       });
@@ -188,24 +188,24 @@ class _ViewActivityState extends State<ViewActivity> {
                       setState(() {
                         _isLoading = true;
                       });
-                      currentUser = UserAccount(id: user.uid);
+                      currentUser = UserAccount(id: user!.uid);
 
                       _editedActivityInvite = SelectInvite(
-                        activityID: widget.user.activityID,
-                        caption: widget.user.caption,
-                        meetUpType: widget.user.meetUpType,
-                        companionType: widget.user.companionType,
-                        participants: widget.user.participants,
-                        schedule: widget.user.schedule,
-                        location: widget.user.location,
-                        notes: widget.user.notes,
-                        creatorId: widget.user.creatorId,
-                        creatorName: widget.user.creatorName,
-                        creatorPhoto: widget.user.creatorPhoto,
-                        type: widget.user.type
+                        activityID: widget.user!.activityID,
+                        caption: widget.user!.caption,
+                        meetUpType: widget.user!.meetUpType,
+                        companionType: widget.user!.companionType,
+                        participants: widget.user!.participants,
+                        schedule: widget.user!.schedule,
+                        location: widget.user!.location,
+                        notes: widget.user!.notes,
+                        creatorId: widget.user!.creatorId,
+                        creatorName: widget.user!.creatorName,
+                        creatorPhoto: widget.user!.creatorPhoto,
+                        type: widget.user!.type
                       );
 
-                      invite.pressAccepted(_editedActivityInvite, widget.user.id, currentUser.id);
+                      invite.pressAccepted(_editedActivityInvite, widget.user!.id, currentUser.id);
                       // invite.pressAccepted(widget.user.creatorId, widget.user.activityID, widget.user.id, currentUser.id);
 
                       setState(() {

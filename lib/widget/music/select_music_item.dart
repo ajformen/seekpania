@@ -18,21 +18,21 @@ class SelectMusicItem extends StatefulWidget {
 }
 
 class _SelectMusicItemState extends State<SelectMusicItem> {
-  Map selects;
-  bool isPicked;
+  Map? selects;
+  bool? isPicked;
 
   _SelectMusicItemState({this.selects, this.isPicked});
 
-  UserAccount currentUser;
+  UserAccount? currentUser;
   final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-    currentUser = UserAccount(id: user.uid);
+    currentUser = UserAccount(id: user!.uid);
     final music = Provider.of<SelectMusic>(context);
     // final theGame = Provider.of<Game>(context);
-    print(music.selects[currentUser.id]);
-    isPicked = (music.selects[currentUser.id] == true);
+    print(music.selects[currentUser!.id]);
+    isPicked = (music.selects[currentUser!.id] == true);
     final itrst = Provider.of<Interest>(context);
     return GridTile(
       child: GestureDetector(
@@ -41,17 +41,17 @@ class _SelectMusicItemState extends State<SelectMusicItem> {
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               width: 1,
-              color: Colors.deepPurple[900],
+              color: Colors.deepPurple[900]!,
             ),
             // color: game.isSelected ? Colors.deepPurple[900] : Colors.white,
-            color: isPicked ? Colors.deepPurple[900] : Colors.white,
+            color: isPicked! ? Colors.deepPurple[900] : Colors.white,
           ),
           padding: EdgeInsets.fromLTRB(12.0, 5.0, 12.0, 0),
           child: Text(
-            music.title,
+            music.title!,
             style: TextStyle(
               // color: game.isSelected ? Colors.white : Colors.black,
-              color: isPicked ? Colors.white : Colors.black,
+              color: isPicked! ? Colors.white : Colors.black,
               fontWeight: FontWeight.bold,
             ),
           ),

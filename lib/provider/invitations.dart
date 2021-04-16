@@ -13,8 +13,8 @@ class Invitations with ChangeNotifier {
   final user = FirebaseAuth.instance.currentUser;
   final usersRef = FirebaseFirestore.instance.collection('users');
   final activityFeedRef = FirebaseFirestore.instance.collection('feeds');
-  UserAccount currentUser;
-  SelectInvite selectInvite;
+  late UserAccount currentUser;
+  late SelectInvite selectInvite;
 
   List<SelectInvite> _items = [];
 
@@ -49,7 +49,7 @@ class Invitations with ChangeNotifier {
   }
 
   Future<void> addInvite(SelectActivity activity, String userId) async{
-    currentUser = UserAccount(id: user.uid);
+    currentUser = UserAccount(id: user!.uid);
     selectInvite = SelectInvite(id: invId);
     DocumentSnapshot doc = await usersRef.doc(currentUser.id).get();
     currentUser = UserAccount.fromDocument(doc);

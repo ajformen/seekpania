@@ -7,8 +7,8 @@ import 'package:challenge_seekpania/provider/activities.dart';
 import 'package:challenge_seekpania/widget/home/activity/people_going_item.dart';
 
 class PeopleGoing extends StatefulWidget {
-  final String activityId;
-  final String creatorId;
+  final String? activityId;
+  final String? creatorId;
 
   PeopleGoing({this.activityId, this.creatorId});
 
@@ -29,7 +29,7 @@ class _PeopleGoingState extends State<PeopleGoing> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Activities>(context).fetchSpecificActivity(widget.creatorId, widget.activityId).then((_) {
+      Provider.of<Activities>(context).fetchSpecificActivity(widget.creatorId!, widget.activityId!).then((_) {
         setState(() {
           _isLoading = false;
         });

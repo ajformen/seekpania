@@ -8,15 +8,15 @@ import 'package:challenge_seekpania/provider/activities.dart';
 import 'package:challenge_seekpania/widget/home/activity/people_going.dart';
 
 class ActivityDetails extends StatefulWidget {
-  final String id;
-  final String caption;
-  final String meetUpType;
-  final String companionType;
-  final int participants;
-  final String schedule;
-  final String location;
-  final String notes;
-  final String creatorId, creatorName, creatorPhoto, type;
+  final String? id;
+  final String? caption;
+  final String? meetUpType;
+  final String? companionType;
+  final int? participants;
+  final String? schedule;
+  final String? location;
+  final String? notes;
+  final String? creatorId, creatorName, creatorPhoto, type;
 
   ActivityDetails({this.id, this.caption, this.meetUpType, this.companionType,
     this.participants, this.schedule, this.location, this.notes,
@@ -55,7 +55,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
               ),
             ),
             Text(
-              widget.caption,
+              widget.caption!,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -104,7 +104,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          PeopleGoing(creatorId: widget.creatorId ,activityId: widget.id)
+                          PeopleGoing(creatorId: widget.creatorId!, activityId: widget.id!)
                   )
               );
             }
@@ -140,7 +140,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
               ),
               SizedBox(width: 20.0,),
               Text(
-                widget.caption,
+                widget.caption!,
               ),
             ],
           ),
@@ -153,7 +153,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
               ),
               SizedBox(width: 20.0,),
               Text(
-                widget.schedule,
+                widget.schedule!,
                 style: TextStyle(
                   color: Theme.of(context).errorColor,
                   fontWeight: FontWeight.bold
@@ -183,7 +183,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
                           text: widget.location,
                           recognizer: TapGestureRecognizer()..onTap = () async {
                             var url = widget.location;
-                            if (await canLaunch(url)) {
+                            if (await canLaunch(url!)) {
                               await launch(url);
                             } else {
                               throw 'Could not launch $url';
@@ -210,7 +210,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
               ),
               SizedBox(width: 20.0,),
               Text(
-                widget.companionType
+                widget.companionType!
               ),
             ],
           ),
@@ -223,7 +223,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
               ),
               SizedBox(width: 20.0,),
               Text(
-                widget.meetUpType,
+                widget.meetUpType!,
               ),
             ],
           ),
@@ -236,7 +236,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
               ),
               SizedBox(width: 20.0,),
               Text(
-                widget.notes,
+                widget.notes!,
               ),
             ],
           ),

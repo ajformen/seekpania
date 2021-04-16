@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:challenge_seekpania/models/select_invite.dart';
 
 class InvitationDetails extends StatefulWidget {
-  final SelectInvite user;
+  final SelectInvite? user;
 
   InvitationDetails({this.user});
 
@@ -39,7 +39,7 @@ class _InvitationDetailsState extends State<InvitationDetails> {
               ),
             ),
             Text(
-              widget.user.caption,
+              widget.user!.caption!,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -71,7 +71,7 @@ class _InvitationDetailsState extends State<InvitationDetails> {
                 'Need (',
               ),
               Text(
-                widget.user.participants.toString(),
+                widget.user!.participants.toString(),
               ),
               Text(
                 ')',
@@ -90,7 +90,7 @@ class _InvitationDetailsState extends State<InvitationDetails> {
               ),
               SizedBox(width: 20.0,),
               Text(
-                widget.user.caption,
+                widget.user!.caption!,
               ),
             ],
           ),
@@ -103,7 +103,7 @@ class _InvitationDetailsState extends State<InvitationDetails> {
               ),
               SizedBox(width: 20.0,),
               Text(
-                widget.user.schedule,
+                widget.user!.schedule!,
                 style: TextStyle(
                     color: Theme.of(context).errorColor,
                     fontWeight: FontWeight.bold
@@ -124,7 +124,7 @@ class _InvitationDetailsState extends State<InvitationDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.user.location,
+                    widget.user!.location!,
                   ),
                   // Text(
                   //   'Cebu, Philippines'
@@ -142,7 +142,7 @@ class _InvitationDetailsState extends State<InvitationDetails> {
               ),
               SizedBox(width: 20.0,),
               Text(
-                  widget.user.companionType
+                  widget.user!.companionType!
               ),
             ],
           ),
@@ -155,7 +155,7 @@ class _InvitationDetailsState extends State<InvitationDetails> {
               ),
               SizedBox(width: 20.0,),
               Text(
-                widget.user.meetUpType,
+                widget.user!.meetUpType!,
               ),
             ],
           ),
@@ -168,7 +168,7 @@ class _InvitationDetailsState extends State<InvitationDetails> {
               ),
               SizedBox(width: 20.0,),
               Text(
-                widget.user.notes,
+                widget.user!.notes!,
               ),
             ],
           ),

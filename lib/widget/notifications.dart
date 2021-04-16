@@ -27,7 +27,7 @@ class _NotificationsState extends State<Notifications> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Invitations>(context).fetchUserInvitations(user.uid).then((_) {
+      Provider.of<Invitations>(context).fetchUserInvitations(user!.uid).then((_) {
         setState(() {
           _isLoading = false;
         });

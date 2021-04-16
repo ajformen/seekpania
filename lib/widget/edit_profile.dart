@@ -1,7 +1,7 @@
 import 'package:flash/flash.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:country_list_pick/country_list_pick.dart';
-import 'package:flutter_country_picker/flutter_country_picker.dart';
+// import 'package:flutter_country_picker/flutter_country_picker.dart';
 import 'package:challenge_seekpania/page/header.dart';
 import 'package:challenge_seekpania/models/user_account.dart';
 import 'package:challenge_seekpania/widget/check_user.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class EditProfile extends StatefulWidget {
-  final String currentUserID, theCountry, thePhoto;
+  final String? currentUserID, theCountry, thePhoto;
 
   EditProfile({this.currentUserID, this.theCountry, this.thePhoto});
 
@@ -19,15 +19,15 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  String photoURL;
-  String firstName;
-  String lastName;
-  String fullName;
+  String? photoURL;
+  String? firstName;
+  String? lastName;
+  String? fullName;
   // Country country;
-  CountryCode country;
+  CountryCode? country;
   // String theCountry;
-  String gender;
-  String status;
+  String? gender;
+  String? status;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController displayFullNameController = TextEditingController();
   TextEditingController cityController = TextEditingController();
@@ -35,7 +35,7 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController genderCustomController = TextEditingController();
   bool isLoading = false;
   bool isVisible = false;
-  UserAccount user;
+  late UserAccount user;
 
   bool isGenderVisible = false;
   bool isStatusVisible = false;
@@ -73,8 +73,8 @@ class _EditProfileState extends State<EditProfile> {
     firstName = user.firstName;
     lastName = user.lastName;
     fullName = "$firstName $lastName";
-    displayFullNameController.text = fullName;
-    cityController.text = user.city;
+    displayFullNameController.text = fullName!;
+    cityController.text = user.city!;
     // if (country == null) {
     //   country = country;
     //   print('COUNTRY IS: ');
@@ -83,7 +83,7 @@ class _EditProfileState extends State<EditProfile> {
 
     if (gender == "Non-Binary") {
       isVisible = true;
-      genderCustomController.text = user.genderCustom;
+      genderCustomController.text = user.genderCustom!;
     } else {
       isVisible = false;
       gender = user.gender;
@@ -182,8 +182,8 @@ class _EditProfileState extends State<EditProfile> {
       "status": status,
       "city": cityController.text,
       // "country": country.name,
-      "country": country.name,
-      "countryDialCode": country.dialCode,
+      "country": country!.name,
+      "countryDialCode": country!.dialCode,
       "birthDate": user.birthDate,
       "age": user.age,
     });
@@ -207,7 +207,7 @@ class _EditProfileState extends State<EditProfile> {
           // backgroundGradient: LinearGradient(
           //   colors: [Colors.indigo, Colors.deepPurple],
           // ),
-          backgroundColor: Colors.grey[850],
+          backgroundColor: Colors.grey[850]!,
           child: FlashBar(
             message: Text('Profile has been updated',
             style: TextStyle(
@@ -372,10 +372,10 @@ class _EditProfileState extends State<EditProfile> {
                   child: CountryListPick(
                     // initialSelection: 'PILI NA UY',
                     initialSelection: widget.theCountry,
-                    onChanged: (CountryCode name) {
+                    onChanged: (CountryCode? name) {
                       setState(() {
                         country = name;
-                        print(country.name);
+                        print(country!.name);
                         isCountryVisible = false;
                       });
                     },
@@ -425,7 +425,7 @@ class _EditProfileState extends State<EditProfile> {
                   groupValue: gender,
                   onChanged: (value) {
                     setState(() {
-                      gender = value;
+                      gender = value.toString();
                       isVisible = false;
                       isGenderVisible = false;
                     });
@@ -439,7 +439,7 @@ class _EditProfileState extends State<EditProfile> {
                   groupValue: gender,
                   onChanged: (value) {
                     setState(() {
-                      gender = value;
+                      gender = value.toString();
                       isVisible = false;
                       isGenderVisible = false;
                     });
@@ -453,7 +453,7 @@ class _EditProfileState extends State<EditProfile> {
                   groupValue: gender,
                   onChanged: (value) {
                     setState(() {
-                      gender = value;
+                      gender = value.toString();
                       isVisible = true;
                       isGenderVisible = false;
                     });
@@ -547,7 +547,7 @@ class _EditProfileState extends State<EditProfile> {
                 ],
                 onChanged: (value) {
                   setState(() {
-                    status = value;
+                    status = value.toString();
                     isStatusVisible = false;
                   });
                 },

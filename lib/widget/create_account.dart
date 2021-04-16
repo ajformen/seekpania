@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:challenge_seekpania/widget/timeline.dart';
 // import 'package:challenge_seekpania/widget/account.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_country_picker/flutter_country_picker.dart';
+// import 'package:flutter_country_picker/flutter_country_picker.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:challenge_seekpania/models/user_account.dart';
 import 'package:challenge_seekpania/page/header.dart';
@@ -19,7 +19,7 @@ import 'package:challenge_seekpania/provider/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 final DateTime timestamp = DateTime.now();
-UserAccount currentUser;
+late UserAccount currentUser;
 
 class CreateAccount extends StatefulWidget {
   @override
@@ -31,15 +31,15 @@ class _CreateAccountState extends State<CreateAccount> {
   TextEditingController genderCustomController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  String email;
-  String gender;
-  String genderCustom;
-  String status;
-  CountryCode country;
-  String city;
-  DateTime birthDate;
-  String formatBirthDate;
-  int age;
+  String? email;
+  String? gender;
+  String? genderCustom;
+  String? status;
+  CountryCode? country;
+  String? city;
+  DateTime? birthDate;
+  String? formatBirthDate;
+  int? age;
 
   bool isVisible = false;
 
@@ -126,22 +126,22 @@ class _CreateAccountState extends State<CreateAccount> {
   }
 
   createProfileData() async {
-    _formKey.currentState.save();
-    currentUser = UserAccount(id: user.uid);
+    _formKey.currentState!.save();
+    currentUser = UserAccount(id: user!.uid);
     DocumentSnapshot doc = await usersRef.doc(currentUser.id).get();
     usersRef.doc(currentUser.id).set({
       "id": currentUser.id,
       "email": email,
-      "photoUrl": user.photoURL,
-      "firstName": user.displayName.split(" ")[0],
-      "lastName": user.displayName.split(" ")[1],
+      "photoUrl": user!.photoURL,
+      "firstName": user!.displayName!.split(" ")[0],
+      "lastName": user!.displayName!.split(" ")[1],
       "gender": gender,
       "genderCustom": genderCustomController.text,
       "status": status,
       "city": cityController.text,
       // "country": country.name,
-      "country": country.name,
-      "countryDialCode": country.dialCode,
+      "country": country!.name,
+      "countryDialCode": country!.dialCode,
       "birthDate": formatBirthDate,
       "age": age,
       "timestamp": timestamp,
@@ -173,7 +173,7 @@ class _CreateAccountState extends State<CreateAccount> {
             // backgroundGradient: LinearGradient(
             //   colors: [Colors.indigo, Colors.deepPurple],
             // ),
-            backgroundColor: Colors.grey[850],
+            backgroundColor: Colors.grey[850]!,
             child: FlashBar(
               message: Text('Account created successfully',
                 style: TextStyle(
@@ -216,7 +216,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     child: Form(
                       child: TextFormField(
                         enabled: false,
-                        initialValue: user.displayName.split(" ")[0],
+                        initialValue: user!.displayName!.split(" ")[0],
                         onSaved: (val) => city = val,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
@@ -234,7 +234,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     child: Form(
                       child: TextFormField(
                         enabled: false,
-                        initialValue: user.displayName.split(" ")[1],
+                        initialValue: user!.displayName!.split(" ")[1],
                         onSaved: (val) => city = val,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
@@ -275,7 +275,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         groupValue: gender,
                         onChanged: (value) {
                           setState(() {
-                            gender = value;
+                            gender = value.toString();
                             isVisible = false;
                             isGenderVisible = false;
                           });
@@ -289,7 +289,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         groupValue: gender,
                         onChanged: (value) {
                           setState(() {
-                            gender = value;
+                            gender = value.toString();
                             isVisible = false;
                             isGenderVisible = false;
                           });
@@ -303,7 +303,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         groupValue: gender,
                         onChanged: (value) {
                           setState(() {
-                            gender = value;
+                            gender = value.toString();
                             isVisible = true;
                             isGenderVisible = false;
                           });
@@ -387,7 +387,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     ],
                     onChanged: (value) {
                       setState(() {
-                        status = value;
+                        status = value.toString();
                         isStatusVisible = false;
                       });
                     },
@@ -447,11 +447,11 @@ class _CreateAccountState extends State<CreateAccount> {
                         width: double.infinity,
                         child: CountryListPick(
                           // initialSelection: null,
-                          onChanged: (CountryCode name) {
+                          onChanged: (CountryCode? name) {
                             setState(() {
                               country = name;
-                              print(country.name);
-                              print(country.dialCode);
+                              print(country!.name);
+                              print(country!.dialCode);
                               isCountryVisible = false;
                             });
                           },
@@ -487,19 +487,19 @@ class _CreateAccountState extends State<CreateAccount> {
                       // Text(birthdate == null ? 'Nothing has been picked yet' : birthdate.toString()),
                       // Text('Birthday'),
                       RaisedButton(
-                        child: Text(birthDate == null ? 'Select your birth date' : formatBirthDate),
+                        child: Text((birthDate == null ? 'Select your birth date' : formatBirthDate)!),
                         color: Colors.white,
                         onPressed: () {
                           showDatePicker(
                             context: context,
-                            initialDate: birthDate == null ? DateTime.now() : birthDate,
+                            initialDate: birthDate == null ? DateTime.now() : birthDate!,
                             firstDate: DateTime(1920),
                             lastDate: DateTime(2300)
                           ).then((date) {
                             setState(() {
                               birthDate = date;
-                              formatBirthDate = DateFormat('MMMM-dd-yyyy').format(birthDate);
-                              age = timestamp.year - birthDate.year;
+                              formatBirthDate = DateFormat('MMMM-dd-yyyy').format(birthDate!);
+                              age = timestamp.year - birthDate!.year;
                               print('AGE');
                               print(age);
                               isBirthDateVisible = false;
@@ -537,7 +537,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       key: _formKey,
                       child: TextFormField(
                         enabled: false,
-                        initialValue: user.email,
+                        initialValue: user!.email,
                         onSaved: (val) => email = val,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),

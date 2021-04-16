@@ -13,7 +13,7 @@ import 'package:challenge_seekpania/widget/profile/report_user.dart';
 
 class ViewOtherUsersProfile extends StatefulWidget {
 
-  final UserAccount user;
+  final UserAccount? user;
 
   ViewOtherUsersProfile({this.user});
 
@@ -22,7 +22,7 @@ class ViewOtherUsersProfile extends StatefulWidget {
 }
 
 class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
-  String gender;
+  String? gender;
 
   var _isInit = true;
   var _isLoading = false;
@@ -34,7 +34,7 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Interest>(context).fetchAllInterests(widget.user.id).then((_) {
+      Provider.of<Interest>(context).fetchAllInterests(widget.user!.id!).then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -46,7 +46,7 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
   }
 
   viewInterest() {
-    final interests = Provider.of<Interest>(context, listen: false).userInterests.map((g) => InterestBox(g.title)).toList();
+    final interests = Provider.of<Interest>(context, listen: false).userInterests.map((g) => InterestBox(g.title!)).toList();
     // final liveEvents = Provider.of<LiveEvents>(context, listen: false).eventItems.map((g) => InterestBox(g.title)).toList();
     // final interests = games;
 
@@ -60,20 +60,20 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
     );
   }
 
-  Map favorites;
-  bool isPicked;
+  Map? favorites;
+  bool? isPicked;
   _ViewOtherUsersProfileState({this.favorites, this.isPicked});
 
   final user = FirebaseAuth.instance.currentUser;
-  UserAccount currentUser;
+  UserAccount? currentUser;
 
   @override
   Widget build(BuildContext context) {
 
-    if (widget.user.gender == 'Non-Binary') {
-      gender = widget.user.genderCustom;
+    if (widget.user!.gender == 'Non-Binary') {
+      gender = widget.user!.genderCustom;
     } else {
-      gender = widget.user.gender;
+      gender = widget.user!.gender;
     }
 
     // currentUser = UserAccount(id: user.uid);
@@ -97,7 +97,7 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
                         bottomLeft: Radius.circular(20),
                       ),
                       child: Image.network(
-                        widget.user.photoURL,
+                        widget.user!.photoURL!,
                         // 's400-c/$userPhoto',
                         // 'https://lh3.googleusercontent.com/a-/AOh14GjZwVeyNas_d37ucE1zyFcth-1b33CYoXU8lEUj=s400-c',
                         width: 390,
@@ -119,7 +119,7 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
                             ),
                             children: <TextSpan>[
                               TextSpan(
-                                text: widget.user.firstName,
+                                text: widget.user!.firstName,
                                 style: TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
@@ -135,7 +135,7 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
                                 ),
                               ),
                               TextSpan(
-                                text: widget.user.age.toString(),
+                                text: widget.user!.age.toString(),
                                 style: TextStyle(
                                   fontSize: 18,
                                 ),
@@ -159,7 +159,7 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
                                 ),
                               ),
                               TextSpan(
-                                text: widget.user.status,
+                                text: widget.user!.status,
                                 style: TextStyle(
                                   fontSize: 18,
                                 ),
@@ -171,7 +171,7 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
                                 ),
                               ),
                               TextSpan(
-                                text: widget.user.city,
+                                text: widget.user!.city,
                                 style: TextStyle(
                                   fontSize: 18,
                                 ),
@@ -191,7 +191,7 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
                             ),
                             IconButton(
                               onPressed: () {
-                                userFave.toggleFavoriteStatus(widget.user);
+                                userFave.toggleFavoriteStatus(widget.user!);
                                 Fluttertoast.showToast(
                                     msg: "You have favorited this user!",
                                     toastLength: Toast.LENGTH_SHORT,

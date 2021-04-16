@@ -5,24 +5,24 @@ import 'package:flutter/foundation.dart';
 import 'package:challenge_seekpania/models/user_account.dart';
 
 class SelectInvite with ChangeNotifier {
-  final String id;
-  final String activityID;
-  final String interestName;
-  final String caption;
-  final String meetUpType;
-  final String companionType;
-  final int participants;
-  final String schedule;
-  final String location;
-  final String notes;
-  final String creatorId;
-  final String creatorName;
-  final String creatorPhoto;
-  final String type; // 'invitations', 'messaging', 'reminder' ..
+  final String? id;
+  final String? activityID;
+  final String? interestName;
+  final String? caption;
+  final String? meetUpType;
+  final String? companionType;
+  final int? participants;
+  final String? schedule;
+  final String? location;
+  final String? notes;
+  final String? creatorId;
+  final String? creatorName;
+  final String? creatorPhoto;
+  final String? type; // 'invitations', 'messaging', 'reminder' ..
   // final DateTime timestamp;
-  final String invitationStatus;
+  final String? invitationStatus;
   final dynamic accepts;
-  bool isAccepted;
+  bool? isAccepted;
 
   SelectInvite({
     this.id,
@@ -48,7 +48,7 @@ class SelectInvite with ChangeNotifier {
   factory SelectInvite.fromDocument(DocumentSnapshot doc) {
     final d = doc.data();
     return SelectInvite(
-      id: d['id'],
+      id: d!['id'],
       activityID: d['activityID'],
       interestName: d['interestName'],
       caption: d['caption'],
@@ -71,7 +71,7 @@ class SelectInvite with ChangeNotifier {
   Future<void> pressAccepted(SelectInvite invite, invitationId, userId) async {
     final user = FirebaseAuth.instance.currentUser;
     UserAccount currentUser;
-    currentUser = UserAccount(id: user.uid);
+    currentUser = UserAccount(id: user!.uid);
     // String currentUserID = currentUser.id;
     final usersRef = FirebaseFirestore.instance.collection('users');
     final activityFeedRef = FirebaseFirestore.instance.collection('feeds');
@@ -143,7 +143,7 @@ class SelectInvite with ChangeNotifier {
   Future<void> pressDeclined(invitationId, userId) async {
     final user = FirebaseAuth.instance.currentUser;
     UserAccount currentUser;
-    currentUser = UserAccount(id: user.uid);
+    currentUser = UserAccount(id: user!.uid);
     // String currentUserID = currentUser.id;
     final usersRef = FirebaseFirestore.instance.collection('users');
     final activityFeedRef = FirebaseFirestore.instance.collection('feeds');

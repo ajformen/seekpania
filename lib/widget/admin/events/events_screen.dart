@@ -37,7 +37,7 @@ class EventsScreen extends StatelessWidget {
                         delegate: SearchPage<SelectLiveEvent>(
                           searchLabel: 'Search Events',
                           builder: (event) => ListTile(
-                            title: Text(event.title),
+                            title: Text(event.title!),
                             trailing: Container(
                               width: 100,
                               child: Row(
@@ -61,7 +61,7 @@ class EventsScreen extends StatelessWidget {
                                   IconButton(
                                     icon: Icon(Icons.delete),
                                     onPressed: () async {
-                                      await Provider.of<LiveEvents>(context, listen: false).deleteLiveEvent(event.id);
+                                      await Provider.of<LiveEvents>(context, listen: false).deleteLiveEvent(event.id!);
                                     },
                                     color: Theme.of(context).errorColor,
                                   ),
@@ -70,7 +70,7 @@ class EventsScreen extends StatelessWidget {
                             ),
                           ),
                           filter: (event) => [
-                            event.title,
+                            event.title.toString(),
                           ],
                           items: eventsData.items,
                         )
@@ -108,8 +108,8 @@ class EventsScreen extends StatelessWidget {
                 itemBuilder: (_, i) => Column(
                   children: [
                     EventItem(
-                      eventsData.items[i].id,
-                      eventsData.items[i].title,
+                      eventsData.items[i].id!,
+                      eventsData.items[i].title!,
                     ),
                     Divider(color: Color(0xff9933ff)),
                   ],

@@ -18,17 +18,22 @@ class CreateActivity extends StatefulWidget {
 
 class _CreateActivityState extends State<CreateActivity> {
 
-  String location;
+  String? location;
   final user = FirebaseAuth.instance.currentUser;
-  Position _position;
-  StreamSubscription<Position> _streamSubscription;
-  Address _address;
+  Position? _position;
+  late StreamSubscription<Position> _streamSubscription;
+  Address? _address;
 
   @override
   void initState() {
     super.initState();
     var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
-    _streamSubscription = Geolocator().getPositionStream(locationOptions).listen((Position position) {
+    // below _streamSubscription was before the upgrade
+    // _streamSubscription = Geolocator.getPositionStream(locationOptions).listen((Position position) {
+    var lastPosition = Geolocator.getLastKnownPosition();
+    print('LAST POSITION');
+    print(lastPosition);
+    _streamSubscription = Geolocator.getPositionStream(desiredAccuracy: LocationAccuracy.high, distanceFilter: 10).listen((Position position) {
       setState(() {
         print(position);
         _position = position;
@@ -64,7 +69,7 @@ class _CreateActivityState extends State<CreateActivity> {
     try {
       final usersRef = FirebaseFirestore.instance.collection('users');
       UserAccount currentUser;
-      currentUser = UserAccount(id: user.uid);
+      currentUser = UserAccount(id: user!.uid);
       await usersRef.doc(currentUser.id).update({
         'currentLocation': location,
       });

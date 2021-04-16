@@ -18,17 +18,17 @@ class SelectGameItem extends StatefulWidget {
 }
 
 class _SelectGameItemState extends State<SelectGameItem> {
-  Map selects;
-  bool isPicked;
+  Map? selects;
+  bool? isPicked;
 
   _SelectGameItemState({this.selects, this.isPicked});
 
-  UserAccount currentUser;
+  late UserAccount currentUser;
   final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-    currentUser = UserAccount(id: user.uid);
+    currentUser = UserAccount(id: user!.uid);
     final game = Provider.of<SelectGames>(context);
     // final theGame = Provider.of<Game>(context);
     print(game.selects[currentUser.id]);
@@ -41,17 +41,17 @@ class _SelectGameItemState extends State<SelectGameItem> {
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               width: 1,
-              color: Colors.deepPurple[900],
+              color: Colors.deepPurple[900]!,
             ),
             // color: game.isSelected ? Colors.deepPurple[900] : Colors.white,
-            color: isPicked ? Colors.deepPurple[900] : Colors.white,
+            color: isPicked! ? Colors.deepPurple[900] : Colors.white,
           ),
           padding: EdgeInsets.fromLTRB(12.0, 5.0, 12.0, 0),
           child: Text(
-            game.title,
+            game.title!,
             style: TextStyle(
               // color: game.isSelected ? Colors.white : Colors.black,
-              color: isPicked ? Colors.white : Colors.black,
+              color: isPicked! ? Colors.white : Colors.black,
               fontWeight: FontWeight.bold,
             ),
           ),

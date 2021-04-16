@@ -31,7 +31,7 @@ class _ActivityInterestScreenState extends State<ActivityInterestScreen> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Interest>(context).fetchCurrentUserInterests(user.uid).then((_) {
+      Provider.of<Interest>(context).fetchCurrentUserInterests(user!.uid).then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -123,7 +123,7 @@ class _ActivityInterestScreenState extends State<ActivityInterestScreen> {
     // final games = Provider.of<Games>(context, listen: false).gameItems.map((g) => ActivityInterestItem(g.id, g.title)).toList();
     // final liveEvents = Provider.of<LiveEvents>(context, listen: false).eventItems.map((g) => ActivityInterestItem(g.id, g.title)).toList();
     // final interests = games + liveEvents;
-    final interests = Provider.of<Interest>(context, listen: false).currentUserInterests.map((g) => ActivityInterestItem(g.id, g.title, g.type)).toList();
+    final interests = Provider.of<Interest>(context, listen: false).currentUserInterests.map((g) => ActivityInterestItem(g.id!, g.title!, g.type!)).toList();
 
     return _isLoading ? Center(
       child: CircularProgressIndicator(),

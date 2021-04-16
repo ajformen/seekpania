@@ -1,4 +1,5 @@
 import 'package:challenge_seekpania/widget/points/points_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash/flash.dart';
 import 'package:challenge_seekpania/widget/check_user.dart';
 import 'package:challenge_seekpania/widget/profile.dart';
@@ -16,10 +17,10 @@ import 'package:challenge_seekpania/widget/home/activity/my_activity.dart';
 import 'package:challenge_seekpania/widget/favorites/favorites.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
-UserAccount currentUser;
+late UserAccount currentUser;
 
 class Account extends StatefulWidget {
-  final String accountID;
+  final String? accountID;
 
   Account({ this.accountID });
 
@@ -71,7 +72,7 @@ class _AccountState extends State<Account> {
             // backgroundGradient: LinearGradient(
             //   colors: [Colors.indigo, Colors.deepPurple],
             // ),
-            backgroundColor: Colors.grey[850],
+            backgroundColor: Colors.grey[850]!,
             child: FlashBar(
               message: Text('Logout successful',
                 style: TextStyle(
@@ -127,7 +128,7 @@ class _AccountState extends State<Account> {
 
   viewProfile() async {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => Profile(profileID: currentUser?.id,)));
+        context, MaterialPageRoute(builder: (context) => Profile(profileID: currentUser.id!,)));
   }
 
   // buildAccount() {
@@ -137,14 +138,14 @@ class _AccountState extends State<Account> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder(
+        body: FutureBuilder<DocumentSnapshot>(
           future: usersRef.doc(widget.accountID).get(),
           // future: usersRef.doc(user.uid).get(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return buildLoading();
             }
-            currentUser = UserAccount.fromDocument(snapshot.data);
+            currentUser = UserAccount.fromDocument(snapshot.data!);
             return ListView(
               children: [
                 Container(
@@ -158,14 +159,14 @@ class _AccountState extends State<Account> {
                           children: [
                             CircleAvatar(
                               maxRadius: 45,
-                              backgroundImage: NetworkImage(user.photoURL),
+                              backgroundImage: NetworkImage(user!.photoURL!),
                             ),
                             SizedBox(width: 15),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  currentUser.firstName,
+                                  currentUser.firstName!,
                                   style: TextStyle(
                                       fontSize: 25.0,
                                       color: Colors.black,

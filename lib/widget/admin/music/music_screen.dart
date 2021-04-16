@@ -37,7 +37,7 @@ class MusicScreen extends StatelessWidget {
                       delegate: SearchPage<SelectMusic>(
                         searchLabel: 'Search Music',
                         builder: (game) => ListTile(
-                          title: Text(game.title),
+                          title: Text(game.title!),
                           trailing: Container(
                             width: 100,
                             child: Row(
@@ -61,7 +61,7 @@ class MusicScreen extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.delete),
                                   onPressed: () async {
-                                    await Provider.of<Musics>(context, listen: false).deleteMusic(game.id);
+                                    await Provider.of<Musics>(context, listen: false).deleteMusic(game.id!);
                                   },
                                   color: Theme.of(context).errorColor,
                                 ),
@@ -70,7 +70,7 @@ class MusicScreen extends StatelessWidget {
                           ),
                         ),
                         filter: (game) => [
-                          game.title,
+                          game.title.toString(),
                         ],
                         items: musicData.items,
                       )
@@ -101,8 +101,8 @@ class MusicScreen extends StatelessWidget {
                 itemBuilder: (_, i) => Column(
                   children: [
                     MusicItem(
-                      musicData.items[i].id,
-                      musicData.items[i].title,
+                      musicData.items[i].id!,
+                      musicData.items[i].title!,
                     ),
                     Divider(color: Color(0xff9933ff)),
                   ],

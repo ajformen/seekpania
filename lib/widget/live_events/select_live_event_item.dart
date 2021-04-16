@@ -21,21 +21,21 @@ class SelectLiveEventItem extends StatefulWidget {
 }
 
 class _SelectLiveEventItemState extends State<SelectLiveEventItem> {
-  Map selects;
-  bool isPicked;
+  Map? selects;
+  bool?isPicked;
 
   _SelectLiveEventItemState({this.selects, this.isPicked});
 
 
-  UserAccount currentUser;
+  UserAccount? currentUser;
   final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-    currentUser = UserAccount(id: user.uid);
+    currentUser = UserAccount(id: user!.uid);
     final liveEvent = Provider.of<SelectLiveEvent>(context);
     final itrst = Provider.of<Interest>(context);
-    isPicked = (liveEvent.selects[currentUser.id] == true);
+    isPicked = (liveEvent.selects[currentUser!.id] == true);
     return GridTile(
       child: GestureDetector(
         child: Container(
@@ -43,17 +43,17 @@ class _SelectLiveEventItemState extends State<SelectLiveEventItem> {
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               width: 1,
-              color: Colors.deepPurple[900],
+              color: Colors.deepPurple[900]!,
             ),
             // color: liveEvent.isSelected ? Colors.deepPurple[900] : Colors.white,
-            color: isPicked ? Colors.deepPurple[900] : Colors.white,
+            color: isPicked! ? Colors.deepPurple[900] : Colors.white,
           ),
           padding: EdgeInsets.fromLTRB(12.0, 5.0, 12.0, 0),
           child: Text(
-            liveEvent.title,
+            liveEvent.title!,
             style: TextStyle(
               // color: liveEvent.isSelected ? Colors.white : Colors.black,
-              color: isPicked ? Colors.white : Colors.black,
+              color: isPicked! ? Colors.white : Colors.black,
               fontWeight: FontWeight.bold,
             ),
           ),

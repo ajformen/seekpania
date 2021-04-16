@@ -17,9 +17,9 @@ import 'package:challenge_seekpania/widget/home/activity/set_location.dart';
 class FaceToFace extends StatefulWidget {
   // static const routeName = './activity-face-to-face';
 
-  final String interestID;
-  final String interest;
-  final String type;
+  final String? interestID;
+  final String? interest;
+  final String? type;
 
   FaceToFace({this.interestID, this.interest, this.type});
 
@@ -36,7 +36,7 @@ class _FaceToFaceState extends State<FaceToFace> {
   final _captionForm = GlobalKey<FormState>();
   final _howManyForm = GlobalKey<FormState>();
   // var _editedInvite = SelectInvite(id: null, caption: '', participants: '');
-  String caption, participants;
+  String? caption, participants;
 
   bool isOneSelected = false;
   bool isGroupSelected = false;
@@ -49,12 +49,12 @@ class _FaceToFaceState extends State<FaceToFace> {
   bool isLocation = true;
   bool isInvalidLocation = false;
 
-  String notes;
-  String location;
+  String? notes;
+  String? location;
 
-  String _setTime, _setDate;
-  String _hour, _minute, _time;
-  String dateTime;
+  String? _setTime, _setDate;
+  String? _hour, _minute, _time;
+  String? dateTime;
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
 
@@ -62,13 +62,13 @@ class _FaceToFaceState extends State<FaceToFace> {
   TextEditingController _timeController = TextEditingController();
 
   Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
+    final DateTime picked = (await showDatePicker(
         context: context,
         initialDate: selectedDate,
         initialDatePickerMode: DatePickerMode.day,
         firstDate: DateTime(2021),
         lastDate: DateTime(2101)
-    );
+    ))!;
     if (picked != null)
       setState(() {
         selectedDate = picked;
@@ -78,17 +78,17 @@ class _FaceToFaceState extends State<FaceToFace> {
   }
 
   Future<Null> _selectTime(BuildContext context) async {
-    final TimeOfDay picked = await showTimePicker(
+    final TimeOfDay picked = (await showTimePicker(
       context: context,
       initialTime: selectedTime,
-    );
+    ))!;
     if (picked != null)
       setState(() {
         selectedTime = picked;
         _hour = selectedTime.hour.toString();
         _minute = selectedTime.minute.toString();
-        _time = _hour + ' : ' + _minute;
-        _timeController.text = _time;
+        _time = _hour! + ' : ' + _minute!;
+        _timeController.text = _time!;
         _timeController.text = formatDate(
             DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
             [hh, ':', nn, "" "", am]
@@ -109,8 +109,8 @@ class _FaceToFaceState extends State<FaceToFace> {
   }
 
   Future<void> _submit() async {
-    final isCaptionValid = _captionForm.currentState.validate();
-    final isHowManyValid = _howManyForm.currentState.validate();
+    final isCaptionValid = _captionForm.currentState!.validate();
+    final isHowManyValid = _howManyForm.currentState!.validate();
     if (isOneSelected == false && isGroupSelected == false && participantsController.text.isNotEmpty) {
       setState(() {
         isCompanionSelected = true;
@@ -152,8 +152,8 @@ class _FaceToFaceState extends State<FaceToFace> {
       return;
     }
 
-    _captionForm.currentState.save();
-    _howManyForm.currentState.save();
+    _captionForm.currentState!.save();
+    _howManyForm.currentState!.save();
 
     setState(() {
       isOneSelected = false;
@@ -164,8 +164,8 @@ class _FaceToFaceState extends State<FaceToFace> {
       isInvalidLocation = false;
     });
 
-    String type;
-    var count = int.parse(participants);
+    String? type;
+    var count = int.parse(participants!);
     if (count == 1) {
       type = 'One Companion';
     } else if (count > 1) {
@@ -201,7 +201,7 @@ class _FaceToFaceState extends State<FaceToFace> {
         MaterialPageRoute(
             builder: (context) =>
                 // ActivitySearch(searchID: widget.interestID, searchType: widget.type, caption: caption, participants: participants)
-            ActivitySearch(searchID: widget.interestID, searchType: widget.type, activity: _editedActivity)
+            ActivitySearch(searchID: widget.interestID!, searchType: widget.type!, activity: _editedActivity)
         )
     );
 
@@ -270,7 +270,7 @@ class _FaceToFaceState extends State<FaceToFace> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
               border: Border.all(
-                color: Colors.deepPurple[900],
+                color: Colors.deepPurple[900]!,
               )
             ),
             child: Center(
@@ -310,14 +310,14 @@ class _FaceToFaceState extends State<FaceToFace> {
                 fontStyle: FontStyle.italic,
               ),
               enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.deepPurple[900]),
+                borderSide: BorderSide(color: Colors.deepPurple[900]!),
               ),
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.deepPurple[900]),
+                borderSide: BorderSide(color: Colors.deepPurple[900]!),
               ),
             ),
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please provide a caption';
               }
               return null;
@@ -345,7 +345,7 @@ class _FaceToFaceState extends State<FaceToFace> {
                   height: 40.0,
                   decoration: new BoxDecoration(
                     border: Border.all(
-                      color: isOneSelected ? Colors.deepPurple[900] : Colors.black,
+                      color: isOneSelected ? Colors.deepPurple[900]! : Colors.black,
                     ),
                     color: isOneSelected ? Colors.deepPurple[900] : Colors.white,
                     shape: BoxShape.circle,
@@ -391,7 +391,7 @@ class _FaceToFaceState extends State<FaceToFace> {
                   height: 40.0,
                   decoration: new BoxDecoration(
                     border: Border.all(
-                      color: isGroupSelected ? Colors.deepPurple[900] : Colors.black,
+                      color: isGroupSelected ? Colors.deepPurple[900]! : Colors.black,
                     ),
                     color: isGroupSelected ? Colors.deepPurple[900] : Colors.white,
                     shape: BoxShape.circle,
@@ -459,14 +459,14 @@ class _FaceToFaceState extends State<FaceToFace> {
                       fontStyle: FontStyle.italic,
                     ),
                     enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.deepPurple[900]),
+                      borderSide: BorderSide(color: Colors.deepPurple[900]!),
                     ),
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.deepPurple[900]),
+                      borderSide: BorderSide(color: Colors.deepPurple[900]!),
                     ),
                   ),
                   validator: (value) {
-                    if (value.isEmpty) {
+                    if (value!.isEmpty) {
                       return 'Invalid!';
                     }
                     if (int.parse(value) <= 0) {
@@ -610,7 +610,7 @@ class _FaceToFaceState extends State<FaceToFace> {
                     enabled: false,
                     keyboardType: TextInputType.text,
                     controller: _dateController,
-                    onSaved: (String val) {
+                    onSaved: (String? val) {
                       _setDate = val;
                     },
                     decoration: InputDecoration(
@@ -641,7 +641,7 @@ class _FaceToFaceState extends State<FaceToFace> {
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
-                    onSaved: (String val) {
+                    onSaved: (String? val) {
                       _setTime = val;
                     },
                     enabled: false,
@@ -731,7 +731,7 @@ class _FaceToFaceState extends State<FaceToFace> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           isLocation ? noLocation() : Text(
-                            location,
+                            location!,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -822,7 +822,7 @@ class _FaceToFaceState extends State<FaceToFace> {
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                      color: Colors.deepPurple[900],
+                      color: Colors.deepPurple[900]!,
                     ),
                   ),
                   // color: Colors.grey[350],
@@ -838,7 +838,7 @@ class _FaceToFaceState extends State<FaceToFace> {
                     Container(
                       padding: EdgeInsets.only(left: 10.0),
                       child: isNotes ? noNotes() : Text(
-                        notes,
+                        notes!,
                         style: TextStyle(
                           fontSize: 12.0,
                           // fontStyle: FontStyle.italic,

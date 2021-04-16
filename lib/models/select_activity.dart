@@ -5,21 +5,21 @@ import 'package:flutter/foundation.dart';
 import 'package:challenge_seekpania/models/user_account.dart';
 
 class SelectActivity with ChangeNotifier {
-  final String id;
-  final String caption;
-  final String interestName;
-  final String meetUpType;
-  final String companionType;
-  final int participants;
-  final String scheduleDate;
-  final String scheduleTime;
-  final String location;
-  final String invitationLink;
-  final String notes;
-  final String creatorId;
-  final String creatorName;
-  final String creatorPhoto;
-  final String type; // 'invitations', 'messaging', 'reminder' ..
+  final String? id;
+  final String? caption;
+  final String? interestName;
+  final String? meetUpType;
+  final String? companionType;
+  final int? participants;
+  final String? scheduleDate;
+  final String? scheduleTime;
+  final String? location;
+  final String? invitationLink;
+  final String? notes;
+  final String? creatorId;
+  final String? creatorName;
+  final String? creatorPhoto;
+  final String? type; // 'invitations', 'messaging', 'reminder' ..
   // final DateTime timestamp;
   final dynamic going;
 
@@ -46,7 +46,7 @@ class SelectActivity with ChangeNotifier {
   factory SelectActivity.fromDocument(DocumentSnapshot doc) {
     final d = doc.data();
     return SelectActivity(
-      id: d['id'],
+      id: d!['id'],
       caption: d['caption'],
       interestName: d['interestName'],
       meetUpType: d['meetUpType'],

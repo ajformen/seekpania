@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:challenge_seekpania/widget/home/activity/set_location.dart';
 
 class VirtualSetLocationLinkNotes extends StatefulWidget {
-  final String searchID;
-  final String interestName;
-  final String searchType;
-  final String caption;
-  final String companionType;
-  final int participants;
-  final String scheduleType;
-  final String dateFormat;
-  final String timeFormat;
+  final String? searchID;
+  final String? interestName;
+  final String? searchType;
+  final String? caption;
+  final String? companionType;
+  final int? participants;
+  final String? scheduleType;
+  final String? dateFormat;
+  final String? timeFormat;
 
   VirtualSetLocationLinkNotes({this.searchID, this.interestName, this.searchType, this.caption, this.companionType, this.participants, this.scheduleType, this.dateFormat, this.timeFormat});
 
@@ -23,7 +23,7 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
   bool isLocation = true;
   bool isLink = true;
 
-  String location;
+  String? location;
   // String notes;
 
   @override
@@ -162,7 +162,7 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 isLocation ? noLocation() : Text(
-                                  location,
+                                  location!,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -236,7 +236,7 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
                               child: Column(
                                 children: <Widget>[
                                   isLink ? noLink() : Text(
-                                    location,
+                                    location!,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -280,7 +280,7 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
                       keyboardType: TextInputType.multiline,
                       // focusNode: _editNotesFocusNode,
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Please enter location.';
                         }
 
@@ -378,7 +378,7 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
                               children: [
                                 // isLocation ? noLocation() :
                                 isLocation ? noLocation() : Text(
-                                  location,
+                                  location!,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -452,7 +452,7 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
                               child: Column(
                                 children: <Widget>[
                                   isLink ? noLink() : Text(
-                                    location,
+                                    location!,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -496,7 +496,7 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
                       keyboardType: TextInputType.multiline,
                       // focusNode: _editNotesFocusNode,
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Please enter location.';
                         }
 

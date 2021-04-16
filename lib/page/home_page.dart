@@ -11,7 +11,7 @@ import 'package:challenge_seekpania/widget/check_user.dart';
 import 'package:provider/provider.dart';
 
 // final user = FirebaseAuth.instance.currentUser;
-UserAccount currentUser;
+UserAccount? currentUser;
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  User _user;
+  User? _user;
 
   @override
   void initState() {
@@ -50,11 +50,11 @@ class _HomePageState extends State<HomePage> {
             return buildLoading();
           } else if (snapshot.hasData) {
             print(snapshot.data);
-            this._user = snapshot.data;
-            currentUser = UserAccount(id: _user.uid);
+            this._user = snapshot.data as User?;
+            currentUser = UserAccount(id: _user!.uid);
             // currentUser.id = "";
             print('HOME PAGE USER ID:');
-            print(currentUser.id);
+            print(currentUser!.id);
             // print('TOKEN');
             return CheckUser();
           } else {

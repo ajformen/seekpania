@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:challenge_seekpania/widget/virtual/virtual_set_location_link_notes.dart';
 
 class VirtualSetDateTime extends StatefulWidget {
-  final String searchID;
-  final String interestName;
-  final String searchType;
-  final String caption;
-  final String companionType;
-  final int participants;
+  final String? searchID;
+  final String? interestName;
+  final String? searchType;
+  final String? caption;
+  final String? companionType;
+  final int? participants;
 
   VirtualSetDateTime({this.searchID, this.interestName, this.searchType, this.caption, this.companionType, this.participants});
 
@@ -21,7 +21,7 @@ class VirtualSetDateTime extends StatefulWidget {
 
 class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
 
-  String scheduleType;
+  String? scheduleType;
 
   bool isNowSelected = false;
   bool isLaterSelected = false;
@@ -29,12 +29,12 @@ class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
   bool isNow = false;
   bool checkNowLater = false;
 
-  double _height;
-  double _width;
+  double? _height;
+  double? _width;
 
-  String _setTime, _setDate;
-  String _hour, _minute, _time;
-  String dateTime;
+  String? _setTime, _setDate;
+  String? _hour, _minute, _time;
+  String? dateTime;
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
 
@@ -48,7 +48,7 @@ class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
       });
       return;
     }
-    String _dateFormat, _timeFormat;
+    String? _dateFormat, _timeFormat;
 
     if (isNowSelected == true) {
       scheduleType = 'NOW';
@@ -198,7 +198,7 @@ class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
                         height: 40.0,
                         decoration: new BoxDecoration(
                           border: Border.all(
-                            color: isLaterSelected ? Colors.yellow[800] : Colors.black,
+                            color: isLaterSelected ? Colors.yellow[800]! : Colors.black,
                           ),
                           color: isLaterSelected ? Colors.yellow[800] : Colors.white,
                           // shape: BoxShape.circle,
@@ -238,13 +238,13 @@ class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
   }
 
   Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
+    final DateTime picked = (await showDatePicker(
         context: context,
         initialDate: selectedDate,
         initialDatePickerMode: DatePickerMode.day,
         firstDate: DateTime(2021),
         lastDate: DateTime(2101)
-    );
+    ))!;
     if (picked != null)
       setState(() {
         selectedDate = picked;
@@ -254,17 +254,17 @@ class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
   }
 
   Future<Null> _selectTime(BuildContext context) async {
-    final TimeOfDay picked = await showTimePicker(
+    final TimeOfDay picked = (await showTimePicker(
       context: context,
       initialTime: selectedTime,
-    );
+    ))!;
     if (picked != null)
       setState(() {
         selectedTime = picked;
         _hour = selectedTime.hour.toString();
         _minute = selectedTime.minute.toString();
-        _time = _hour + ' : ' + _minute;
-        _timeController.text = _time;
+        _time = _hour! + ' : ' + _minute!;
+        _timeController.text = _time!;
         _timeController.text = formatDate(
             DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
             [hh, ':', nn, "" "", am]
@@ -371,7 +371,7 @@ class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
                       enabled: false,
                       keyboardType: TextInputType.text,
                       controller: _dateController,
-                      onSaved: (String val) {
+                      onSaved: (String? val) {
                         _setDate = val;
                       },
                       decoration: InputDecoration(
@@ -421,7 +421,7 @@ class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
                 child: TextFormField(
                   style: TextStyle(fontSize: 26),
                   textAlign: TextAlign.center,
-                  onSaved: (String val) {
+                  onSaved: (String? val) {
                     _setTime = val;
                   },
                   enabled: false,

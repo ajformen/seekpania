@@ -21,16 +21,16 @@ class _EditMusicScreenState extends State<EditMusicScreen> {
   var _isLoading = false;
 
   Future<void> _saveForm() async {
-    final isValid = _form.currentState.validate();
+    final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
-    _form.currentState.save();
+    _form.currentState!.save();
     setState(() {
       _isLoading = true;
     });
     if (_editedMusic.id != null) {
-      await Provider.of<Musics>(context, listen: false).updateMusic(_editedMusic.id, _editedMusic);
+      await Provider.of<Musics>(context, listen: false).updateMusic(_editedMusic.id!, _editedMusic);
     } else {
       try {
         await Provider.of<Musics>(context, listen: false).addMusic(_editedMusic);
@@ -48,11 +48,11 @@ class _EditMusicScreenState extends State<EditMusicScreen> {
   void didChangeDependencies() {
     if (_isInit) {
       // gameId IS NULL FIX THIS!
-      final musicId = ModalRoute.of(context).settings.arguments as String;
+      final musicId = ModalRoute.of(context)!.settings.arguments as String;
       if (musicId != null) {
         _editedMusic = Provider.of<Musics>(context, listen: false).findById(musicId);
         _initValues = {
-          'title': _editedMusic.title,
+          'title': _editedMusic.title.toString(),
         };
       }
     }
@@ -88,7 +88,7 @@ class _EditMusicScreenState extends State<EditMusicScreen> {
                 ),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return 'Please provide the name of the game.';
                   }
                   return null;

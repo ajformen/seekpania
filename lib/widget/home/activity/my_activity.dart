@@ -31,7 +31,7 @@ class _MyActivityState extends State<MyActivity> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Activities>(context).fetchCurrentUserActivity(user.uid).then((_) {
+      Provider.of<Activities>(context).fetchCurrentUserActivity(user!.uid).then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -113,9 +113,9 @@ class _MyActivityState extends State<MyActivity> {
     // final liveEvents = Provider.of<LiveEvents>(context, listen: false).eventItems.map((g) => ActivityInterestItem(g.id, g.title)).toList();
     // final interests = games + liveEvents;
     final activities = Provider.of<Activities>(context, listen: false).currentUserActivity.map((g) => MyActivityItem(
-      g.id, g.caption, g.meetUpType, g.companionType,
-      g.participants, g.scheduleDate, g.location, g.notes,
-      g.creatorId, g.creatorName, g.creatorPhoto, g.type,
+      g.id!, g.caption!, g.meetUpType!, g.companionType!,
+      g.participants!, g.scheduleDate!, g.location!, g.notes!,
+      g.creatorId!, g.creatorName!, g.creatorPhoto!, g.type!,
     )).toList();
 
     return Expanded(

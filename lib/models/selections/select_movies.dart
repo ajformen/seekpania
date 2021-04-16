@@ -6,9 +6,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SelectMovies with ChangeNotifier {
-  final String id;
-  final String title;
-  bool isSelected;
+  final String? id;
+  final String? title;
+  bool? isSelected;
   final dynamic selects;
 
   SelectMovies({
@@ -20,8 +20,8 @@ class SelectMovies with ChangeNotifier {
 
   factory SelectMovies.fromDocument(DocumentSnapshot doc) {
     return SelectMovies(
-      id: doc.data()['id'],
-      title: doc.data()['title'],
+      id: doc.data()!['id'],
+      title: doc.data()!['title'],
       // isSelected: doc.data()['isSelected'],
       selects: doc['selects'],
     );
@@ -30,21 +30,21 @@ class SelectMovies with ChangeNotifier {
   Future<void> toggleSelectedStatus() async {
     final user = FirebaseAuth.instance.currentUser;
     UserAccount currentUser;
-    currentUser = UserAccount(id: user.uid);
-    String currentUserID = currentUser.id;
+    currentUser = UserAccount(id: user!.uid);
+    String currentUserID = currentUser.id!;
     final moviesRef = FirebaseFirestore.instance.collection('movies');
     final usersRef = FirebaseFirestore.instance.collection('users');
     // isSelected = !isSelected;
     isSelected = selects[currentUserID] == true;
     try {
-      if (isSelected) {
+      if (isSelected!) {
         await moviesRef.doc(id).update({
           'selects.$currentUserID': false,
         });
         selects[currentUserID] = false;
         //....
         await usersRef.doc(currentUser.id).collection('interests').doc(id).delete();
-      } else if (!isSelected) {
+      } else if (!isSelected!) {
         await moviesRef.doc(id).update({
           'selects.$currentUserID' : true
         });

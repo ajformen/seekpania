@@ -19,7 +19,7 @@ class _LoggedInWidgetState extends State<LoggedInWidget> {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final user = FirebaseAuth.instance.currentUser;
   final usersRef = FirebaseFirestore.instance.collection('users');
-  UserAccount currentUser;
+  late UserAccount currentUser;
   TextEditingController cityController = TextEditingController();
 
   @override
@@ -29,7 +29,7 @@ class _LoggedInWidgetState extends State<LoggedInWidget> {
   }
 
   getUser() async {
-    DocumentSnapshot doc = await usersRef.doc(user.uid).get();
+    DocumentSnapshot doc = await usersRef.doc(user!.uid).get();
     currentUser = UserAccount.fromDocument(doc);
   }
 
@@ -65,11 +65,11 @@ class _LoggedInWidgetState extends State<LoggedInWidget> {
             SizedBox(height: 8),
             CircleAvatar(
               maxRadius: 35,
-              backgroundImage: NetworkImage(user.photoURL),
+              backgroundImage: NetworkImage(user!.photoURL!),
             ),
             SizedBox(height: 8),
             Text(
-              user.displayName,
+              user!.displayName!,
               style: TextStyle(
                   fontSize: 25.0,
                   color: Colors.black,
@@ -196,7 +196,7 @@ class _LoggedInWidgetState extends State<LoggedInWidget> {
             ),
             SizedBox(height: 8),
             Text(
-              user.email,
+              user!.email!,
               style: TextStyle(
                 fontSize: 13.0,
                 color: Colors.black,

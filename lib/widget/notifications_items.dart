@@ -11,7 +11,7 @@ import 'package:challenge_seekpania/widget/home/activity/view_activity.dart';
 // import 'package:timeago/timeago.dart' as timeago;
 
 class NotificationsItems extends StatefulWidget {
-  final SelectInvite user;
+  final SelectInvite? user;
 
   NotificationsItems({this.user});
 
@@ -21,14 +21,14 @@ class NotificationsItems extends StatefulWidget {
 
 class _NotificationsItemsState extends State<NotificationsItems> {
   int id = 0;
-  String invStatus;
-  UserAccount currentUser;
+  String? invStatus;
+  UserAccount? currentUser;
   final user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
     print('USER ID');
-    print(widget.user.id);
+    print(widget.user!.id);
     super.initState();
   }
 
@@ -45,10 +45,10 @@ class _NotificationsItemsState extends State<NotificationsItems> {
 
   @override
   Widget build(BuildContext context) {
-    currentUser = UserAccount(id: user.uid);
-    String activityItemText;
+    currentUser = UserAccount(id: user!.uid);
+    String? activityItemText;
 
-    if (widget.user.type == 'invitation') {
+    if (widget.user!.type == 'invitation') {
       activityItemText = ' sent you an invitation';
     }
 
@@ -57,7 +57,7 @@ class _NotificationsItemsState extends State<NotificationsItems> {
       children: [
         ListTile(
           leading: CircleAvatar(
-            backgroundImage: NetworkImage(widget.user.creatorPhoto),
+            backgroundImage: NetworkImage(widget.user!.creatorPhoto!),
             maxRadius: 25,
           ),
           title: Padding(
@@ -71,7 +71,7 @@ class _NotificationsItemsState extends State<NotificationsItems> {
                 ),
                 children: [
                   TextSpan(
-                    text: widget.user.creatorName,
+                    text: widget.user!.creatorName,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -84,9 +84,9 @@ class _NotificationsItemsState extends State<NotificationsItems> {
             ),
           ),
           onTap: () async{
-            if (widget.user.invitationStatus == 'pending') {
+            if (widget.user!.invitationStatus == 'pending') {
               Navigator.push(context, MaterialPageRoute(builder: (context) => ViewActivity(user: widget.user))).then(onGoBack);
-            } else if (widget.user.invitationStatus == 'accepted') {
+            } else if (widget.user!.invitationStatus == 'accepted') {
               // Navigator.of(context).pop(context);
               Fluttertoast.showToast(
                   msg: "You already accepted this invitation!",
@@ -97,7 +97,7 @@ class _NotificationsItemsState extends State<NotificationsItems> {
                   textColor: Colors.white,
                   fontSize: 13.0
               );
-            } else if (widget.user.invitationStatus == 'declined') {
+            } else if (widget.user!.invitationStatus == 'declined') {
               // Navigator.of(context).pop(context);
               Fluttertoast.showToast(
                   msg: "You have declined this invitation!",
