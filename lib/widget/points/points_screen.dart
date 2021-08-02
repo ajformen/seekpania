@@ -1,7 +1,10 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'package:challenge_seekpania/models/user_account.dart';
 
 import 'package:provider/provider.dart';
 import 'package:challenge_seekpania/provider/rate.dart';
@@ -9,7 +12,6 @@ import 'package:challenge_seekpania/provider/rate.dart';
 import 'package:challenge_seekpania/widget/points/points_item.dart';
 
 class PointsScreen extends StatefulWidget {
-  // static const routeName = './activity-interest-screen';
 
   @override
   _PointsScreenState createState() => _PointsScreenState();
@@ -17,6 +19,8 @@ class PointsScreen extends StatefulWidget {
 
 class _PointsScreenState extends State<PointsScreen> {
   final user = FirebaseAuth.instance.currentUser;
+  late UserAccount currentUser;
+  final usersRef = FirebaseFirestore.instance.collection('users');
 
   var _isInit = true;
   var _isLoading = false;
@@ -38,16 +42,14 @@ class _PointsScreenState extends State<PointsScreen> {
     super.didChangeDependencies();
   }
 
-  // Future<void> _refreshInterests(BuildContext context) async {
-  //   await Provider.of<Games>(context, listen: false).fetchGameInterests();
-  //   await Provider.of<LiveEvents>(context, listen: false).fetchLiveEventInterests();
-  // }
+  Widget buildLoading() => Center(child: CircularProgressIndicator());
 
   display(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         header(context),
+        totalPoints(),
         viewPoints()
       ],
     );
@@ -64,7 +66,6 @@ class _PointsScreenState extends State<PointsScreen> {
               icon: Icon(
                 Icons.arrow_back_sharp,
                 size: 30.0,
-                // color: Color(0xffff3366),
                 color: Colors.deepPurple[900],
               ),
             ),
@@ -84,19 +85,49 @@ class _PointsScreenState extends State<PointsScreen> {
     );
   }
 
+  totalPoints() {
+    return FutureBuilder<DocumentSnapshot>(
+        future: usersRef.doc(user!.uid).get(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return buildLoading();
+          }
+          currentUser = UserAccount.fromDocument(snapshot.data!);
+          return Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.only(top: 15.0, bottom: 10.0),
+            child: Container(
+              width: 130.0,
+              height: 40.0,
+              decoration: new BoxDecoration(
+                border: Border.all(
+                  color: Colors.deepPurple[700]!,
+                ),
+                color: Colors.deepPurple[700],
+                // shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(
+                  '${currentUser.points} points',
+                  style: TextStyle(
+                    fontSize: 10.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+    );
+  }
+
   noPoints() {
     return Container(
       alignment: Alignment.center,
-      padding: EdgeInsets.only(top: 250.0),
+      padding: EdgeInsets.only(top: 200.0),
       child: Column(
         children: [
-          Text(
-            'You don\'t have any points.',
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.red[600],
-            ),
-          ),
           Text(
             'To earn points someone has to rate you.',
             style: TextStyle(
@@ -110,7 +141,7 @@ class _PointsScreenState extends State<PointsScreen> {
   }
 
   viewPoints() {
-    final points = Provider.of<Rate>(context, listen: false).userPoints.map((g) => PointsItem(g.id!, g.rate!)).toList();
+    final points = Provider.of<Rate>(context, listen: false).userPoints.map((g) => PointsItem(g.id!, g.rate!, g.feedback!)).toList();
 
     return _isLoading ? Center(
       child: CircularProgressIndicator(),
@@ -124,7 +155,6 @@ class _PointsScreenState extends State<PointsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final gamesData = Provider.of<Games>(context);
     print('rebuilding...');
     return Scaffold(
       body: SafeArea(

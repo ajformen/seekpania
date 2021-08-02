@@ -19,19 +19,13 @@ class SelectLiveEvent with ChangeNotifier {
   });
 
   factory SelectLiveEvent.fromDocument(DocumentSnapshot doc) {
+    final d = doc.data() as Map;
     return SelectLiveEvent(
-      id: doc.data()!['id'],
-      title: doc.data()!['title'],
-      // isSelected: doc.data()['isSelected'],
+      id: d['id'],
+      title: d['title'],
       selects: doc['selects'],
     );
   }
-
-  // factory SelectLiveEvent.fromDocument2(DocumentSnapshot doc) {
-  //   return SelectLiveEvent(
-  //     title: doc.data()['title'],
-  //   );
-  // }
 
   Future<void> toggleSelectedStatus() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -40,7 +34,6 @@ class SelectLiveEvent with ChangeNotifier {
     String currentUserID = currentUser.id!;
     final liveEventsRef = FirebaseFirestore.instance.collection('liveEvents');
     final usersRef = FirebaseFirestore.instance.collection('users');
-    // isSelected = !isSelected;
     isSelected = selects[currentUserID] == true;
     try {
       if (isSelected!) {

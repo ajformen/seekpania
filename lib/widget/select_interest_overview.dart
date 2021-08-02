@@ -10,14 +10,12 @@ class SelectInterestOverview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: header(context, titleText: "Select Interest"),
       appBar: AppBar(
         title: Center(
           child: Text(
             "Select Interest",
             style: TextStyle(
               fontSize: 18.0,
-              // color: Colors.deepPurple,
             ),
           ),
         ),

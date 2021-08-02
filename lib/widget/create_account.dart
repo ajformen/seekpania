@@ -1,22 +1,18 @@
 import 'package:flash/flash.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:challenge_seekpania/widget/timeline.dart';
-// import 'package:challenge_seekpania/widget/account.dart';
 import 'package:intl/intl.dart';
-// import 'package:flutter_country_picker/flutter_country_picker.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:challenge_seekpania/models/user_account.dart';
 import 'package:challenge_seekpania/page/header.dart';
 import 'package:challenge_seekpania/widget/check_user.dart';
-import 'package:challenge_seekpania/widget/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:challenge_seekpania/widget/logged_in_widget.dart';
-import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
-import 'package:challenge_seekpania/provider/google_sign_in.dart';
-import 'package:provider/provider.dart';
+
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
+import 'package:mailer/smtp_server/gmail.dart';
 
 final DateTime timestamp = DateTime.now();
 late UserAccount currentUser;
@@ -30,7 +26,9 @@ class _CreateAccountState extends State<CreateAccount> {
   final user = FirebaseAuth.instance.currentUser;
   TextEditingController genderCustomController = TextEditingController();
   TextEditingController cityController = TextEditingController();
+  TextEditingController pinController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  int ? pin;
   String? email;
   String? gender;
   String? genderCustom;
@@ -48,6 +46,7 @@ class _CreateAccountState extends State<CreateAccount> {
   bool isCountryVisible = false;
   bool isBirthDateVisible = false;
 
+  bool _pinValid = true;
   bool _genderValid = true;
   bool _genderCustomValid = true;
   bool _statusValid = true;
@@ -73,8 +72,6 @@ class _CreateAccountState extends State<CreateAccount> {
 
   submit() {
     setState(() {
-      // gender == null ? _genderValid = false : _genderValid = true;
-      // validate data
       if (gender == null) {
         _genderValid = false;
         isGenderVisible = true;
@@ -96,6 +93,7 @@ class _CreateAccountState extends State<CreateAccount> {
         _countryValid = true;
       }
 
+      pinController.text.trim().length < 3 || pinController.text.isEmpty ? _pinValid = false : _pinValid = true;
       cityController.text.trim().length < 3 || cityController.text.isEmpty ? _cityValid = false : _cityValid = true;
       genderCustomController.text.trim().length < 3 || genderCustomController.text.isEmpty ? _genderCustomValid = false : _genderCustomValid = true;
 
@@ -129,24 +127,28 @@ class _CreateAccountState extends State<CreateAccount> {
     _formKey.currentState!.save();
     currentUser = UserAccount(id: user!.uid);
     DocumentSnapshot doc = await usersRef.doc(currentUser.id).get();
+    /// for mobile users
     usersRef.doc(currentUser.id).set({
       "id": currentUser.id,
       "email": email,
-      "photoUrl": user!.photoURL,
+      "photoURL": user!.photoURL,
       "firstName": user!.displayName!.split(" ")[0],
       "lastName": user!.displayName!.split(" ")[1],
+      "pin": int.parse(pinController.text),
       "gender": gender,
       "genderCustom": genderCustomController.text,
       "status": status,
       "city": cityController.text,
-      // "country": country.name,
       "country": country!.name,
       "countryDialCode": country!.dialCode,
       "birthDate": formatBirthDate,
       "age": age,
+      "userStatus": 'Active',
       "timestamp": timestamp,
       "currentLocation": '',
-      "favorites": {},
+      "points": 30.0,
+      "health": '',
+      "chats": [],
     });
     doc = await usersRef.doc(currentUser.id).get();
     currentUser = UserAccount.fromDocument(doc);
@@ -154,25 +156,56 @@ class _CreateAccountState extends State<CreateAccount> {
     print(currentUser.email);
     print(currentUser.city);
     print(currentUser.country);
-    // Navigator.pop(context, email);
-    // Fluttertoast.showToast(
-    //     msg: "You have successfully created your account!",
-    //     toastLength: Toast.LENGTH_SHORT,
-    //     gravity: ToastGravity.CENTER,
-    //     timeInSecForIosWeb: 1,
-    //     backgroundColor: Colors.blueGrey[400],
-    //     textColor: Colors.white,
-    //     fontSize: 13.0
-    // );
+
+    /// send this to the server
+    final usersDbRef = FirebaseFirestore.instance.collection('usersDB');
+    usersDbRef.doc(currentUser.id).set({
+      "id": currentUser.id,
+      "email": email,
+      "photoURL": user!.photoURL,
+      "firstName": user!.displayName!.split(" ")[0],
+      "lastName": user!.displayName!.split(" ")[1],
+      "pin": int.parse(pinController.text),
+      "gender": gender,
+      "genderCustom": genderCustomController.text,
+      "status": status,
+      "city": cityController.text,
+      "country": country!.name,
+      "countryDialCode": country!.dialCode,
+      "birthDate": formatBirthDate,
+      "age": age,
+      "userStatus": 'Active',
+      "timestamp": timestamp,
+      "currentLocation": '',
+      "points": 30.0,
+      "health": '',
+      "chats": [],
+    });
+
+    /// Send email notifications to the user that his/her account is deleted
+    String username = 'dev.seekpania@gmail.com';
+    String password = 'Seekpania654';
+
+    final smtpServer = gmail(username, password);
+
+    /// Create our email message
+    final message = Message()..from = Address(username, 'Seekpania')..recipients.add(currentUser.email)
+      ..subject = 'Account Registration : ${DateTime.now()}'
+      ..html = "<h3>Thank you for registering with us! Happy seeking!</h3>\n<p></p>";
+
+    try {
+      final sendEmail = await send(message, smtpServer);
+      print(sendEmail.toString());
+    } on MailerException catch (e) {
+      print('Message not sent. \n' + e.toString());
+    }
+
     showFlash(
         context: context,
         duration: const Duration(seconds: 1),
         builder: (context, controller) {
           return Flash.bar(
             controller: controller,
-            // backgroundGradient: LinearGradient(
-            //   colors: [Colors.indigo, Colors.deepPurple],
-            // ),
             backgroundColor: Colors.grey[850]!,
             child: FlashBar(
               message: Text('Account created successfully',
@@ -184,32 +217,20 @@ class _CreateAccountState extends State<CreateAccount> {
         }
     );
     Navigator.pushReplacement(
-      // context, MaterialPageRoute(builder: (context) => LoggedInWidget()));
         context, MaterialPageRoute(builder: (context) => Timeline()));
-
-    // Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext parentContext) {
     return Scaffold(
       appBar: header(context,
-        titleText: 'Set up your profile', removeBackButton: true,
+        titleText: 'Set up your profile',
       ),
       body: ListView(
         children: <Widget>[
           Container(
             child: Column(
               children: <Widget>[
-                // Padding(
-                //   padding: EdgeInsets.only(top: 25.0),
-                //   child: Center(
-                //     child: Text(
-                //       "Create an account",
-                //       style: TextStyle(fontSize: 25.0),
-                //     ),
-                //   ),
-                // ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.0, 25.0, 16.0, 5.0),
                   child: Container(
@@ -222,7 +243,6 @@ class _CreateAccountState extends State<CreateAccount> {
                           border: OutlineInputBorder(),
                           labelText: "First Name",
                           labelStyle: TextStyle(fontSize: 15.0),
-                          // hintText: "Must be at least 3 characters",
                         ),
                       ),
                     ),
@@ -240,7 +260,26 @@ class _CreateAccountState extends State<CreateAccount> {
                           border: OutlineInputBorder(),
                           labelText: "Last Name",
                           labelStyle: TextStyle(fontSize: 15.0),
-                          // hintText: "Must be at least 3 characters",
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.0, 5.0, 16.0, 0),
+                  child: Container(
+                    child: Form(
+                      child: TextFormField(
+                        onSaved: (val) => city = val,
+                        controller: pinController,
+                        obscureText: true,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: "6-Digit PIN",
+                          labelStyle: TextStyle(fontSize: 15.0),
+                          hintText: "Enter 6-Digit PIN",
+                          errorText: _pinValid ? null : "PIN is too short",
                         ),
                       ),
                     ),
@@ -413,30 +452,6 @@ class _CreateAccountState extends State<CreateAccount> {
                     ],
                   ),
                 ),
-                // Container(
-                //   padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 5.0),
-                //   // alignment: Alignment.center,
-                //   child: Card(
-                //     child: Padding(
-                //       padding: EdgeInsets.all(10.0),
-                //       child: SizedBox(
-                //         width: double.infinity,
-                //         child: CountryPicker(
-                //           showFlag: true,
-                //           showName: true,
-                //           onChanged: (Country _country) {
-                //             setState(() {
-                //               country = _country;
-                //               print(country.name);
-                //               isCountryVisible = false;
-                //             });
-                //           },
-                //           selectedCountry: country,
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
                 Container(
                   padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 5.0),
                   // alignment: Alignment.center,
@@ -461,7 +476,6 @@ class _CreateAccountState extends State<CreateAccount> {
                   ),
                 ),
                 Padding(
-                  // DAMNIT CITY
                   padding: EdgeInsets.fromLTRB(16.0, 5.0, 16.0, 0),
                   child: Container(
                     child: Form(
@@ -484,8 +498,6 @@ class _CreateAccountState extends State<CreateAccount> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      // Text(birthdate == null ? 'Nothing has been picked yet' : birthdate.toString()),
-                      // Text('Birthday'),
                       RaisedButton(
                         child: Text((birthDate == null ? 'Select your birth date' : formatBirthDate)!),
                         color: Colors.white,
@@ -543,7 +555,6 @@ class _CreateAccountState extends State<CreateAccount> {
                           border: OutlineInputBorder(),
                           labelText: "Email",
                           labelStyle: TextStyle(fontSize: 15.0),
-                          // hintText: "Must be at least 3 characters",
                         ),
                       ),
                     ),

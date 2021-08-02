@@ -25,7 +25,7 @@ class _SetDateTimeState extends State<SetDateTime> {
 
   bool isNowSelected = false;
   bool isLaterSelected = false;
-  bool isReveal = false;
+  bool isReveal = true;
   bool isNow = false;
   bool checkNowLater = false;
 
@@ -42,34 +42,12 @@ class _SetDateTimeState extends State<SetDateTime> {
   TextEditingController _timeController = TextEditingController();
 
   _isSubmit() {
-    if (isNowSelected == false && isLaterSelected == false) {
-      setState(() {
-        checkNowLater = true;
-      });
-      return;
-    }
     String? _dateFormat, _timeFormat;
-
-    if (isNowSelected == true) {
-      scheduleType = 'NOW';
-      _dateFormat = '';
-      _timeFormat = '';
-    } else if (isLaterSelected == true) {
-      scheduleType = 'LATER';
+    print('TYPE');
+    scheduleType = 'LATER';
       _dateFormat = _dateController.text;
       _timeFormat = _timeController.text;
-    }
-    print('TYPE');
     print(scheduleType);
-
-    // Navigator.pop(context, type);
-
-    // print(widget.searchID);
-    // print(widget.interestName);
-    // print(widget.searchType);
-    // print(widget.caption);
-    // print(widget.companionType);
-    // print(widget.participants);
 
     Navigator.push(
         context,
@@ -88,9 +66,6 @@ class _SetDateTimeState extends State<SetDateTime> {
     return Column(
       children: [
         header(),
-        buildNowOrLater(),
-        buildScheduleType(),
-        buildNow(),
         buildDate(),
         buildTime(),
       ],
@@ -106,7 +81,6 @@ class _SetDateTimeState extends State<SetDateTime> {
           IconButton(
             onPressed: () {
               Navigator.pop(context);
-              // _isSubmit();
             },
             icon: Icon(
               Icons.arrow_back_sharp,
@@ -173,7 +147,6 @@ class _SetDateTimeState extends State<SetDateTime> {
                     ],
                   ),
                   onTap: () {
-                    // game.toggleOneCompanionType();
                     setState(() {
                       isNowSelected = !isNowSelected;
                       print('NOW');
@@ -217,7 +190,6 @@ class _SetDateTimeState extends State<SetDateTime> {
                     ],
                   ),
                   onTap: () {
-                    // toggleSelected();
                     setState(() {
                       isLaterSelected = !isLaterSelected;
                       print('LATER');
@@ -376,7 +348,6 @@ class _SetDateTimeState extends State<SetDateTime> {
                       decoration: InputDecoration(
                           disabledBorder:
                           UnderlineInputBorder(borderSide: BorderSide.none),
-                          // labelText: 'Time',
                           contentPadding: EdgeInsets.only(top: 0.0)
                       ),
                     ),
@@ -429,7 +400,6 @@ class _SetDateTimeState extends State<SetDateTime> {
                   decoration: InputDecoration(
                       disabledBorder:
                       UnderlineInputBorder(borderSide: BorderSide.none),
-                      // labelText: 'Time',
                       contentPadding: EdgeInsets.all(5)
                   ),
                 ),

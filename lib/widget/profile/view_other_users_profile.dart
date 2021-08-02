@@ -29,7 +29,6 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
 
   @override
   void didChangeDependencies() {
-    // print('VIEW INTEREST');
     if (_isInit) {
       setState(() {
         _isLoading = true;
@@ -47,15 +46,12 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
 
   viewInterest() {
     final interests = Provider.of<Interest>(context, listen: false).userInterests.map((g) => InterestBox(g.title!)).toList();
-    // final liveEvents = Provider.of<LiveEvents>(context, listen: false).eventItems.map((g) => InterestBox(g.title)).toList();
-    // final interests = games;
 
     return _isLoading ? Center(
         child: CircularProgressIndicator()
     ) : Wrap(
       spacing: 8,
       runSpacing: 8,
-      // direction: Axis.horizontal,
       children: interests,
     );
   }
@@ -75,12 +71,7 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
     } else {
       gender = widget.user!.gender;
     }
-
-    // currentUser = UserAccount(id: user.uid);
-    // print('VIEW OTHER USERS PROFILE CURRENTUSER ID');
-    // print(currentUser.id);
     final userFave = Provider.of<UserAccount>(context);
-    // isPicked = (userFave.favorites[currentUser.id] == true);
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -98,8 +89,6 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
                       ),
                       child: Image.network(
                         widget.user!.photoURL!,
-                        // 's400-c/$userPhoto',
-                        // 'https://lh3.googleusercontent.com/a-/AOh14GjZwVeyNas_d37ucE1zyFcth-1b33CYoXU8lEUj=s400-c',
                         width: 390,
                         height: 412,
                         fit: BoxFit.cover,
@@ -182,7 +171,8 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
                         Row(
                           children: [
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                              },
                               icon: Icon(
                                 Icons.chat_sharp,
                                 size: 26.0,
@@ -191,7 +181,7 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
                             ),
                             IconButton(
                               onPressed: () {
-                                userFave.toggleFavoriteStatus(widget.user!);
+                                userFave.toggleFavoriteStatus2(widget.user!);
                                 Fluttertoast.showToast(
                                     msg: "You have favorited this user!",
                                     toastLength: Toast.LENGTH_SHORT,
@@ -203,7 +193,6 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
                                 );
                               },
                               icon: Icon(
-                                // isPicked ? Icons.favorite : Icons.favorite_border,
                                 Icons.favorite,
                                 size: 26.0,
                                 color: Colors.deepPurple[900],
@@ -258,7 +247,6 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
               child: Icon(
                 Icons.arrow_back_ios,
                 size: 24.0,
-                // color: Colors.deepPurple[900],
                 color: Colors.white,
               ),
             ),
@@ -269,7 +257,6 @@ class _ViewOtherUsersProfileState extends State<ViewOtherUsersProfile> {
               icon: Icon(
                 Icons.more_vert,
                 size: 24.0,
-                // color: Colors.deepPurple[900],
                 color: Colors.white,
               ),
             )

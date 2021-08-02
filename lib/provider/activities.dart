@@ -44,32 +44,19 @@ class Activities with ChangeNotifier {
   }
 
   Future<void> fetchFaveUsers(String currentUserID) async{
-    try {
-      currentUser = UserAccount(id:  FirebaseAuth.instance.currentUser!.uid);
-      DocumentSnapshot faveLists = await usersRef.doc(currentUserID).get();
-      Map favorites = faveLists.data()!['favorites'] as Map;
 
-      List<String> userIds = [];
-      List<UserAccount> users = [];
-      favorites.forEach((userId, selected) {
-        if (selected && userId != currentUser!.id) {
-          userIds.add(userId);
-        }
-      });
-      await Future.forEach(userIds, (userId) async {
-        DocumentSnapshot userDoc = await usersRef.doc(userId.toString()).get();
-        print(userDoc.data());
-        final user = UserAccount.fromDocument(userDoc);
-        print('--------------');
-        print(user.photoURL);
-        users.add(user);
-      });
-      print(users);
-      _faveUsers = users;
+    try {
+      QuerySnapshot faveLists = await usersRef.doc(currentUserID).collection('favorites').get();
+      final extractedData = faveLists.docs.map((g) => UserAccount.fromDocument(g)).toList();
+      if (extractedData == null) {
+        return;
+      }
+
+      _faveUsers = extractedData;
       notifyListeners();
-    } catch (error) {
-      print(error);
-      throw error;
+    } catch (e) {
+      print(e);
+      throw e;
     }
   }
 
@@ -78,15 +65,12 @@ class Activities with ChangeNotifier {
 
       currentUser = UserAccount(id:  FirebaseAuth.instance.currentUser!.uid);
       DocumentSnapshot gameDoc = await usersRef.doc(currentUserID).collection('activities').doc(activityID).get();
-      Map going = gameDoc.data()!['going'] as Map;
+      final d = gameDoc.data() as Map;
+      Map going = d['going'];
 
       List<String> userIds = [];
       List<UserAccount> users = [];
       going.forEach((userId, selected) {
-        // if (selected && userId != currentUser.id) {
-        //   userIds.add(userId);
-        // }
-        // this one is not working
         if ((selected && userId != currentUser!.id) || (selected && userId == currentUser!.id)) {
           userIds.add(userId);
         }
@@ -131,8 +115,6 @@ class Activities with ChangeNotifier {
     DocumentSnapshot doc = await usersRef.doc(currentUser!.id).get();
     currentUser = UserAccount.fromDocument(doc);
     try{
-      // gamesRef.doc(currentUser.id).collection('gamesAdded').doc(theGame.id).set({
-      // usersRef.doc(currentUser.id).collection('activities').doc(userId).collection('invitation').doc(selectInvite.id).set({
       usersRef.doc(currentUser!.id).collection('activities').doc(selectActivity!.id).set({
         'id': selectActivity!.id,
         'caption': activity.caption,
@@ -140,6 +122,7 @@ class Activities with ChangeNotifier {
         'meetUpType': activity.meetUpType,
         'companionType': activity.companionType,
         'participants': activity.participants,
+        'scheduleType': activity.scheduleType,
         'scheduleDate': activity.scheduleDate,
         'scheduleTime': activity.scheduleTime,
         'location': activity.location,
@@ -150,7 +133,6 @@ class Activities with ChangeNotifier {
         'creatorPhoto': currentUser!.photoURL,
         'timestamp': timestamp,
         'type': 'invitation',
-        // 'invitation_status': 'pending',
         'going': {},
       });
       final newActivity = SelectActivity(
@@ -169,10 +151,14 @@ class Activities with ChangeNotifier {
   }
 
   Future<void> deleteActivity(String id) async {
-    // final existingGameIndex = _items.indexWhere((invite) => invite.id == id);
     await usersRef.doc(currentUser!.id).collection('activities').doc(id).delete();
-    // _items.removeWhere((game) => game.id == id);
-    // _items.removeAt(existingGameIndex);
+    notifyListeners();
+  }
+
+  Future<void> deleteFave(String id) async {
+    final existingGameIndex = _items.indexWhere((g) => g.id == id);
+    await usersRef.doc(currentUser!.id).collection('favorites').doc(id).delete();
+    _items.removeAt(existingGameIndex);
     notifyListeners();
   }
 

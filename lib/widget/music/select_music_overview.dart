@@ -1,4 +1,3 @@
-import 'package:challenge_seekpania/page/header.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -20,7 +19,6 @@ class _SelectMusicOverviewState extends State<SelectMusicOverview> {
 
   @override
   void initState() {
-    // Provider.of<Games>(context).fetchAndSetGames(); -- THIS WON'T WORK
     super.initState();
   }
 
@@ -44,14 +42,11 @@ class _SelectMusicOverviewState extends State<SelectMusicOverview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: header(context, titleText: 'Games'),
       appBar: AppBar(
-        // backgroundColor: Colors.white,
         title: Center(
           child: Text(
             "Music",
             style: TextStyle(
-              // color: Colors.deepPurple,
               fontSize: 18.0,
             ),
           ),
@@ -59,7 +54,6 @@ class _SelectMusicOverviewState extends State<SelectMusicOverview> {
         actions: <Widget>[
           IconButton(
             onPressed: () {
-              // Navigator.of(context).pushNamed(ViewInterests.routeName);
             },
             icon: Icon(
               Icons.done,
@@ -69,10 +63,6 @@ class _SelectMusicOverviewState extends State<SelectMusicOverview> {
           ),
         ],
       ),
-      // body: ChangeNotifierProvider(
-      //   create: (context) => Games(),
-      //   child: GamesGrid(),
-      // ),
       body: _isLoading ? Center(
         child: CircularProgressIndicator(),
       ) : MusicGrid(),

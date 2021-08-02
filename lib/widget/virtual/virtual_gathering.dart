@@ -3,19 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 
-import 'package:challenge_seekpania/models/select_activity.dart';
-
-import 'package:provider/provider.dart';
-import 'package:challenge_seekpania/provider/invitations.dart';
-import 'package:challenge_seekpania/provider/activities.dart';
-
-import 'package:challenge_seekpania/widget/home/interests/activity_search.dart';
-import 'package:challenge_seekpania/widget/home/activity/set_date_time.dart';
-import 'package:challenge_seekpania/widget/home/activity/edit_meet_up_notes.dart';
 import 'package:challenge_seekpania/widget/virtual/virtual_set_date_time.dart';
 
 class VirtualGathering extends StatefulWidget {
-  // static const routeName = './activity-face-to-face';
 
   final String? interestID;
   final String? interest;
@@ -29,13 +19,11 @@ class VirtualGathering extends StatefulWidget {
 
 class _VirtualGatheringState extends State<VirtualGathering> {
   String activityID = Uuid().v4();
-  var _editedActivity;
 
   TextEditingController captionController = TextEditingController();
   TextEditingController participantsController = TextEditingController();
   final _captionForm = GlobalKey<FormState>();
   final _howManyForm = GlobalKey<FormState>();
-  // var _editedInvite = SelectInvite(id: null, caption: '', participants: '');
   String? caption, participants;
 
   bool isOneSelected = false;
@@ -126,7 +114,6 @@ class _VirtualGatheringState extends State<VirtualGathering> {
     }
 
     if(isGroupSelected == true && participantsController.text == '1') {
-      // return Text('Invalid', style: TextStyle(fontSize: 8.0, color: Theme.of(context).errorColor),);
       setState(() {
         isInvalidGroupInput = true;
       });
@@ -134,7 +121,6 @@ class _VirtualGatheringState extends State<VirtualGathering> {
     }
 
     if(isOneSelected == true && participantsController.text != '1') {
-      // return Text('Invalid', style: TextStyle(fontSize: 8.0, color: Theme.of(context).errorColor),);
       setState(() {
         isInvalidOneInput = true;
       });
@@ -145,20 +131,6 @@ class _VirtualGatheringState extends State<VirtualGathering> {
       return;
     }
 
-    // if (scheduleType == 'set a schedule') {
-    //   setState(() {
-    //     isSchedule = true;
-    //   });
-    //   return;
-    // }
-
-    // if (location == null) {
-    //   setState(() {
-    //     isInvalidLocation = true;
-    //   });
-    //   return;
-    // }
-
     _captionForm.currentState!.save();
     _howManyForm.currentState!.save();
 
@@ -168,7 +140,6 @@ class _VirtualGatheringState extends State<VirtualGathering> {
       isCompanionSelected = false;
       isInvalidGroupInput = false;
       isInvalidOneInput = false;
-      // isInvalidLocation = false;
     });
 
     String? type;
@@ -179,37 +150,10 @@ class _VirtualGatheringState extends State<VirtualGathering> {
       type = 'Group Companion';
     }
 
-    // this one is working
-    // print(scheduleDate);
-    // print(scheduleTime);
-    // print(location);
-    // print(notes);
-
-    // _editedActivity = SelectActivity(
-    //   id: activityID,
-    //   caption: caption,
-    //   meetUpType: 'Face to Face',
-    //   companionType: type,
-    //   participants: count,
-    //   scheduleDate: _setDate,
-    //   scheduleTime: _setTime,
-    //   location: location,
-    //   invitationLink: '',
-    //   notes: notes,
-    // );
-
-    //for security purposes ahahaha
-    // await Provider.of<Activities>(context, listen: false).createActivity(_editedActivity);
-
-    // activityID = Uuid().v4();
-
-    // Navigator.pushReplacement(
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) =>
-            // ActivitySearch(searchID: widget.interestID, searchType: widget.type, caption: caption, participants: participants)
-            // ActivitySearch(searchID: widget.interestID, searchType: widget.type, activity: _editedActivity)
             VirtualSetDateTime(
               searchID: widget.interestID!, interestName: widget.interest!, searchType: widget.type!,
               caption: caption!, companionType: type!, participants: count,
@@ -217,7 +161,6 @@ class _VirtualGatheringState extends State<VirtualGathering> {
         )
     );
 
-    // print('SUCCESS');
   }
 
   display() {
@@ -231,10 +174,6 @@ class _VirtualGatheringState extends State<VirtualGathering> {
         invalidCompanionType(),
         invalidGroupInput(),
         invalidOneInput(),
-        // schedule(),
-        // displayLocation(),
-        // invalidLocation(),
-        // meetUpNotes(),
         search(),
       ],
     );
@@ -253,7 +192,6 @@ class _VirtualGatheringState extends State<VirtualGathering> {
             icon: Icon(
               Icons.arrow_back_sharp,
               size: 30.0,
-              // color: Color(0xffff3366),
               color: Colors.deepPurple[900],
             ),
           ),
@@ -315,7 +253,6 @@ class _VirtualGatheringState extends State<VirtualGathering> {
             style: TextStyle(
               color: Colors.deepPurple[900],
               fontStyle: FontStyle.italic,
-              // fontWeight: FontWeight.bold
             ),
             decoration: InputDecoration(
               hintText: 'Lets have coffee',
@@ -384,7 +321,6 @@ class _VirtualGatheringState extends State<VirtualGathering> {
               ],
             ),
             onTap: () {
-              // game.toggleOneCompanionType();
               setState(() {
                 isOneSelected = !isOneSelected;
                 print('ONE');
@@ -460,7 +396,6 @@ class _VirtualGatheringState extends State<VirtualGathering> {
                   style: TextStyle(
                     color: Colors.deepPurple[900],
                     fontStyle: FontStyle.italic,
-                    // fontWeight: FontWeight.bold
                   ),
                   decoration: InputDecoration(
                     labelText: 'Companion(s)',
@@ -511,8 +446,6 @@ class _VirtualGatheringState extends State<VirtualGathering> {
         maintainAnimation: false,
         maintainState: false,
         child: Container(
-          // width: 60,
-          // padding: EdgeInsets.all(5.0),
           child: Text(
             'Select a companion type',
             style: TextStyle(
@@ -534,8 +467,6 @@ class _VirtualGatheringState extends State<VirtualGathering> {
         maintainAnimation: false,
         maintainState: false,
         child: Container(
-          // width: 60,
-          // padding: EdgeInsets.all(5.0),
           child: Text(
             'Group companions must be more than 1 people',
             style: TextStyle(
@@ -557,8 +488,6 @@ class _VirtualGatheringState extends State<VirtualGathering> {
         maintainAnimation: false,
         maintainState: false,
         child: Container(
-          // width: 60,
-          // padding: EdgeInsets.all(5.0),
           child: Text(
             'One companion must be 1 person only',
             style: TextStyle(
@@ -580,7 +509,6 @@ class _VirtualGatheringState extends State<VirtualGathering> {
       padding: const EdgeInsets.only(top: 60.0),
       margin: const EdgeInsets.only(left: 200.0),
       width: 150.0,
-      // height: 20.0,
       child: RaisedButton(
         onPressed: goSearch,
         elevation: 0,

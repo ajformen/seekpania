@@ -8,8 +8,6 @@ import 'package:challenge_seekpania/models/select_invite.dart';
 
 import 'package:challenge_seekpania/widget/home/activity/view_activity.dart';
 
-// import 'package:timeago/timeago.dart' as timeago;
-
 class NotificationsItems extends StatefulWidget {
   final SelectInvite? user;
 
@@ -87,7 +85,6 @@ class _NotificationsItemsState extends State<NotificationsItems> {
             if (widget.user!.invitationStatus == 'pending') {
               Navigator.push(context, MaterialPageRoute(builder: (context) => ViewActivity(user: widget.user))).then(onGoBack);
             } else if (widget.user!.invitationStatus == 'accepted') {
-              // Navigator.of(context).pop(context);
               Fluttertoast.showToast(
                   msg: "You already accepted this invitation!",
                   toastLength: Toast.LENGTH_SHORT,
@@ -98,7 +95,6 @@ class _NotificationsItemsState extends State<NotificationsItems> {
                   fontSize: 13.0
               );
             } else if (widget.user!.invitationStatus == 'declined') {
-              // Navigator.of(context).pop(context);
               Fluttertoast.showToast(
                   msg: "You have declined this invitation!",
                   toastLength: Toast.LENGTH_SHORT,
@@ -112,7 +108,6 @@ class _NotificationsItemsState extends State<NotificationsItems> {
           },
         ),
         SizedBox(height: 10.0,),
-        // Divider(color: Color(0xff9933ff)),
       ],
     );
   }

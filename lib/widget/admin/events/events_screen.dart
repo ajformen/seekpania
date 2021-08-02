@@ -20,7 +20,6 @@ class EventsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final gamesData = Provider.of<LiveEvents>(context);
     print('rebuilding...');
     return Scaffold(
       appBar: AppBar(
@@ -45,13 +44,6 @@ class EventsScreen extends StatelessWidget {
                                   IconButton(
                                     icon: Icon(Icons.edit),
                                     onPressed: () {
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //         builder: (context) =>
-                                      //             EditGameScreen(arguments: id)
-                                      //     )
-                                      // );
                                       print('EVENT ID SEARCH:');
                                       print(event.id);
                                       Navigator.of(context).pushNamed(EditEventScreen.routeName, arguments: event.id);
@@ -82,13 +74,6 @@ class EventsScreen extends StatelessWidget {
                 Icons.add
             ),
             onPressed: () {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) =>
-              //             EditGameScreen()
-              //     )
-              // );
               Navigator.of(context).pushNamed(EditEventScreen.routeName);
             },
           ),

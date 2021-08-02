@@ -1,16 +1,11 @@
 import 'package:challenge_seekpania/models/user_account.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:challenge_seekpania/widget/create_account.dart';
 import 'package:challenge_seekpania/provider/google_sign_in.dart';
-// import 'package:challenge_seekpania/widget/background_painter.dart';
-import 'package:challenge_seekpania/widget/logged_in_widget.dart';
 import 'package:challenge_seekpania/widget/sign_up_widget.dart';
 import 'package:challenge_seekpania/widget/check_user.dart';
 import 'package:provider/provider.dart';
 
-// final user = FirebaseAuth.instance.currentUser;
 UserAccount? currentUser;
 
 class HomePage extends StatefulWidget {
@@ -25,10 +20,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    // setState(() {
-    //   this._user = FirebaseAuth.instance.currentUser;
-    // });
   }
 
   @override
@@ -52,10 +43,8 @@ class _HomePageState extends State<HomePage> {
             print(snapshot.data);
             this._user = snapshot.data as User?;
             currentUser = UserAccount(id: _user!.uid);
-            // currentUser.id = "";
             print('HOME PAGE USER ID:');
             print(currentUser!.id);
-            // print('TOKEN');
             return CheckUser();
           } else {
             return SignUpWidget();

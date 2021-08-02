@@ -29,17 +29,13 @@ class _RateUserState extends State<RateUser> {
   bool isNoRate = false;
 
   String? feedback;
-  int? rate;
+  double? rate;
 
   TextEditingController feedbackController = TextEditingController();
 
   final _form = GlobalKey<FormState>();
 
   _submit() async{
-    // final isValid = _form.currentState.validate();
-    // if (!isValid) {
-    //   return;
-    // }
 
     if (isOneSelected == false && isTwoSelected == false && isThreeSelected == false && isFourSelected == false && isFiveSelected == false) {
       setState(() {
@@ -102,7 +98,6 @@ class _RateUserState extends State<RateUser> {
               icon: Icon(
                 Icons.arrow_back_sharp,
                 size: 30.0,
-                // color: Color(0xffff3366),
                 color: Colors.deepPurple[900],
               ),
             ),
@@ -171,7 +166,6 @@ class _RateUserState extends State<RateUser> {
               ],
             ),
             onTap: () {
-              // game.toggleOneCompanionType();
               setState(() {
                 isOneSelected = true;
                 isTwoSelected = false;
@@ -352,8 +346,6 @@ class _RateUserState extends State<RateUser> {
           maintainAnimation: false,
           maintainState: false,
           child: Container(
-            // width: 60,
-            // padding: EdgeInsets.all(5.0),
             child: Text(
               'You didn\'t rate this user',
               style: TextStyle(

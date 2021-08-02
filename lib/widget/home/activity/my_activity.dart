@@ -3,17 +3,12 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:challenge_seekpania/models/select_activity.dart';
-
 import 'package:provider/provider.dart';
 import 'package:challenge_seekpania/provider/activities.dart';
-import 'package:challenge_seekpania/provider/selections/games.dart';
-import 'package:challenge_seekpania/provider/selections/live_events.dart';
 
 import 'package:challenge_seekpania/widget/home/activity/my_activity_item.dart';
 
 class MyActivity extends StatefulWidget {
-  // static const routeName = './my-activity';
 
   @override
   _MyActivityState createState() => _MyActivityState();
@@ -24,6 +19,14 @@ class _MyActivityState extends State<MyActivity> {
 
   var _isInit = true;
   var _isLoading = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print('MY ACTIVITY');
+    print(user!.uid);
+  }
 
   @override
   void didChangeDependencies() {
@@ -63,7 +66,6 @@ class _MyActivityState extends State<MyActivity> {
               icon: Icon(
                 Icons.arrow_back_sharp,
                 size: 30.0,
-                // color: Color(0xffff3366),
                 color: Colors.deepPurple[900],
               ),
             ),
@@ -109,13 +111,8 @@ class _MyActivityState extends State<MyActivity> {
   }
 
   viewActivity() {
-    // final games = Provider.of<Games>(context, listen: false).gameItems.map((g) => ActivityInterestItem(g.id, g.title)).toList();
-    // final liveEvents = Provider.of<LiveEvents>(context, listen: false).eventItems.map((g) => ActivityInterestItem(g.id, g.title)).toList();
-    // final interests = games + liveEvents;
-    final activities = Provider.of<Activities>(context, listen: false).currentUserActivity.map((g) => MyActivityItem(
-      g.id!, g.caption!, g.meetUpType!, g.companionType!,
-      g.participants!, g.scheduleDate!, g.location!, g.notes!,
-      g.creatorId!, g.creatorName!, g.creatorPhoto!, g.type!,
+    final activities = Provider.of<Activities>(context, listen: false).currentUserActivity.map((info) => MyActivityItem(
+      info: info,
     )).toList();
 
     return Expanded(
@@ -128,7 +125,6 @@ class _MyActivityState extends State<MyActivity> {
 
   @override
   Widget build(BuildContext context) {
-    // final gamesData = Provider.of<Games>(context);
     print('rebuilding...');
     return Scaffold(
       body: SafeArea(

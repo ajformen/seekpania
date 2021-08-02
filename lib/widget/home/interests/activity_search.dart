@@ -1,27 +1,24 @@
+import 'package:challenge_seekpania/services/message_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:challenge_seekpania/models/user_account.dart';
 import 'package:challenge_seekpania/models/select_activity.dart';
-import 'package:challenge_seekpania/models/display_interests.dart';
 
 import 'package:provider/provider.dart';
 import 'package:challenge_seekpania/provider/interest.dart';
 import 'package:challenge_seekpania/provider/activities.dart';
 
 import 'package:challenge_seekpania/widget/home/interests/activity_search_items.dart';
-import 'package:challenge_seekpania/widget/home/activity/my_activity.dart';
 
 class ActivitySearch extends StatefulWidget {
 
   final String? searchID;
   final String? searchType;
   final SelectActivity? activity;
-  // final String caption;
-  // final String participants;
 
-  // ActivitySearch({this.searchID, this.searchType, this.caption, this.participants});
   ActivitySearch({this.searchID, this.searchType, this.activity});
 
   @override
@@ -29,29 +26,41 @@ class ActivitySearch extends StatefulWidget {
 }
 
 class _ActivitySearchState extends State<ActivitySearch> {
-  final user = FirebaseAuth.instance.currentUser;
   final usersRef = FirebaseFirestore.instance.collection('users');
-  late UserAccount currentUserID;
+  late UserAccount currentUser;
 
   var _isInit = true;
   var _isLoading = false;
 
   @override
   void initState() {
+    print('ACTIVITYYYYY SEARCHHHH');
     print('CAPTION');
     print(widget.activity!.caption);
     print('PARTICIPANTS');
     print(widget.activity!.participants);
+    print('ACTIVITY ID');
+    print(widget.activity!.id);
+    print('SEARCH ID');
+    print(widget.searchID);
+    print('SEARCH TYPE');
+    print(widget.searchType);
     super.initState();
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
+    final user = FirebaseAuth.instance.currentUser;
+    currentUser = UserAccount(id: user!.uid);
+    DocumentSnapshot doc = await usersRef.doc(currentUser.id).get();
+    currentUser = UserAccount.fromDocument(doc);
+    print('AJ CURRENT LOCATION - ACT SEARCH');
+    print(currentUser.currentLocation);
     if (_isInit) {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Interest>(context).fetchUsersInterests(widget.searchID!, widget.searchType!).then((_) {
+      Provider.of<Interest>(context, listen: false).fetchUsersInterests(widget.searchID!, widget.searchType!, currentUser.currentLocation!).then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -60,6 +69,13 @@ class _ActivitySearchState extends State<ActivitySearch> {
     _isInit = false;
 
     super.didChangeDependencies();
+  }
+
+  getStateLocation() async {
+    final user = FirebaseAuth.instance.currentUser;
+    currentUser = UserAccount(id: user!.uid);
+    DocumentSnapshot doc = await usersRef.doc(currentUser.id).get();
+    currentUser = UserAccount.fromDocument(doc);
   }
 
   display() {
@@ -87,7 +103,6 @@ class _ActivitySearchState extends State<ActivitySearch> {
               Icons.close,
               size: 30.0,
               color: Color(0xffff3366),
-              // color: Colors.deepPurple[900],
             ),
           ),
           GestureDetector(
@@ -98,9 +113,40 @@ class _ActivitySearchState extends State<ActivitySearch> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            onTap: () {
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => MyActivity()));
+            onTap: () async {
+              final user = FirebaseAuth.instance.currentUser;
+              currentUser = UserAccount(id: user!.uid);
+              DocumentSnapshot doc = await usersRef.doc(currentUser.id).get();
+              currentUser = UserAccount.fromDocument(doc);
+              print('THE IDDDD');
+              print(currentUser.id);
+              print(currentUser.firstName);
+              print(widget.activity!.caption);
+
+              await usersRef.doc(currentUser.id).collection('activities').doc(widget.activity!.id).update({
+                'going.${currentUser.id}' : true
+              });
+
+              double total = currentUser.points! - 3;
+              await usersRef.doc(currentUser.id).update({
+                'points': total,
+              });
+
+              MessageService(uid: user.uid).createChat(currentUser.firstName!, widget.activity!.caption!);
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+              Fluttertoast.showToast(
+                  msg: "Activity created successfully!",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 2,
+                  backgroundColor: Colors.black,
+                  textColor: Colors.white,
+                  fontSize: 13.0
+              );
             },
           ),
         ],
@@ -121,8 +167,6 @@ class _ActivitySearchState extends State<ActivitySearch> {
   }
 
   displaySearchUsers() {
-    // final interests = Provider.of<Interest>(context, listen: false).gameItems.map((g) => ActivityInterestItem(g.id, g.title)).toList();
-    // final users = Provider.of<Interest>(context, listen: false).interestItems.map((user) => ActivitySearchItems(user: user, caption: widget.caption, participants: widget.participants)).toList();
     final users = Provider.of<Interest>(context, listen: false).interestItems.map((user) => ActivitySearchItems(user: user, activity: widget.activity!)).toList();
 
     return Expanded(

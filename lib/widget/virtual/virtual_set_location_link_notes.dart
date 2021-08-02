@@ -1,6 +1,16 @@
+import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
+
+import 'package:challenge_seekpania/models/select_activity.dart';
+
+import 'package:provider/provider.dart';
+import 'package:challenge_seekpania/provider/activities.dart';
 
 import 'package:challenge_seekpania/widget/home/activity/set_location.dart';
+import 'package:challenge_seekpania/widget/home/activity/edit_meet_up_notes.dart';
+import 'package:challenge_seekpania/widget/virtual/virtual_link.dart';
+import 'package:challenge_seekpania/widget/virtual/activity/activity_search.dart';
 
 class VirtualSetLocationLinkNotes extends StatefulWidget {
   final String? searchID;
@@ -20,11 +30,16 @@ class VirtualSetLocationLinkNotes extends StatefulWidget {
 }
 
 class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNotes> {
+  String activityID = Uuid().v4();
+  var _editedActivity;
+
   bool isLocation = true;
   bool isLink = true;
 
   String? location;
-  // String notes;
+  String? link;
+  String? notes;
+  CountryCode? country;
 
   @override
   void initState() {
@@ -40,13 +55,50 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
     print(widget.dateFormat);
     print(widget.timeFormat);
 
-    // if (widget.scheduleType == 'NOW') {
-    //   buildNow();
-    // } else if (widget.scheduleType == 'LATER') {
-    //   buildLater();
-    // }
-
     super.initState();
+  }
+
+  Future<void> _submit() async {
+    _editedActivity = SelectActivity(
+      id: activityID,
+      interestName: widget.interestName,
+      caption: widget.caption,
+      meetUpType: 'Face to Face',
+      companionType: widget.companionType,
+      participants: widget.participants,
+      scheduleType: widget.scheduleType,
+      scheduleDate: widget.dateFormat,
+      scheduleTime: widget.timeFormat,
+      location: country!.name,
+      invitationLink: link,
+      notes: notes,
+    );
+
+    print(activityID);
+    print(widget.interestName);
+    print(widget.caption);
+    print(widget.companionType);
+    print(widget.participants);
+    print(widget.scheduleType);
+    print(widget.dateFormat);
+    print(widget.timeFormat);
+    print(location);
+    print(notes);
+    print('THIS IS IT!');
+
+    await Provider.of<Activities>(context, listen: false)
+        .createActivity(_editedActivity);
+
+    activityID = Uuid().v4();
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+            ActivitySearch(
+                searchID: widget.searchID!,
+                searchType: widget.searchType!,
+                activity: _editedActivity)));
   }
 
   noLocation() {
@@ -58,7 +110,6 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
       child: Text(
         'Tap to select country',
         style: TextStyle(
-          // fontSize: 12.0,
             fontStyle: FontStyle.italic,
             color: Colors.grey
         ),
@@ -77,7 +128,6 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
         child: Text(
           'Add invitation link',
           style: TextStyle(
-            // fontSize: 12.0,
               fontWeight: FontWeight.bold
           ),
         ),
@@ -97,7 +147,6 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    // _isSubmit();
                   },
                   icon: Icon(
                     Icons.arrow_back_sharp,
@@ -142,9 +191,6 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
                       height: 70.0,
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        // border: Border.all(
-                        //   color: Colors.deepPurple[900],
-                        // )
                         color: Colors.deepPurple[50],
                       ),
                       child: Row(
@@ -167,7 +213,6 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                // SizedBox(height: 15.0,),
                                 Text(
                                   'Choose a country to match',
                                   style: TextStyle(
@@ -208,9 +253,6 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
                       height: 70.0,
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        // border: Border.all(
-                        //   color: Colors.deepPurple[900],
-                        // )
                         color: Colors.deepPurple[50],
                       ),
                       child: Row(
@@ -221,15 +263,6 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
                               // color: Colors.red,
                             ),
                           ),
-                          // Container(
-                          //   padding: const EdgeInsets.only(left: 15.0),
-                          //   child: isLocation ? noLocation() : Text(
-                          //     location,
-                          //     style: TextStyle(
-                          //       fontWeight: FontWeight.bold,
-                          //     ),
-                          //   ),
-                          // ),
                           Expanded(
                             child: Container(
                               padding: const EdgeInsets.only(left: 15.0, right: 5.0),
@@ -258,12 +291,8 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
             child: Center(
               child: Container(
                 width: 300.0,
-                // height: 70.0,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  // border: Border.all(
-                  //   color: Colors.deepPurple[900],
-                  // )
                   color: Colors.deepPurple[50],
                 ),
                 child: Form(
@@ -286,9 +315,7 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
 
                         return null;
                       },
-                      // controller: notesController,
                       onSaved: (value) {
-                        // notes = value;
                       }
                   ),
                 ),
@@ -299,6 +326,8 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
       ),
     );
   }
+
+  /// LATER
 
   buildLater() {
     return Container(
@@ -312,7 +341,6 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    // _isSubmit();
                   },
                   icon: Icon(
                     Icons.arrow_back_sharp,
@@ -329,90 +357,42 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
                     ),
                   ),
                   onTap: () {
-                    // _isSubmit();
+                    _submit();
                   },
                 ),
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.only(top: 50.0),
-            child: GestureDetector(
-              onTap: () async{
-                String dataFromSetLocation = await Navigator.push(context, MaterialPageRoute(builder: (context) => SetLocation()));
-                setState(() {
-                  location = dataFromSetLocation;
-                  if (location == '') {
-                    isLocation = true;
-                  } else {
-                    isLocation = false;
-                  }
-                });
-              },
-              child: Center(
-                child: Column(
-                  children: [
-                    Container(
-                      width: 300.0,
-                      height: 70.0,
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        // border: Border.all(
-                        //   color: Colors.deepPurple[900],
-                        // )
-                        color: Colors.deepPurple[50],
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            child: Icon(
-                              Icons.location_on,
-                              color: Colors.red,
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.only(left: 15.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                // isLocation ? noLocation() :
-                                isLocation ? noLocation() : Text(
-                                  location!,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                // SizedBox(height: 15.0,),
-                                Text(
-                                  'Choose a country to match',
-                                  style: TextStyle(
-                                    fontSize: 11.0,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+            padding: EdgeInsets.fromLTRB(25.0, 50, 25.0, 0),
+            child: Card(
+              child: Padding(
+                padding: EdgeInsets.all(10.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: CountryListPick(
+                    onChanged: (CountryCode? name) {
+                      setState(() {
+                        country = name;
+                        print(country!.name);
+                      });
+                    },
+                  ),
                 ),
               ),
             ),
           ),
           Container(
-            padding: EdgeInsets.only(top: 10.0),
+            padding: EdgeInsets.only(top: 20.0),
             child: GestureDetector(
               onTap: () async{
-                String dataFromSetLocation = await Navigator.push(context, MaterialPageRoute(builder: (context) => SetLocation()));
+                String dataFromSetLink = await Navigator.push(context, MaterialPageRoute(builder: (context) => VirtualLinkScreen()));
                 setState(() {
-                  location = dataFromSetLocation;
-                  if (location == '') {
-                    isLocation = true;
+                  link = dataFromSetLink;
+                  if (link == '') {
+                    isLink = true;
                   } else {
-                    isLocation = false;
+                    isLink = false;
                   }
                 });
               },
@@ -424,9 +404,6 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
                       height: 70.0,
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        // border: Border.all(
-                        //   color: Colors.deepPurple[900],
-                        // )
                         color: Colors.deepPurple[50],
                       ),
                       child: Row(
@@ -437,22 +414,13 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
                               // color: Colors.red,
                             ),
                           ),
-                          // Container(
-                          //   padding: const EdgeInsets.only(left: 15.0),
-                          //   child: isLocation ? noLocation() : Text(
-                          //     location,
-                          //     style: TextStyle(
-                          //       fontWeight: FontWeight.bold,
-                          //     ),
-                          //   ),
-                          // ),
                           Expanded(
                             child: Container(
                               padding: const EdgeInsets.only(left: 15.0, right: 5.0),
                               child: Column(
                                 children: <Widget>[
                                   isLink ? noLink() : Text(
-                                    location!,
+                                    link!,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -469,44 +437,73 @@ class _VirtualSetLocationLinkNotesState extends State<VirtualSetLocationLinkNote
               ),
             ),
           ),
+          /// Set Notes
           Container(
-            padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-            child: Center(
-              child: Container(
-                width: 300.0,
-                // height: 70.0,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  // border: Border.all(
-                  //   color: Colors.deepPurple[900],
-                  // )
-                  color: Colors.deepPurple[50],
-                ),
-                child: Form(
-                  // key: _form,
-                  child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Notes for your companion.',
-                        hintStyle: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            fontSize: 14.0
-                        ),
+            padding: EdgeInsets.only(top: 20.0),
+            child: GestureDetector(
+              onTap: () async {
+                String dataFromNotes = await Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EditMeetUpNotes()));
+                setState(() {
+                  notes = dataFromNotes;
+                });
+              },
+              child: Center(
+                child: Column(
+                  children: [
+                    Container(
+                      width: 300.0,
+                      height: 70.0,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurple[50],
                       ),
-                      maxLines: 13,
-                      keyboardType: TextInputType.multiline,
-                      // focusNode: _editNotesFocusNode,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter location.';
-                        }
-
-                        return null;
-                      },
-                      // controller: notesController,
-                      onSaved: (value) {
-                        // notes = value;
-                      }
-                  ),
+                      child: Row(
+                        children: [
+                          Container(
+                            child: Icon(
+                              Icons.edit,
+                              color: Colors.deepPurple,
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(left: 15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                RichText(
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.black,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: notes,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                // SizedBox(height: 15.0,),
+                                Text(
+                                  'Add meet-up notes (optional)',
+                                  style: TextStyle(
+                                    fontSize: 11.0,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

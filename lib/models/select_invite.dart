@@ -12,14 +12,15 @@ class SelectInvite with ChangeNotifier {
   final String? meetUpType;
   final String? companionType;
   final int? participants;
-  final String? schedule;
+  final String? scheduleType;
+  final String? scheduleDate;
+  final String? scheduleTime;
   final String? location;
   final String? notes;
   final String? creatorId;
   final String? creatorName;
   final String? creatorPhoto;
-  final String? type; // 'invitations', 'messaging', 'reminder' ..
-  // final DateTime timestamp;
+  final String? type;
   final String? invitationStatus;
   final dynamic accepts;
   bool? isAccepted;
@@ -32,37 +33,39 @@ class SelectInvite with ChangeNotifier {
     this.meetUpType,
     this.companionType,
     this.participants,
-    this.schedule,
+    this.scheduleType,
+    this.scheduleDate,
+    this.scheduleTime,
     this.location,
     this.notes,
     this.creatorId,
     this.creatorName,
     this.creatorPhoto,
     this.type,
-    // this.timestamp,
     this.invitationStatus,
     this.accepts,
     this.isAccepted,
   });
 
   factory SelectInvite.fromDocument(DocumentSnapshot doc) {
-    final d = doc.data();
+    final d = doc.data() as Map;
     return SelectInvite(
-      id: d!['id'],
+      id: d['id'],
       activityID: d['activityID'],
       interestName: d['interestName'],
       caption: d['caption'],
       meetUpType: d['meetUpType'],
       companionType: d['companionType'],
       participants: d['participants'],
-      schedule: d['schedule'],
+      scheduleType: d['scheduleType'],
+      scheduleDate: d['scheduleDate'],
+      scheduleTime: d['scheduleTime'],
       location: d['location'],
       notes: d['notes'],
       creatorId: d['creatorId'],
       creatorName: d['creatorName'],
       creatorPhoto: d['creatorPhoto'],
       type: d['type'],
-      // timestamp: d['timestamp'],
       invitationStatus: d['invitationStatus'],
       accepts: d['accepts'],
     );
@@ -72,7 +75,6 @@ class SelectInvite with ChangeNotifier {
     final user = FirebaseAuth.instance.currentUser;
     UserAccount currentUser;
     currentUser = UserAccount(id: user!.uid);
-    // String currentUserID = currentUser.id;
     final usersRef = FirebaseFirestore.instance.collection('users');
     final activityFeedRef = FirebaseFirestore.instance.collection('feeds');
     print(invite.creatorId);
@@ -81,34 +83,22 @@ class SelectInvite with ChangeNotifier {
     print(userId);
     print('---------------');
 
-    // isAccepted = accepts[userId] == true;
-
     try {
-      // cant do anything here, error "SOME REQUESTED DOCUMENT WAS NOT FOUND"
-      // doc.set({}) is not the best move
       await activityFeedRef.doc(userId).collection('invitations').doc(invitationId).update({
         'accepts.$userId' : true,
         'invitationStatus': 'accepted',
       });
-      // accepts[userId] = true;
-      // await usersRef.doc(creatorId).collection('activities').doc(activityId).collection('going').doc(userId).set({
       await usersRef.doc(invite.creatorId).collection('activities').doc(invite.activityID).update({
         'going.$userId' : true
-        // 'userID': userId,
-        // 'invitation_status': 'accepted',
       });
-
-      // await usersRef.doc(userId).collection('activities').doc(invite.activityID).update({
-      //   'going.$userId' : true
-      //   // 'userID': userId,
-      //   // 'invitation_status': 'accepted',
-      // });
 
       print(invite.caption);
       print(invite.meetUpType);
       print(invite.companionType);
       print(invite.participants);
-      print(invite.schedule);
+      print(invite.scheduleType);
+      print(invite.scheduleDate);
+      print(invite.scheduleTime);
       print(invite.location);
       print(invite.notes);
       print(invite.creatorName);
@@ -122,7 +112,9 @@ class SelectInvite with ChangeNotifier {
         'meetUpType': invite.meetUpType,
         'companionType': invite.companionType,
         'participants': invite.participants,
-        'schedule': invite.schedule,
+        'scheduleType': invite.scheduleType,
+        'scheduleDate': invite.scheduleDate,
+        'scheduleTime': invite.scheduleTime,
         'location': invite.location,
         'notes': invite.notes,
         'creatorId': invite.creatorId,
@@ -144,15 +136,10 @@ class SelectInvite with ChangeNotifier {
     final user = FirebaseAuth.instance.currentUser;
     UserAccount currentUser;
     currentUser = UserAccount(id: user!.uid);
-    // String currentUserID = currentUser.id;
-    final usersRef = FirebaseFirestore.instance.collection('users');
     final activityFeedRef = FirebaseFirestore.instance.collection('feeds');
-
-    // isAccepted = accepts[userId] == true;
 
     try {
       await activityFeedRef.doc(userId).collection('invitations').doc(invitationId).update({
-        // 'accepts.$userId' : false,
         'invitationStatus': 'declined',
       });
 

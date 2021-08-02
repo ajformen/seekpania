@@ -22,13 +22,6 @@ class GameItem extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.edit),
               onPressed: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) =>
-                //             EditGameScreen(arguments: id)
-                //     )
-                // );
                 print('SELECTED GAME ID');
                 print(id);
                 print('GAME NAME');

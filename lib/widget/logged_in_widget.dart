@@ -3,10 +3,6 @@ import 'package:challenge_seekpania/page/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:challenge_seekpania/provider/google_sign_in.dart';
-import 'package:provider/provider.dart';
-import 'package:challenge_seekpania/widget/sign_up_widget.dart';
-import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoggedInWidget extends StatefulWidget {
@@ -50,18 +46,11 @@ class _LoggedInWidgetState extends State<LoggedInWidget> {
       elevation: 0,
     ),
     body: Container(
-      // alignment: Alignment.center,
-      // color: Colors.blueGrey.shade900,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10.0, 5.0, 0, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Text(
-            //   'Logged In',
-            //   style: TextStyle(color: Colors.black),
-            // ),
             SizedBox(height: 8),
             CircleAvatar(
               maxRadius: 35,
@@ -206,9 +195,6 @@ class _LoggedInWidgetState extends State<LoggedInWidget> {
             SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                // final provider =
-                // Provider.of<GoogleSignInProvider>(context, listen: false);
-                // provider.logout();
                 logout();
               },
               child: Text('Logout'),

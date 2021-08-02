@@ -27,8 +27,6 @@ class Report with ChangeNotifier {
     DocumentSnapshot doc = await usersRef.doc(currentUser.id).get();
     currentUser = UserAccount.fromDocument(doc);
     try{
-      // gamesRef.doc(currentUser.id).collection('gamesAdded').doc(theGame.id).set({
-      // usersRef.doc(currentUser.id).collection('activities').doc(userId).collection('invitation').doc(selectInvite.id).set({
       reportUsersRef.doc(selectReport.id).set({
         'id': selectReport.id,
         'feedback': report.feedback,

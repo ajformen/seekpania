@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:challenge_seekpania/widget/health_form.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 
 import 'package:challenge_seekpania/models/user_account.dart';
 
-import 'package:challenge_seekpania/widget/home/interests/activity_interest_screen.dart';
 import 'package:challenge_seekpania/widget/virtual/virtual_activity_interest_screen.dart';
 
 class CreateActivity extends StatefulWidget {
@@ -27,9 +27,6 @@ class _CreateActivityState extends State<CreateActivity> {
   @override
   void initState() {
     super.initState();
-    var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
-    // below _streamSubscription was before the upgrade
-    // _streamSubscription = Geolocator.getPositionStream(locationOptions).listen((Position position) {
     var lastPosition = Geolocator.getLastKnownPosition();
     print('LAST POSITION');
     print(lastPosition);
@@ -43,8 +40,45 @@ class _CreateActivityState extends State<CreateActivity> {
         convertCoordinatesToAddress(coordinates);
       });
     });
+  }
 
-    // getCurrentLocation();
+  _checkUserHealth() async {
+    final user = FirebaseAuth.instance.currentUser;
+    final usersRef = FirebaseFirestore.instance.collection('users');
+    UserAccount currentUser;
+    currentUser = UserAccount(id: user!.uid);
+    DocumentSnapshot doc = await usersRef.doc(currentUser.id).get();
+    currentUser = UserAccount.fromDocument(doc);
+    print('USERS STATUS NOW!!!!');
+    print(currentUser.userStatus);
+    if (currentUser.health == 'NOT SAFE') {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text(
+            'Due to your health issues. You have been restricted from using the app.',
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Ok',
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+          ],
+        ),
+      );
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  HealthFormScreen()
+          )
+      );
+    }
   }
 
   void dispose() {
@@ -81,7 +115,7 @@ class _CreateActivityState extends State<CreateActivity> {
   }
 
   viewFaceToFace() {
-    Navigator.of(context).pushNamed(ActivityInterestScreen.routeName);
+    _checkUserHealth();
   }
 
   viewVirtualGathering() {
@@ -90,39 +124,9 @@ class _CreateActivityState extends State<CreateActivity> {
 
   buildFaceToFace() {
     return Container(
-      // width: 360,
-      // height: 327,
-      // decoration: BoxDecoration(
-      //   // color: Colors.deepPurpleAccent[100],
-      //   color: Color(0xffff3366),
-      //   border: Border.all(
-      //     // color: Colors.deepPurpleAccent[100],
-      //     color: Color(0xffff3366),
-      //   ),
-      // ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [
-          //     Icon(
-          //       Icons.emoji_people,
-          //       color: Colors.white,
-          //     ),
-          //     SizedBox(width: 10,),
-          //     Icon(
-          //       Icons.group,
-          //       color: Colors.white,
-          //     ),
-          //     SizedBox(width: 10,),
-          //     Icon(
-          //       Icons.self_improvement,
-          //       color: Colors.white,
-          //     ),
-          //   ],
-          // ),
-          // SizedBox(height: 15,),
           Text(
             // 'Meet your companion personally within your area!',
             'What am I going to do today?',
@@ -143,26 +147,6 @@ class _CreateActivityState extends State<CreateActivity> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [
-          //     Icon(
-          //       Icons.phone_android,
-          //       color: Colors.white,
-          //     ),
-          //     SizedBox(width: 10,),
-          //     Icon(
-          //       Icons.video_call,
-          //       color: Colors.white,
-          //     ),
-          //     SizedBox(width: 10,),
-          //     Icon(
-          //       Icons.laptop,
-          //       color: Colors.white,
-          //     ),
-          //   ],
-          // ),
-          // SizedBox(height: 15,),
           Text(
             // 'Have a virtual experience with your companion!',
             'Who am I going to do it with?',
@@ -201,14 +185,6 @@ class _CreateActivityState extends State<CreateActivity> {
     return Container(
       width: 360.0,
       height: 654.0,
-      // decoration: BoxDecoration(
-      //   image: DecorationImage(
-      //     image: NetworkImage(
-      //       'https://th.bing.com/th/id/R98b6682a63f15ed0d814333336378049?rik=Ei%2f8tHfsKZ0aQQ&riu=http%3a%2f%2fgetwallpapers.com%2fwallpaper%2ffull%2f1%2fe%2f1%2f262631.jpg',
-      //     ),
-      //     fit: BoxFit.cover,
-      //   ),
-      // ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -270,19 +246,6 @@ class _CreateActivityState extends State<CreateActivity> {
             viewFaceToFace()
           }
         ),
-        ListTile(
-          leading: Icon(
-            Icons.online_prediction,
-            color: Colors.deepPurple[900],
-          ),
-          title: Text(
-            'Virtual Gathering',
-          ),
-          onTap: () => {
-            Navigator.of(context).pop(context),
-            viewVirtualGathering()
-          },
-        ),
         SizedBox(height: 10.0,),
       ],
     ),
@@ -292,7 +255,6 @@ class _CreateActivityState extends State<CreateActivity> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        // padding: EdgeInsets.only(top: 25.0),
         child: Column(
           children: <Widget>[
             buildHomeScreen(),

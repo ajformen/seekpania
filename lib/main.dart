@@ -1,5 +1,14 @@
+import 'package:challenge_seekpania/models/selections/select_sports.dart';
+import 'package:challenge_seekpania/provider/emergencies.dart';
+import 'package:challenge_seekpania/provider/messages.dart';
+import 'package:challenge_seekpania/provider/selections/chaperones.dart';
+import 'package:challenge_seekpania/provider/selections/outdoors.dart';
+import 'package:challenge_seekpania/provider/selections/readings.dart';
+import 'package:challenge_seekpania/provider/selections/sports.dart';
 import 'package:challenge_seekpania/widget/interest_detail.dart';
-import 'package:challenge_seekpania/widget/timeline.dart';
+import 'package:challenge_seekpania/widget/outdoors/select_outdoors_overview.dart';
+import 'package:challenge_seekpania/widget/reading/select_reading_overview.dart';
+import 'package:challenge_seekpania/widget/sports/select_sports_overview.dart';
 import 'package:flutter/material.dart';
 import 'package:challenge_seekpania/page/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -50,7 +59,9 @@ import 'package:challenge_seekpania/widget/admin/movies/edit_movies_screen.dart'
 
 import 'package:challenge_seekpania/widget/home/interests/activity_interest_screen.dart';
 import 'package:challenge_seekpania/widget/virtual/virtual_activity_interest_screen.dart';
-// import 'package:challenge_seekpania/widget/home/face_to_face.dart';
+
+import 'models/selections/select_outdoors.dart';
+import 'models/selections/select_reading.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -92,6 +103,15 @@ class MyApp extends StatelessWidget {
           create: (ctx) => Movies(),
         ),
         ChangeNotifierProvider(
+          create: (ctx) => Readings(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Outdoors(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Sports(),
+        ),
+        ChangeNotifierProvider(
           create: (ctx) => SelectGames(),
         ),
         ChangeNotifierProvider(
@@ -102,6 +122,15 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => SelectMovies(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => SelectReading(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => SelectOutdoors(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => SelectSports(),
         ),
         ChangeNotifierProvider(
           create: (ctx) => Interest(),
@@ -127,6 +156,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => Report(),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => Messages(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Chaperones(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Emergencies(),
+        ),
         //add more here...
       ],
       child: MaterialApp(
@@ -149,9 +187,11 @@ class MyApp extends StatelessWidget {
           SelectLiveEventsOverview.routeName: (ctx) => SelectLiveEventsOverview(),
           SelectMusicOverview.routeName: (ctx) => SelectMusicOverview(),
           SelectMoviesOverview.routeName: (ctx) => SelectMoviesOverview(),
+          SelectReadingOverview.routeName: (ctx) => SelectReadingOverview(),
+          SelectOutdoorsOverview.routeName: (ctx) => SelectOutdoorsOverview(),
+          SelectSportsOverview.routeName: (ctx) => SelectSportsOverview(),
           ActivityInterestScreen.routeName: (ctx) => ActivityInterestScreen(),
           VirtualActivityInterestScreen.routeName: (ctx) => VirtualActivityInterestScreen(),
-          // FaceToFace.routeName: (ctx) => FaceToFace(),
         },
       ),
     );

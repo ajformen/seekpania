@@ -12,10 +12,11 @@ class InterestAccount {
   });
 
   factory InterestAccount.fromDocument(DocumentSnapshot doc) {
+    final d = doc.data() as Map;
     return InterestAccount(
-      id: doc.data()!['id'],
-      title: doc.data()!['title'],
-      isSelected: doc.data()!['isSelected'],
+      id: d['id'],
+      title: d['title'],
+      isSelected: d['isSelected'],
     );
   }
 }

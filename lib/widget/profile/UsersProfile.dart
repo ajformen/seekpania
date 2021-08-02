@@ -25,7 +25,6 @@ class _UsersProfileState extends State<UsersProfile> {
 
   @override
   void didChangeDependencies() {
-    // print('VIEW INTEREST');
     if (_isInit) {
       setState(() {
         _isLoading = true;
@@ -35,11 +34,6 @@ class _UsersProfileState extends State<UsersProfile> {
           _isLoading = false;
         });
       });
-      // Provider.of<LiveEvents>(context).fetchLiveEventInterests().then((_) {
-      //   setState(() {
-      //     _isLoading = false;
-      //   });
-      // });
     }
     _isInit = false;
 
@@ -56,28 +50,16 @@ class _UsersProfileState extends State<UsersProfile> {
 
   viewInterest() {
     final interests = Provider.of<Interest>(context, listen: false).userInterests.map((g) => InterestBox(g.title!)).toList();
-    // final liveEvents = Provider.of<LiveEvents>(context, listen: false).eventItems.map((g) => InterestBox(g.title)).toList();
-    // final interests = games;
 
     return _isLoading ? buildLoading() : Wrap(
       spacing: 8,
       runSpacing: 8,
-      // direction: Axis.horizontal,
         children: interests,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    // String userPhoto = widget.user.photoURL;
-    // String originalPhoto = 's96-c/$userPhoto';
-    // String newPhoto = 's400-c/$userPhoto';
-    //
-    // String photoPath = userPhoto;
-    //
-    // String result = photoPath.replaceAll(originalPhoto, newPhoto);
-    // print('THE NEW PHOTO URL');
-    // print(result);
 
     if (widget.user!.gender == 'Non-Binary') {
       gender = widget.user!.genderCustom!;
@@ -102,8 +84,6 @@ class _UsersProfileState extends State<UsersProfile> {
                       ),
                       child: Image.network(
                         widget.user!.photoURL!,
-                        // 's400-c/$userPhoto',
-                        // 'https://lh3.googleusercontent.com/a-/AOh14GjZwVeyNas_d37ucE1zyFcth-1b33CYoXU8lEUj=s400-c',
                         width: 390,
                         height: 412,
                         fit: BoxFit.cover,
@@ -199,10 +179,6 @@ class _UsersProfileState extends State<UsersProfile> {
                       ],
                     ),
                   ),
-                  // Container(
-                  //   padding: EdgeInsets.fromLTRB(25, 25, 24, 0),
-                  //   child: viewInterest(),
-                  // ),
                 ],
               ),
             ),
@@ -226,7 +202,6 @@ class _UsersProfileState extends State<UsersProfile> {
           child: Icon(
             Icons.arrow_back_ios,
             size: 24.0,
-            // color: Colors.deepPurple[900],
             color: Colors.white,
           ),
         ),

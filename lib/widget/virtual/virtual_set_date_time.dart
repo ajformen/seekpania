@@ -25,7 +25,7 @@ class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
 
   bool isNowSelected = false;
   bool isLaterSelected = false;
-  bool isReveal = false;
+  bool isReveal = true;
   bool isNow = false;
   bool checkNowLater = false;
 
@@ -42,34 +42,12 @@ class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
   TextEditingController _timeController = TextEditingController();
 
   _isSubmit() {
-    if (isNowSelected == false && isLaterSelected == false) {
-      setState(() {
-        checkNowLater = true;
-      });
-      return;
-    }
     String? _dateFormat, _timeFormat;
-
-    if (isNowSelected == true) {
-      scheduleType = 'NOW';
-      _dateFormat = '';
-      _timeFormat = '';
-    } else if (isLaterSelected == true) {
-      scheduleType = 'LATER';
-      _dateFormat = _dateController.text;
-      _timeFormat = _timeController.text;
-    }
     print('TYPE');
+    scheduleType = 'LATER';
+    _dateFormat = _dateController.text;
+    _timeFormat = _timeController.text;
     print(scheduleType);
-
-    // Navigator.pop(context, type);
-
-    // print(widget.searchID);
-    // print(widget.interestName);
-    // print(widget.searchType);
-    // print(widget.caption);
-    // print(widget.companionType);
-    // print(widget.participants);
 
     Navigator.push(
         context,
@@ -88,9 +66,6 @@ class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
     return Column(
       children: [
         header(),
-        buildNowOrLater(),
-        buildScheduleType(),
-        buildNow(),
         buildDate(),
         buildTime(),
       ],
@@ -106,7 +81,6 @@ class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
           IconButton(
             onPressed: () {
               Navigator.pop(context);
-              // _isSubmit();
             },
             icon: Icon(
               Icons.arrow_back_sharp,
@@ -173,7 +147,6 @@ class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
                     ],
                   ),
                   onTap: () {
-                    // game.toggleOneCompanionType();
                     setState(() {
                       isNowSelected = !isNowSelected;
                       print('NOW');
@@ -217,7 +190,6 @@ class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
                     ],
                   ),
                   onTap: () {
-                    // toggleSelected();
                     setState(() {
                       isLaterSelected = !isLaterSelected;
                       print('LATER');
@@ -360,8 +332,6 @@ class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
                     _selectDate(context);
                   },
                   child: Container(
-                    // width: _width / 1.7,
-                    // height: _height / 9,
                     margin: EdgeInsets.only(top: 30),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(color: Colors.deepPurple[50]),
@@ -377,7 +347,6 @@ class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
                       decoration: InputDecoration(
                           disabledBorder:
                           UnderlineInputBorder(borderSide: BorderSide.none),
-                          // labelText: 'Time',
                           contentPadding: EdgeInsets.only(top: 0.0)
                       ),
                     ),
@@ -430,7 +399,6 @@ class _VirtualSetDateTimeState extends State<VirtualSetDateTime> {
                   decoration: InputDecoration(
                       disabledBorder:
                       UnderlineInputBorder(borderSide: BorderSide.none),
-                      // labelText: 'Time',
                       contentPadding: EdgeInsets.all(5)
                   ),
                 ),

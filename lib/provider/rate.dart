@@ -11,7 +11,7 @@ class Rate with ChangeNotifier {
   String rateId = Uuid().v4();
   final user = FirebaseAuth.instance.currentUser;
   final usersRef = FirebaseFirestore.instance.collection('users');
-  late UserAccount currentUser;
+  late UserAccount accUser;
   late SelectRate selectRate;
 
   List<SelectRate> _items = [];
@@ -43,13 +43,15 @@ class Rate with ChangeNotifier {
   }
 
   Future<void> createRating(SelectRate rate, userId) async{
-    currentUser = UserAccount(id: user!.uid);
+    accUser = UserAccount(id: userId);
     selectRate = SelectRate(id: rateId);
-    DocumentSnapshot doc = await usersRef.doc(currentUser.id).get();
-    currentUser = UserAccount.fromDocument(doc);
+    DocumentSnapshot doc = await usersRef.doc(accUser.id).get();
+    accUser = UserAccount.fromDocument(doc);
     try{
-      // gamesRef.doc(currentUser.id).collection('gamesAdded').doc(theGame.id).set({
-      // usersRef.doc(currentUser.id).collection('activities').doc(userId).collection('invitation').doc(selectInvite.id).set({
+      double total = accUser.points! + double.parse(rate.rate.toString());
+      await usersRef.doc(userId).update({
+        'points': total,
+      });
       usersRef.doc(userId).collection('points').doc(selectRate.id).set({
         'id': selectRate.id,
         'rate': rate.rate,

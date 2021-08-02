@@ -34,7 +34,6 @@ class Invitations with ChangeNotifier {
 
   Future<void> fetchUserInvitations(String userId) async {
     try {
-      // QuerySnapshot snapshot = await gamesRef.doc(currentUser.id).collection('gamesAdded').where('creatorId', isEqualTo: '$currentUser.id').orderBy('timestamp').get();
       QuerySnapshot feedsList = await activityFeedRef.doc(userId).collection('invitations').orderBy('timestamp', descending: true).limit(50).get();
       final extractedData = feedsList.docs.map((game) => SelectInvite.fromDocument(game)).toList();
       if (extractedData == null) {
@@ -54,8 +53,6 @@ class Invitations with ChangeNotifier {
     DocumentSnapshot doc = await usersRef.doc(currentUser.id).get();
     currentUser = UserAccount.fromDocument(doc);
     try{
-      // gamesRef.doc(currentUser.id).collection('gamesAdded').doc(theGame.id).set({
-      // usersRef.doc(currentUser.id).collection('activities').doc(userId).collection('invitation').doc(selectInvite.id).set({
       activityFeedRef.doc(userId).collection('invitations').doc(selectInvite.id).set({
         'id': selectInvite.id,
         'activityID': activity.id,
@@ -64,6 +61,7 @@ class Invitations with ChangeNotifier {
         'meetUpType': activity.meetUpType,
         'companionType': activity.companionType,
         'participants': activity.participants,
+        'scheduleType': activity.scheduleType,
         'scheduleDate': activity.scheduleDate,
         'scheduleTime': activity.scheduleTime,
         'location': activity.location,
@@ -93,10 +91,7 @@ class Invitations with ChangeNotifier {
   }
 
   Future<void> deleteInvite(String currentUserID, String id) async {
-    // final existingGameIndex = _items.indexWhere((invite) => invite.id == id);
     await activityFeedRef.doc(currentUserID).collection('invitations').doc(id).delete();
-    // _items.removeWhere((game) => game.id == id);
-    // _items.removeAt(existingGameIndex);
     notifyListeners();
   }
 

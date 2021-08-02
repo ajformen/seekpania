@@ -1,3 +1,4 @@
+import 'package:challenge_seekpania/widget/settings/deactivate_account.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 
@@ -6,17 +7,13 @@ import 'package:challenge_seekpania/models/select_activity.dart';
 
 import 'package:provider/provider.dart';
 import 'package:challenge_seekpania/provider/invitations.dart';
-import 'package:challenge_seekpania/provider/activities.dart';
 
 import 'package:challenge_seekpania/widget/profile/UsersProfile.dart';
 
 class ActivitySearchItems extends StatefulWidget {
   final UserAccount? user;
   final SelectActivity? activity;
-  // final String caption;
-  // final String participants;
 
-  // ActivitySearchItems({this.user, this.caption, this.participants});
   ActivitySearchItems({this.user, this.activity});
 
   @override
@@ -49,13 +46,23 @@ class _ActivitySearchItemsState extends State<ActivitySearchItems> {
               maxRadius: 25,
             ),
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          UsersProfile(user: widget.user!)
-                  )
-              );
+              if (widget.user!.userStatus == 'Deactivated') {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            DeactivateAccount()
+                    )
+                );
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            UsersProfile(user: widget.user!)
+                    )
+                );
+              }
             },
           ),
           title: Padding(
@@ -69,14 +76,33 @@ class _ActivitySearchItemsState extends State<ActivitySearchItems> {
                 ),
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            UsersProfile(user: widget.user!)
-                    )
-                );
+                if (widget.user!.userStatus == 'Deactivated') {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              DeactivateAccount()
+                      )
+                  );
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              UsersProfile(user: widget.user!)
+                      )
+                  );
+                }
               },
+            ),
+          ),
+          subtitle: Padding(
+            padding: EdgeInsets.only(left: 10.0),
+            child: Text(
+              '${widget.user!.city}, ${widget.user!.currentLocation}',
+              style: TextStyle(
+                fontSize: 12.0,
+              ),
             ),
           ),
           trailing: GestureDetector(
@@ -99,8 +125,6 @@ class _ActivitySearchItemsState extends State<ActivitySearchItems> {
           //
           // },
         ),
-        SizedBox(height: 10,),
-        // Divider(color: Color(0xff9933ff)),
       ],
     );
   }

@@ -6,16 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:challenge_seekpania/models/select_activity.dart';
 
 import 'package:provider/provider.dart';
-import 'package:challenge_seekpania/provider/invitations.dart';
 import 'package:challenge_seekpania/provider/activities.dart';
 
 import 'package:challenge_seekpania/widget/home/interests/activity_search.dart';
-import 'package:challenge_seekpania/widget/home/activity/set_date_time.dart';
 import 'package:challenge_seekpania/widget/home/activity/edit_meet_up_notes.dart';
 import 'package:challenge_seekpania/widget/home/activity/set_location.dart';
 
 class FaceToFace extends StatefulWidget {
-  // static const routeName = './activity-face-to-face';
 
   final String? interestID;
   final String? interest;
@@ -35,7 +32,6 @@ class _FaceToFaceState extends State<FaceToFace> {
   TextEditingController participantsController = TextEditingController();
   final _captionForm = GlobalKey<FormState>();
   final _howManyForm = GlobalKey<FormState>();
-  // var _editedInvite = SelectInvite(id: null, caption: '', participants: '');
   String? caption, participants;
 
   bool isOneSelected = false;
@@ -138,13 +134,6 @@ class _FaceToFaceState extends State<FaceToFace> {
       return;
     }
 
-    // if (scheduleType == 'set a schedule') {
-    //   setState(() {
-    //     isSchedule = true;
-    //   });
-    //   return;
-    // }
-
     if (location == null) {
       setState(() {
         isInvalidLocation = true;
@@ -172,9 +161,6 @@ class _FaceToFaceState extends State<FaceToFace> {
       type = 'Group Companion';
     }
 
-    // this one is working
-    // print(scheduleDate);
-    // print(scheduleTime);
     print(location);
     print(notes);
 
@@ -191,7 +177,6 @@ class _FaceToFaceState extends State<FaceToFace> {
       notes: notes,
     );
 
-    //for security purposes ahahaha
     await Provider.of<Activities>(context, listen: false).createActivity(_editedActivity);
 
     activityID = Uuid().v4();
@@ -200,12 +185,10 @@ class _FaceToFaceState extends State<FaceToFace> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                // ActivitySearch(searchID: widget.interestID, searchType: widget.type, caption: caption, participants: participants)
             ActivitySearch(searchID: widget.interestID!, searchType: widget.type!, activity: _editedActivity)
         )
     );
 
-    // print('SUCCESS');
   }
 
   display() {
@@ -224,7 +207,6 @@ class _FaceToFaceState extends State<FaceToFace> {
         invalidLocation(),
         meetUpNotes(),
         search(),
-        // viewInterest(context)
       ],
     );
   }
@@ -242,7 +224,6 @@ class _FaceToFaceState extends State<FaceToFace> {
             icon: Icon(
               Icons.arrow_back_sharp,
               size: 30.0,
-              // color: Color(0xffff3366),
               color: Colors.deepPurple[900],
             ),
           ),
@@ -301,7 +282,6 @@ class _FaceToFaceState extends State<FaceToFace> {
             style: TextStyle(
               color: Colors.deepPurple[900],
               fontStyle: FontStyle.italic,
-              // fontWeight: FontWeight.bold
             ),
             decoration: InputDecoration(
               hintText: 'Lets have coffee',
@@ -369,7 +349,6 @@ class _FaceToFaceState extends State<FaceToFace> {
               ],
             ),
             onTap: () {
-              // game.toggleOneCompanionType();
               setState(() {
                 isOneSelected = !isOneSelected;
                 print('ONE');
@@ -415,7 +394,6 @@ class _FaceToFaceState extends State<FaceToFace> {
               ],
             ),
             onTap: () {
-              // toggleSelected();
               setState(() {
                 isGroupSelected = !isGroupSelected;
                 print('GROUP');
@@ -445,7 +423,6 @@ class _FaceToFaceState extends State<FaceToFace> {
                   style: TextStyle(
                     color: Colors.deepPurple[900],
                     fontStyle: FontStyle.italic,
-                    // fontWeight: FontWeight.bold
                   ),
                   decoration: InputDecoration(
                     labelText: 'Companion(s)',
@@ -496,8 +473,6 @@ class _FaceToFaceState extends State<FaceToFace> {
         maintainAnimation: false,
         maintainState: false,
         child: Container(
-          // width: 60,
-          // padding: EdgeInsets.all(5.0),
           child: Text(
             'Select a companion type',
             style: TextStyle(
@@ -519,8 +494,6 @@ class _FaceToFaceState extends State<FaceToFace> {
         maintainAnimation: false,
         maintainState: false,
         child: Container(
-          // width: 60,
-          // padding: EdgeInsets.all(5.0),
           child: Text(
             'Group companions must be more than 1 people',
             style: TextStyle(
@@ -542,8 +515,6 @@ class _FaceToFaceState extends State<FaceToFace> {
         maintainAnimation: false,
         maintainState: false,
         child: Container(
-          // width: 60,
-          // padding: EdgeInsets.all(5.0),
           child: Text(
             'One companion must be 1 person only',
             style: TextStyle(
@@ -603,7 +574,6 @@ class _FaceToFaceState extends State<FaceToFace> {
                   child: TextFormField(
                     style: TextStyle(
                       fontSize: 14.0,
-                      // color: Colors.deepPurple,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
@@ -616,8 +586,6 @@ class _FaceToFaceState extends State<FaceToFace> {
                     decoration: InputDecoration(
                         disabledBorder:
                         UnderlineInputBorder(borderSide: BorderSide.none),
-                        // labelText: 'Time',
-                        // contentPadding: EdgeInsets.only(top: 5.0, bottom: 5.0)
                     ),
                   ),
                 ),
@@ -637,7 +605,6 @@ class _FaceToFaceState extends State<FaceToFace> {
                   child: TextFormField(
                     style: TextStyle(
                       fontSize: 14.0,
-                      // color: Colors.deepPurple,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
@@ -650,21 +617,10 @@ class _FaceToFaceState extends State<FaceToFace> {
                     decoration: InputDecoration(
                         disabledBorder:
                         UnderlineInputBorder(borderSide: BorderSide.none),
-                        // labelText: 'Time',
-                        // contentPadding: EdgeInsets.all(5),
                     ),
                   ),
                 ),
               ),
-              // isSchedule ? noScheduleSet() : Text(
-              //   scheduleType,
-              //   style: TextStyle(
-              //       color: Theme.of(context).errorColor,
-              //       // color: Colors.deepPurple[900],
-              //       fontWeight: FontWeight.bold,
-              //       fontSize: 11.0
-              //   ),
-              // ),
             ],
           ),
         ],
@@ -681,7 +637,6 @@ class _FaceToFaceState extends State<FaceToFace> {
       child: Text(
         'Tap to set location',
         style: TextStyle(
-            // fontSize: 12.0,
             fontStyle: FontStyle.italic,
             color: Colors.grey
         ),
@@ -712,9 +667,6 @@ class _FaceToFaceState extends State<FaceToFace> {
                 height: 55.0,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                    // border: Border.all(
-                    //   color: Colors.deepPurple[900],
-                    // )
                   color: Colors.deepPurple[50],
                 ),
                 child: Row(
@@ -766,8 +718,6 @@ class _FaceToFaceState extends State<FaceToFace> {
         maintainAnimation: false,
         maintainState: false,
         child: Container(
-          // width: 60,
-          // padding: EdgeInsets.all(5.0),
           child: Text(
             'Please set your location',
             style: TextStyle(
@@ -825,7 +775,6 @@ class _FaceToFaceState extends State<FaceToFace> {
                       color: Colors.deepPurple[900]!,
                     ),
                   ),
-                  // color: Colors.grey[350],
                 ),
                 child: Row(
                   children: [
@@ -841,8 +790,6 @@ class _FaceToFaceState extends State<FaceToFace> {
                         notes!,
                         style: TextStyle(
                           fontSize: 12.0,
-                          // fontStyle: FontStyle.italic,
-                          // color: Colors.grey[400]
                         ),
                       ),
                     ),

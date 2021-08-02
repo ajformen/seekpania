@@ -30,17 +30,13 @@ class _VirtualActivityInterestItemState extends State<VirtualActivityInterestIte
             padding: EdgeInsets.only(left: 10.0),
             child: Text(
               widget.interest,
-              // style: TextStyle(
-              //   color: Color(0xffff3366),
-              // ),
             ),
           ),
           onTap: () {
             print(widget.id);
             print(widget.interest);
             print(widget.type);
-            // Navigator.of(context).pushNamed(FaceToFace.routeName, arguments: widget.id);
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) =>

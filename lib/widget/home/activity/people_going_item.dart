@@ -4,12 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:challenge_seekpania/models/user_account.dart';
 
 import 'package:challenge_seekpania/widget/profile/view_other_users_profile.dart';
-import 'package:challenge_seekpania/widget/home/activity/activity_details.dart';
 
 class PeopleGoingItem extends StatefulWidget {
-  // final String id;
-  //
-  // PeopleGoingItem(this.id);
   final UserAccount? user;
 
   PeopleGoingItem({this.user});
@@ -36,9 +32,6 @@ class _PeopleGoingItemState extends State<PeopleGoingItem> {
             padding: EdgeInsets.only(left: 10.0),
             child: Text(
               widget.user!.firstName!,
-              // style: TextStyle(
-              //   color: Color(0xffff3366),
-              // ),
             ),
           ),
           onTap: () {

@@ -7,10 +7,6 @@ import 'package:challenge_seekpania/models/user_account.dart';
 import 'package:challenge_seekpania/models/selections/select_games.dart';
 
 import 'package:provider/provider.dart';
-import 'package:challenge_seekpania/provider/game.dart';
-import 'package:challenge_seekpania/provider/selections/games.dart';
-
-import 'package:challenge_seekpania/provider/interest.dart';
 
 class SelectGameItem extends StatefulWidget {
   @override
@@ -30,10 +26,8 @@ class _SelectGameItemState extends State<SelectGameItem> {
   Widget build(BuildContext context) {
     currentUser = UserAccount(id: user!.uid);
     final game = Provider.of<SelectGames>(context);
-    // final theGame = Provider.of<Game>(context);
     print(game.selects[currentUser.id]);
     isPicked = (game.selects[currentUser.id] == true);
-    final itrst = Provider.of<Interest>(context);
     return GridTile(
       child: GestureDetector(
         child: Container(
@@ -43,14 +37,12 @@ class _SelectGameItemState extends State<SelectGameItem> {
               width: 1,
               color: Colors.deepPurple[900]!,
             ),
-            // color: game.isSelected ? Colors.deepPurple[900] : Colors.white,
             color: isPicked! ? Colors.deepPurple[900] : Colors.white,
           ),
           padding: EdgeInsets.fromLTRB(12.0, 5.0, 12.0, 0),
           child: Text(
             game.title!,
             style: TextStyle(
-              // color: game.isSelected ? Colors.white : Colors.black,
               color: isPicked! ? Colors.white : Colors.black,
               fontWeight: FontWeight.bold,
             ),
@@ -58,11 +50,6 @@ class _SelectGameItemState extends State<SelectGameItem> {
         ),
         onTap: () {
           game.toggleSelectedStatus();
-          // if (game.isSelected) {
-          //   itrst.addItem(game.id, game.title);
-          // } else {
-          //   itrst.removeItem(game.id);
-          // }
         },
       ),
     );

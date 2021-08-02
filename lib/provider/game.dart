@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:challenge_seekpania/models/selections/select_games.dart';
-
 class GameItem {
   final String? id;
   final String? title;

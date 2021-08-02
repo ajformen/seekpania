@@ -19,10 +19,10 @@ class SelectMusic with ChangeNotifier {
   });
 
   factory SelectMusic.fromDocument(DocumentSnapshot doc) {
+    final d = doc.data() as Map;
     return SelectMusic(
-      id: doc.data()!['id'],
-      title: doc.data()!['title'],
-      // isSelected: doc.data()['isSelected'],
+      id: d['id'],
+      title: d['title'],
       selects: doc['selects'],
     );
   }
@@ -34,7 +34,6 @@ class SelectMusic with ChangeNotifier {
     String currentUserID = currentUser.id!;
     final musicRef = FirebaseFirestore.instance.collection('music');
     final usersRef = FirebaseFirestore.instance.collection('users');
-    // isSelected = !isSelected;
     isSelected = selects[currentUserID] == true;
     try {
       if (isSelected!) {

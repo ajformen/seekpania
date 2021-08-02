@@ -13,6 +13,9 @@ class Interest with ChangeNotifier {
   final liveEventsRef = FirebaseFirestore.instance.collection('liveEvents');
   final musicRef = FirebaseFirestore.instance.collection('music');
   final moviesRef = FirebaseFirestore.instance.collection('movies');
+  final readingRef = FirebaseFirestore.instance.collection('reading');
+  final outdoorsRef = FirebaseFirestore.instance.collection('outdoors');
+  final sportsRef = FirebaseFirestore.instance.collection('sports');
   String intId = Uuid().v4();
   late Map selects;
   late UserAccount currentUser;
@@ -42,15 +45,22 @@ class Interest with ChangeNotifier {
     return _userInterests;
   }
 
+  List<UserAccount> _countryInterest = [];
+  List<UserAccount> get countryInterest {
+    return _countryInterest;
+  }
+
   DisplayInterests findById(String id) {
     return _items.firstWhere((itrst) => itrst.id == id);
   }
 
   Future<void> fetchCurrentUserInterests(String currentUserID) async {
     try {
-      // QuerySnapshot snapshot = await gamesRef.doc(currentUser.id).collection('gamesAdded').where('creatorId', isEqualTo: '$currentUser.id').orderBy('timestamp').get();
-      QuerySnapshot gamesList = await usersRef.doc(currentUserID).collection('interests').get();
-      final extractedData = gamesList.docs.map((game) => DisplayInterests.fromDocument(game)).toList();
+      QuerySnapshot gamesList =
+          await usersRef.doc(currentUserID).collection('interests').get();
+      final extractedData = gamesList.docs
+          .map((game) => DisplayInterests.fromDocument(game))
+          .toList();
       if (extractedData == null) {
         return;
       }
@@ -64,9 +74,11 @@ class Interest with ChangeNotifier {
 
   Future<void> fetchAllInterests(String userId) async {
     try {
-      // QuerySnapshot snapshot = await gamesRef.doc(currentUser.id).collection('gamesAdded').where('creatorId', isEqualTo: '$currentUser.id').orderBy('timestamp').get();
-      QuerySnapshot gamesList = await usersRef.doc(userId).collection('interests').get();
-      final extractedData = gamesList.docs.map((game) => DisplayInterests.fromDocument(game)).toList();
+      QuerySnapshot gamesList =
+          await usersRef.doc(userId).collection('interests').get();
+      final extractedData = gamesList.docs
+          .map((game) => DisplayInterests.fromDocument(game))
+          .toList();
       if (extractedData == null) {
         return;
       }
@@ -78,26 +90,101 @@ class Interest with ChangeNotifier {
     }
   }
 
-  Future<void> fetchUsersInterests(String interestId, String searchType) async {
+  Future<void> fetchUsersInterests(
+      String interestId, String searchType, String currentLoc) async {
     try {
-      currentUser = UserAccount(id:  FirebaseAuth.instance.currentUser!.uid);
-      // QuerySnapshot searchUsersList = await gamesRef.where('id', isEqualTo: '$interestId').where('selects', isEqualTo: 'true').get();
-      // QuerySnapshot searchInterestType = await usersRef.doc(currentUser.id).collection('interests').where('id', isEqualTo: interestId).get();
+      currentUser = UserAccount(id: FirebaseAuth.instance.currentUser!.uid);
       if (searchType == 'games') {
         DocumentSnapshot gameDoc = await gamesRef.doc(interestId).get();
-        selects = gameDoc.data()!['selects'] as Map;
+        final d = gameDoc.data() as Map;
+        selects = d['selects'];
       } else if (searchType == 'liveEvents') {
         DocumentSnapshot eventDoc = await liveEventsRef.doc(interestId).get();
-        selects = eventDoc.data()!['selects'] as Map;
+        final d = eventDoc.data() as Map;
+        selects = d['selects'];
       } else if (searchType == 'music') {
         DocumentSnapshot musicDoc = await musicRef.doc(interestId).get();
-        selects = musicDoc.data()!['selects'] as Map;
+        final d = musicDoc.data() as Map;
+        selects = d['selects'];
       } else if (searchType == 'movies') {
         DocumentSnapshot moviesDoc = await moviesRef.doc(interestId).get();
-        selects = moviesDoc.data()!['selects'] as Map;
+        final d = moviesDoc.data() as Map;
+        selects = d['selects'];
+      } else if (searchType == 'reading') {
+        DocumentSnapshot moviesDoc = await readingRef.doc(interestId).get();
+        final d = moviesDoc.data() as Map;
+        selects = d['selects'];
+      } else if (searchType == 'outdoors') {
+        DocumentSnapshot moviesDoc = await outdoorsRef.doc(interestId).get();
+        final d = moviesDoc.data() as Map;
+        selects = d['selects'];
+      } else if (searchType == 'sports') {
+        DocumentSnapshot moviesDoc = await sportsRef.doc(interestId).get();
+        final d = moviesDoc.data() as Map;
+        selects = d['selects'];
       }
-      // DocumentSnapshot gameDoc = await gamesRef.doc(interestId).get();
-      // Map selects = gameDoc.data()['selects'] as Map;
+
+      List<String> userIds = [];
+      List<UserAccount> users = [];
+      selects.forEach((userId, selected) {
+        if (selected && userId != currentUser.id) {
+          userIds.add(userId);
+        }
+      });
+      await Future.forEach(userIds, (userId) async {
+        DocumentSnapshot userDoc = await usersRef.doc(userId.toString()).get();
+        print('AJ userDoc.data()');
+        print(userDoc.data());
+        final user = UserAccount.fromDocument(userDoc);
+        print('--------------');
+        if (user.currentLocation == currentLoc) {
+          users.add(user);
+        }
+      });
+      print(users);
+      _interestItems = users;
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  /// Match Users With Interest And Country
+  Future<void> fetchUsersInterestsCountry(
+      String interestId, String searchType, String country) async {
+    try {
+      currentUser = UserAccount(id: FirebaseAuth.instance.currentUser!.uid);
+      if (searchType == 'games') {
+        DocumentSnapshot gameDoc = await gamesRef.doc(interestId).get();
+        final d = gameDoc.data() as Map;
+        selects = d['selects'];
+      } else if (searchType == 'liveEvents') {
+        DocumentSnapshot eventDoc = await liveEventsRef.doc(interestId).get();
+        final d = eventDoc.data() as Map;
+        selects = d['selects'];
+      } else if (searchType == 'music') {
+        DocumentSnapshot musicDoc = await musicRef.doc(interestId).get();
+        final d = musicDoc.data() as Map;
+        selects = d['selects'];
+      } else if (searchType == 'movies') {
+        DocumentSnapshot moviesDoc = await moviesRef.doc(interestId).get();
+        final d = moviesDoc.data() as Map;
+        selects = d['selects'];
+      } else if (searchType == 'reading') {
+        DocumentSnapshot moviesDoc = await readingRef.doc(interestId).get();
+        final d = moviesDoc.data() as Map;
+        selects = d['selects'];
+      } else if (searchType == 'outdoors') {
+        DocumentSnapshot moviesDoc = await outdoorsRef.doc(interestId).get();
+        final d = moviesDoc.data() as Map;
+        selects = d['selects'];
+      } else if (searchType == 'sports') {
+        DocumentSnapshot moviesDoc = await sportsRef.doc(interestId).get();
+        final d = moviesDoc.data() as Map;
+        selects = d['selects'];
+      }
+      print('COUNTRY');
+      print(country);
 
       List<String> userIds = [];
       List<UserAccount> users = [];
@@ -111,15 +198,15 @@ class Interest with ChangeNotifier {
         print(userDoc.data());
         final user = UserAccount.fromDocument(userDoc);
         print('--------------');
-        print(user.photoURL);
-        users.add(user);
+        if (user.country == country) {
+          users.add(user);
+        }
       });
       print(users);
-      _interestItems = users;
+      _countryInterest = users;
       notifyListeners();
     } catch (error) {
       throw (error);
     }
   }
-
 }

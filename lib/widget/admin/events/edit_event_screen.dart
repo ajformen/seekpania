@@ -20,10 +20,6 @@ class _EditEventScreenState extends State<EditEventScreen> {
   var _isInit = true;
   var _isLoading = false;
 
-  // createGameInFirestore() {
-  //
-  // }
-
   Future<void> _saveForm() async {
     final isValid = _form.currentState!.validate();
     if (!isValid) {
@@ -51,7 +47,6 @@ class _EditEventScreenState extends State<EditEventScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      // gameId IS NULL FIX THIS!
       final eventId = ModalRoute.of(context)!.settings.arguments as String;
       if (eventId != null) {
         _editedEvent = Provider.of<LiveEvents>(context, listen: false).findById(eventId);

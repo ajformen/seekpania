@@ -1,10 +1,8 @@
-import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:challenge_seekpania/provider/invitations.dart';
-import 'package:challenge_seekpania/provider/activities.dart';
 
 import 'package:challenge_seekpania/widget/notifications_items.dart';
 
@@ -56,7 +54,6 @@ class _NotificationsState extends State<Notifications> {
         style: TextStyle(
           fontSize: 20.0,
           fontWeight: FontWeight.bold,
-          // color: Color(0xff4e4b6f),
         ),
       ),
     );
@@ -81,10 +78,6 @@ class _NotificationsState extends State<Notifications> {
   }
 
   viewNotifications() {
-    // final games = Provider.of<Games>(context, listen: false).gameItems.map((g) => ActivityInterestItem(g.id, g.title)).toList();
-    // final liveEvents = Provider.of<LiveEvents>(context, listen: false).eventItems.map((g) => ActivityInterestItem(g.id, g.title)).toList();
-    // final interests = games + liveEvents;
-
     final invitations = Provider.of<Invitations>(context, listen: false).currentUserInvitations.map((user) => NotificationsItems(user: user)).toList();
 
     return Expanded(

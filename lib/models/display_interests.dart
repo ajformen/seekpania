@@ -14,10 +14,11 @@ class DisplayInterests with ChangeNotifier{
   });
 
   factory DisplayInterests.fromDocument(DocumentSnapshot doc) {
+    final d = doc.data() as Map;
     return DisplayInterests(
-      id: doc.data()!['id'],
-      title: doc.data()!['title'],
-      type: doc.data()!['type'],
+      id: d['id'],
+      title: d['title'],
+      type: d['type'],
     );
   }
 }

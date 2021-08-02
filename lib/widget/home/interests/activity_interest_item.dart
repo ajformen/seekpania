@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:challenge_seekpania/models/user_account.dart';
 
-// import 'package:challenge_seekpania/widget/home/face_to_face.dart';
 import 'package:challenge_seekpania/widget/home/dummy/face_to_face.dart';
 
 class ActivityInterestItem extends StatefulWidget {
@@ -31,22 +30,16 @@ class _ActivityInterestItemState extends State<ActivityInterestItem> {
             padding: EdgeInsets.only(left: 10.0),
             child: Text(
               widget.interest,
-              // style: TextStyle(
-              //   color: Color(0xffff3366),
-              // ),
             ),
           ),
           onTap: () {
             print(widget.id);
             print(widget.interest);
             print(widget.type);
-            // Navigator.of(context).pushNamed(FaceToFace.routeName, arguments: widget.id);
-            // Navigator.pushReplacement(
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    // FaceToFace(interestID: widget.id, interest: widget.interest, type: widget.type)
                 FaceToFace(interestID: widget.id, interest: widget.interest, type: widget.type)
               )
             );

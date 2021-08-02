@@ -1,13 +1,9 @@
 import 'package:flash/flash.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:country_list_pick/country_list_pick.dart';
-// import 'package:flutter_country_picker/flutter_country_picker.dart';
-import 'package:challenge_seekpania/page/header.dart';
 import 'package:challenge_seekpania/models/user_account.dart';
 import 'package:challenge_seekpania/widget/check_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class EditProfile extends StatefulWidget {
   final String? currentUserID, theCountry, thePhoto;
@@ -23,12 +19,9 @@ class _EditProfileState extends State<EditProfile> {
   String? firstName;
   String? lastName;
   String? fullName;
-  // Country country;
   CountryCode? country;
-  // String theCountry;
   String? gender;
   String? status;
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController displayFullNameController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController countryController = TextEditingController();
@@ -52,7 +45,6 @@ class _EditProfileState extends State<EditProfile> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // theCountry = '+213';
     getUser();
   }
 
@@ -61,13 +53,7 @@ class _EditProfileState extends State<EditProfile> {
     user = UserAccount.fromDocument(doc);
     setState(() {
       isLoading = true;
-      // country = Country(asset: user?.country);
-      // country = user.country as Country;
       gender = user.gender;
-      // print("GENDER IS:");
-      // print(gender);
-      // theCountry = user.countryDialCode;
-      // theCountry = '+213';
     });
     photoURL = widget.thePhoto;
     firstName = user.firstName;
@@ -75,11 +61,6 @@ class _EditProfileState extends State<EditProfile> {
     fullName = "$firstName $lastName";
     displayFullNameController.text = fullName!;
     cityController.text = user.city!;
-    // if (country == null) {
-    //   country = country;
-    //   print('COUNTRY IS: ');
-    //   print(country);
-    // }
 
     if (gender == "Non-Binary") {
       isVisible = true;
@@ -94,8 +75,6 @@ class _EditProfileState extends State<EditProfile> {
   validateProfileData() {
 
     setState(() {
-      // gender == null ? _genderValid = false : _genderValid = true;
-      // validate data
       if (gender == null) {
         _genderValid = false;
         isGenderVisible = true;
@@ -137,38 +116,6 @@ class _EditProfileState extends State<EditProfile> {
           )
       );
     }
-
-    // if (_genderValid && _statusValid && _countryValid && _cityValid) {
-    //   usersRef.doc(widget.currentUserID).update({
-    //     "email": user.email,
-    //     "photoUrl": photoURL,
-    //     "firstName": user.firstName,
-    //     "lastName": user.lastName,
-    //     "gender": gender,
-    //     "genderCustom": genderCustomController.text,
-    //     "status": status,
-    //     "city": cityController.text,
-    //     // "country": country.name,
-    //     "country": country.name,
-    //     "countryDialCode": country.dialCode,
-    //     "birthDate": user.birthDate,
-    //     "age": user.age,
-    //   });
-    //
-    //   Fluttertoast.showToast(
-    //       msg: "Profile has been updated!",
-    //       toastLength: Toast.LENGTH_SHORT,
-    //       gravity: ToastGravity.CENTER,
-    //       timeInSecForIosWeb: 1,
-    //       backgroundColor: Colors.blueGrey[400],
-    //       textColor: Colors.white,
-    //       fontSize: 13.0
-    //   );
-    // }
-    //
-    // print('Profile has been updated!');
-    // // SnackBar snackBar = SnackBar(content: Text('Profile has been updated!'));
-    // // _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
   updateProfileData() {
@@ -188,25 +135,12 @@ class _EditProfileState extends State<EditProfile> {
       "age": user.age,
     });
 
-    // Fluttertoast.showToast(
-    //     msg: "Profile has been updated!",
-    //     toastLength: Toast.LENGTH_SHORT,
-    //     gravity: ToastGravity.CENTER,
-    //     timeInSecForIosWeb: 1,
-    //     backgroundColor: Colors.blueGrey[400],
-    //     textColor: Colors.white,
-    //     fontSize: 13.0
-    // );
-
     showFlash(
       context: context,
       duration: const Duration(seconds: 4),
       builder: (context, controller) {
         return Flash.bar(
           controller: controller,
-          // backgroundGradient: LinearGradient(
-          //   colors: [Colors.indigo, Colors.deepPurple],
-          // ),
           backgroundColor: Colors.grey[850]!,
           child: FlashBar(
             message: Text('Profile has been updated',
@@ -219,8 +153,6 @@ class _EditProfileState extends State<EditProfile> {
     );
 
     print('Profile has been updated!');
-    // SnackBar snackBar = SnackBar(content: Text('Profile has been updated!'));
-    // _scaffoldKey.currentState.showSnackBar(snackBar);
     Navigator.of(context).pop();
   }
 
@@ -229,44 +161,19 @@ class _EditProfileState extends State<EditProfile> {
     print('DISPOSE EDIT PROFILE');
   }
 
-  // _showMessageDialog(BuildContext context) => showDialog(
-  //   context: context,
-  //   builder: (context) => AlertDialog(
-  //     title: Text('Are you sure?'),
-  //     content: Text('Do you want to update your profile?'),
-  //     actions: [
-  //       FlatButton(
-  //         child: Text('Yes'),
-  //         onPressed: ,
-  //       )
-  //     ],
-  //   )
-  // );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: header(context,
-      //   titleText: 'Edit Profile',
-      // ),
       appBar: AppBar(
-        // backgroundColor: Colors.white,
         title: Center(
           child: Text(
             "Edit Profile",
             style: TextStyle(
-              // color: Colors.deepPurple,
             ),
           ),
         ),
         actions: <Widget>[
           IconButton(
-            // onPressed: () => Navigator.pushReplacement(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => Profile(profileID: user?.id)
-            //     )
-            // ),
             onPressed: () =>
                 Navigator.pop(context),
             icon: Icon(
@@ -285,14 +192,11 @@ class _EditProfileState extends State<EditProfile> {
               child: Form(
                 child: TextFormField(
                   enabled: false,
-                  // initialValue: user.firstName,
-                  // onSaved: (val) => city = val,
                   controller: displayFullNameController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: "My name",
                     labelStyle: TextStyle(fontSize: 15.0),
-                    // hintText: "Must be at least 3 characters",
                   ),
                 ),
               ),
@@ -313,11 +217,9 @@ class _EditProfileState extends State<EditProfile> {
             child: Container(
               child: Form(
                 child: TextFormField(
-                  // onSaved: (val) => city = val,
                   controller: cityController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    // labelText: "City",
                     labelStyle: TextStyle(fontSize: 15.0),
                     hintText: "ex: New York City",
                     errorText: _cityValid ? null : "City is too short",
@@ -336,39 +238,12 @@ class _EditProfileState extends State<EditProfile> {
               ),
             ),
           ),
-          // Container(
-          //   padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 5.0),
-          //   // alignment: Alignment.center,
-          //   child: Card(
-          //     child: Padding(
-          //       padding: EdgeInsets.all(10.0),
-          //       child: SizedBox(
-          //         // width: double.infinity,
-          //         child: CountryPicker(
-          //           // showFlag: true,
-          //           showName: true,
-          //           showDialingCode: true,
-          //           onChanged: (Country _country) {
-          //             setState(() {
-          //               country = _country;
-          //               print(country.name);
-          //               // isCountryVisible = false;
-          //             });
-          //           },
-          //           selectedCountry: country,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
           Container(
             padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 5.0),
-            // alignment: Alignment.center,
             child: Card(
               child: Padding(
                 padding: EdgeInsets.all(10.0),
                 child: SizedBox(
-                  // width: double.infinity,
                   child: CountryListPick(
                     // initialSelection: 'PILI NA UY',
                     initialSelection: widget.theCountry,
@@ -476,7 +351,6 @@ class _EditProfileState extends State<EditProfile> {
                   maintainState: false,
                   child: Form(
                     child: TextFormField(
-                      // onSaved: (val) => city = val,
                       controller: genderCustomController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),

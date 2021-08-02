@@ -20,7 +20,6 @@ class MoviesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final gamesData = Provider.of<Games>(context);
     print('rebuilding...');
     return Scaffold(
       appBar: AppBar(
@@ -45,13 +44,6 @@ class MoviesScreen extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.edit),
                                   onPressed: () {
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (context) =>
-                                    //             EditGameScreen(arguments: id)
-                                    //     )
-                                    // );
                                     print('MOVIE ID SEARCH:');
                                     print(movie.id);
                                     Navigator.of(context).pushNamed(EditMoviesScreen.routeName, arguments: movie.id);

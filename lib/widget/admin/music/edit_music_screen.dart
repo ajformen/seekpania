@@ -47,7 +47,6 @@ class _EditMusicScreenState extends State<EditMusicScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      // gameId IS NULL FIX THIS!
       final musicId = ModalRoute.of(context)!.settings.arguments as String;
       if (musicId != null) {
         _editedMusic = Provider.of<Musics>(context, listen: false).findById(musicId);

@@ -1,14 +1,15 @@
+import 'package:challenge_seekpania/widget/emergency/emergency_screen.dart';
 import 'package:challenge_seekpania/widget/points/points_screen.dart';
+import 'package:challenge_seekpania/widget/safety/chaperone.dart';
+import 'package:challenge_seekpania/widget/settings/settings.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash/flash.dart';
 import 'package:challenge_seekpania/widget/check_user.dart';
 import 'package:challenge_seekpania/widget/profile.dart';
 import 'package:challenge_seekpania/models/user_account.dart';
 import 'package:challenge_seekpania/page/home_page.dart';
-import 'package:challenge_seekpania/provider/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -29,7 +30,6 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> {
-  // final String currentUserID = currentUser?.id;
   final user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -42,7 +42,6 @@ class _AccountState extends State<Account> {
     print(widget.accountID);
   }
 
-  // DO NOT DELETE THIS, THIS IS CRUCIAL!
   void dispose() {
     super.dispose();
     print('DISPOSE ACCOUNT');
@@ -56,22 +55,17 @@ class _AccountState extends State<Account> {
   logout() async {
     print('SIGN OUT NA');
     await googleSignIn.signOut();
-    // FirebaseAuth.instance.signOut();
 
     FirebaseAuth auth = FirebaseAuth.instance;
     await auth.signOut();
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomePage()),
             (Route<dynamic> route) => false);
-    // Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
     showFlash(
         context: context,
         duration: const Duration(seconds: 4),
         builder: (context, controller) {
           return Flash.bar(
             controller: controller,
-            // backgroundGradient: LinearGradient(
-            //   colors: [Colors.indigo, Colors.deepPurple],
-            // ),
             backgroundColor: Colors.grey[850]!,
             child: FlashBar(
               message: Text('Logout successful',
@@ -131,16 +125,26 @@ class _AccountState extends State<Account> {
         context, MaterialPageRoute(builder: (context) => Profile(profileID: currentUser.id!,)));
   }
 
-  // buildAccount() {
-  //   return
-  // }
+  addContact() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ChaperoneScreen(accountID: currentUser.id!,)));
+  }
+
+  emergencyContact() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => EmergencyScreen(accountID: currentUser.id!,)));
+  }
+
+  viewSettings() async {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => SettingsScreen(accountID: currentUser.id!,)));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: FutureBuilder<DocumentSnapshot>(
           future: usersRef.doc(widget.accountID).get(),
-          // future: usersRef.doc(user.uid).get(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return buildLoading();
@@ -179,10 +183,6 @@ class _AccountState extends State<Account> {
                                     onTap: viewProfile,
                                     child: Container(
                                       height: 30.0,
-                                      // decoration: BoxDecoration(
-                                      //   color: Colors.indigo,
-                                      //   borderRadius: BorderRadius.circular(7.0),
-                                      // ),
                                       child: Text(
                                         "View Profile",
                                         style: TextStyle(
@@ -225,20 +225,20 @@ class _AccountState extends State<Account> {
                         Divider(color: Color(0xff9933ff)),
                         ListTile(
                           leading: Icon(Icons.person_add, color: Colors.deepPurple),
-                          title: Text('Safety Contact', style: TextStyle(color: Colors.grey[800]),),
-                          onTap: () {},
+                          title: Text('My Chaperone', style: TextStyle(color: Colors.grey[800]),),
+                          onTap: () {addContact();},
+                        ),
+                        Divider(color: Color(0xff9933ff)),
+                        ListTile(
+                          leading: Icon(Icons.warning, color: Colors.deepPurple),
+                          title: Text('Emergency Contact', style: TextStyle(color: Colors.grey[800]),),
+                          onTap: () {emergencyContact();},
                         ),
                         Divider(color: Color(0xff9933ff)),
                         ListTile(
                           leading: Icon(Icons.settings, color: Colors.deepPurple),
                           title: Text('Settings', style: TextStyle(color: Colors.grey[800]),),
-                          onTap: () {},
-                        ),
-                        Divider(color: Color(0xff9933ff)),
-                        ListTile(
-                          leading: Icon(Icons.build, color: Colors.deepPurple),
-                          title: Text('Manage', style: TextStyle(color: Colors.grey[800]),),
-                          onTap: () {manage();},
+                          onTap: () {viewSettings();},
                         ),
                         Divider(color: Color(0xff9933ff)),
                         ListTile(
@@ -246,7 +246,6 @@ class _AccountState extends State<Account> {
                           title: Text('Logout', style: TextStyle(color: Colors.grey[800]),),
                           onTap: () {logout();},
                         ),
-                        // Divider(color: Color(0xff9933ff)),
                       ],
                     ),
                   ),

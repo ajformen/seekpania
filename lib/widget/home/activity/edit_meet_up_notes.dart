@@ -89,10 +89,9 @@ class _EditMeetUpNotesState extends State<EditMeetUpNotes> {
           ),
           maxLines: 13,
           keyboardType: TextInputType.multiline,
-          // focusNode: _editNotesFocusNode,
           validator: (value) {
             if (value!.isEmpty) {
-              return 'Please enter location.';
+              return 'Please enter some notes.';
             }
 
             return null;

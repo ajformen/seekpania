@@ -21,9 +21,9 @@ class SelectReportUser with ChangeNotifier {
   });
 
   factory SelectReportUser.fromDocument(DocumentSnapshot doc) {
-    final d = doc.data();
+    final d = doc.data() as Map;
     return SelectReportUser(
-      id: d!['id'],
+      id: d['id'],
       feedback: d['feedback'],
       reportedUserId: d['reportedUserId'],
       reportedUserName: d['reportedUserName'],

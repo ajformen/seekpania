@@ -1,4 +1,4 @@
-// import 'dart:async';
+import 'package:challenge_seekpania/widget/home/activity/edit_meet_up_notes.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +21,16 @@ class SetLocationNotes extends StatefulWidget {
   final String? dateFormat;
   final String? timeFormat;
 
-  SetLocationNotes({this.searchID, this.interestName, this.searchType, this.caption, this.companionType, this.participants, this.scheduleType, this.dateFormat, this.timeFormat});
+  SetLocationNotes({
+      this.searchID,
+      this.interestName,
+      this.searchType,
+      this.caption,
+      this.companionType,
+      this.participants,
+      this.scheduleType,
+      this.dateFormat,
+      this.timeFormat});
 
   @override
   _SetLocationNotesState createState() => _SetLocationNotesState();
@@ -33,10 +42,6 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
 
   String? location;
   String? notes;
-
-  TextEditingController notesController = TextEditingController();
-
-  final _form = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -61,6 +66,7 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
       meetUpType: 'Face to Face',
       companionType: widget.companionType,
       participants: widget.participants,
+      scheduleType: widget.scheduleType,
       scheduleDate: widget.dateFormat,
       scheduleTime: widget.timeFormat,
       location: location,
@@ -68,20 +74,20 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
       notes: notes,
     );
 
-    _form.currentState!.save();
-
     print(activityID);
     print(widget.interestName);
     print(widget.caption);
     print(widget.companionType);
     print(widget.participants);
+    print(widget.scheduleType);
     print(widget.dateFormat);
     print(widget.timeFormat);
     print(location);
     print(notes);
     print('THIS IS IT!');
 
-    await Provider.of<Activities>(context, listen: false).createActivity(_editedActivity);
+    await Provider.of<Activities>(context, listen: false)
+        .createActivity(_editedActivity);
 
     activityID = Uuid().v4();
 
@@ -89,10 +95,10 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-            // ActivitySearch(searchID: widget.interestID, searchType: widget.type, caption: caption, participants: participants)
-            ActivitySearch(searchID: widget.searchID!, searchType: widget.searchType!, activity: _editedActivity)
-        )
-    );
+                ActivitySearch(
+                    searchID: widget.searchID!,
+                    searchType: widget.searchType!,
+                    activity: _editedActivity)));
   }
 
   buildNow() {
@@ -134,15 +140,11 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
           Container(
             padding: EdgeInsets.only(top: 50.0),
             child: GestureDetector(
-              onTap: () async{
-                String dataFromSetLocation = await Navigator.push(context, MaterialPageRoute(builder: (context) => SetLocation()));
+              onTap: () async {
+                String dataFromSetLocation = await Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SetLocation()));
                 setState(() {
                   location = dataFromSetLocation;
-                  // if (location == '') {
-                  //   isLocation = true;
-                  // } else {
-                  //   isLocation = false;
-                  // }
                 });
               },
               child: Center(
@@ -153,9 +155,6 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
                       height: 70.0,
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        // border: Border.all(
-                        //   color: Colors.deepPurple[900],
-                        // )
                         color: Colors.deepPurple[50],
                       ),
                       child: Row(
@@ -173,7 +172,6 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  // isLocation ? noLocation() :
                                   RichText(
                                     overflow: TextOverflow.ellipsis,
                                     text: TextSpan(
@@ -183,7 +181,6 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
                                       ),
                                       children: [
                                         TextSpan(
-                                          // text: '${_address?.addressLine?? '-'}',
                                           text: location,
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -212,44 +209,73 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
               ),
             ),
           ),
+          // ---------------
           Container(
-            padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 50.0),
-            child: Center(
-              child: Container(
-                width: 300.0,
-                // height: 70.0,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  // border: Border.all(
-                  //   color: Colors.deepPurple[900],
-                  // )
-                  color: Colors.deepPurple[50],
-                ),
-                child: Form(
-                  key: _form,
-                  child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Notes for your companion on how to find you.',
-                        hintStyle: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            fontSize: 14.0
-                        ),
+            padding: EdgeInsets.only(top: 50.0),
+            child: GestureDetector(
+              onTap: () async {
+                String dataFromNotes = await Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EditMeetUpNotes()));
+                setState(() {
+                  notes = dataFromNotes;
+                });
+              },
+              child: Center(
+                child: Column(
+                  children: [
+                    Container(
+                      width: 300.0,
+                      height: 70.0,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurple[50],
                       ),
-                      maxLines: 13,
-                      keyboardType: TextInputType.multiline,
-                      // focusNode: _editNotesFocusNode,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter location.';
-                        }
-
-                        return null;
-                      },
-                      controller: notesController,
-                      onSaved: (value) {
-                        notes = value;
-                      }
-                  ),
+                      child: Row(
+                        children: [
+                          Container(
+                            child: Icon(
+                              Icons.edit,
+                              color: Colors.deepPurple,
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(left: 15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                RichText(
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.black,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: notes,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                // SizedBox(height: 15.0,),
+                                Text(
+                                  'Add meet-up notes (optional)',
+                                  style: TextStyle(
+                                    fontSize: 11.0,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -271,7 +297,6 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    // _submit();
                   },
                   icon: Icon(
                     Icons.arrow_back_sharp,
@@ -288,7 +313,6 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
                     ),
                   ),
                   onTap: () {
-                    // _isSubmit();
                     _submit();
                   },
                 ),
@@ -298,15 +322,11 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
           Container(
             padding: EdgeInsets.only(top: 50.0),
             child: GestureDetector(
-              onTap: () async{
-                String dataFromSetLocation = await Navigator.push(context, MaterialPageRoute(builder: (context) => SetLocation()));
+              onTap: () async {
+                String dataFromSetLocation = await Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SetLocation()));
                 setState(() {
                   location = dataFromSetLocation;
-                  // if (location == '') {
-                  //   isLocation = true;
-                  // } else {
-                  //   isLocation = false;
-                  // }
                 });
               },
               child: Center(
@@ -317,9 +337,6 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
                       height: 70.0,
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        // border: Border.all(
-                        //   color: Colors.deepPurple[900],
-                        // )
                         color: Colors.deepPurple[50],
                       ),
                       child: Row(
@@ -336,7 +353,6 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                // isLocation ? noLocation() :
                                 RichText(
                                   overflow: TextOverflow.ellipsis,
                                   text: TextSpan(
@@ -346,7 +362,6 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
                                     ),
                                     children: [
                                       TextSpan(
-                                        // text: '${_address?.addressLine?? '-'}',
                                         text: location,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -374,44 +389,73 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
               ),
             ),
           ),
+          // ---------------------------
           Container(
-            padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 50.0),
-            child: Center(
-              child: Container(
-                width: 300.0,
-                // height: 70.0,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  // border: Border.all(
-                  //   color: Colors.deepPurple[900],
-                  // )
-                  color: Colors.deepPurple[50],
-                ),
-                child: Form(
-                  key: _form,
-                  child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Notes for your companion on how to find you.',
-                        hintStyle: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            fontSize: 14.0
-                        ),
+            padding: EdgeInsets.only(top: 50.0),
+            child: GestureDetector(
+              onTap: () async {
+                String dataFromNotes = await Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EditMeetUpNotes()));
+                setState(() {
+                  notes = dataFromNotes;
+                });
+              },
+              child: Center(
+                child: Column(
+                  children: [
+                    Container(
+                      width: 300.0,
+                      height: 70.0,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurple[50],
                       ),
-                      maxLines: 13,
-                      keyboardType: TextInputType.multiline,
-                      // focusNode: _editNotesFocusNode,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter location.';
-                        }
-
-                        return null;
-                      },
-                      controller: notesController,
-                      onSaved: (value) {
-                        notes = value;
-                      }
-                  ),
+                      child: Row(
+                        children: [
+                          Container(
+                            child: Icon(
+                              Icons.edit,
+                              color: Colors.deepPurple,
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(left: 15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                RichText(
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.black,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: notes,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                // SizedBox(height: 15.0,),
+                                Text(
+                                  'Add meet-up notes (optional)',
+                                  style: TextStyle(
+                                    fontSize: 11.0,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -433,6 +477,4 @@ class _SetLocationNotesState extends State<SetLocationNotes> {
       ),
     );
   }
-
-
 }

@@ -79,7 +79,6 @@ class _ReportUserState extends State<ReportUser> {
               icon: Icon(
                 Icons.arrow_back_sharp,
                 size: 30.0,
-                // color: Color(0xffff3366),
                 color: Colors.deepPurple[900],
               ),
             ),
@@ -130,7 +129,6 @@ class _ReportUserState extends State<ReportUser> {
             ),
             maxLines: 3,
             keyboardType: TextInputType.multiline,
-            // focusNode: _editNotesFocusNode,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'Please enter your feedback.';

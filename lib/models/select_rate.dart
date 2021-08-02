@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 
 class SelectRate with ChangeNotifier {
   final String? id;
-  final int? rate;
+  final double? rate;
   final String? feedback;
 
   SelectRate({
@@ -13,9 +13,9 @@ class SelectRate with ChangeNotifier {
   });
 
   factory SelectRate.fromDocument(DocumentSnapshot doc) {
-    final d = doc.data();
+    final d = doc.data() as Map;
     return SelectRate(
-      id: d!['id'],
+      id: d['id'],
       rate: d['rate'],
       feedback: d['feedback'],
     );

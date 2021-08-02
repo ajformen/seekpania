@@ -20,7 +20,6 @@ class GamesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final gamesData = Provider.of<Games>(context);
     print('rebuilding...');
     return Scaffold(
       appBar: AppBar(
@@ -45,13 +44,6 @@ class GamesScreen extends StatelessWidget {
                                   IconButton(
                                     icon: Icon(Icons.edit),
                                     onPressed: () {
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //         builder: (context) =>
-                                      //             EditGameScreen(arguments: id)
-                                      //     )
-                                      // );
                                       print('GAME ID SEARCH:');
                                       print(game.id);
                                       Navigator.of(context).pushNamed(EditGameScreen.routeName, arguments: game.id);
@@ -82,13 +74,6 @@ class GamesScreen extends StatelessWidget {
                 Icons.add
             ),
             onPressed: () {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) =>
-              //             EditGameScreen()
-              //     )
-              // );
               Navigator.of(context).pushNamed(EditGameScreen.routeName);
             },
           ),

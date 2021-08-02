@@ -3,21 +3,14 @@ import 'package:challenge_seekpania/widget/select_interest_overview.dart';
 import 'package:challenge_seekpania/widget/edit_profile.dart';
 import 'package:challenge_seekpania/models/user_account.dart';
 import 'package:challenge_seekpania/page/header.dart';
-import 'package:challenge_seekpania/page/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:challenge_seekpania/provider/google_sign_in.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 
 import 'package:challenge_seekpania/widget/interest_box.dart';
 
 import 'package:challenge_seekpania/provider/interest.dart';
-import 'package:challenge_seekpania/provider/selections/games.dart';
-import 'package:challenge_seekpania/provider/selections/live_events.dart';
 
 import 'check_user.dart';
 
@@ -42,40 +35,6 @@ class _ProfileState extends State<Profile> {
 
   final user = FirebaseAuth.instance.currentUser;
 
-  var _isInit = true;
-  var _isLoading = false;
-
-  // logout() async {
-  //   print('SIGN OUT NA');
-  //   await googleSignIn.signOut();
-  //   FirebaseAuth.instance.signOut();
-  //
-  //   Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-  // }
-
-  // @override
-  // void didChangeDependencies() {
-  //   // print('VIEW INTEREST');
-  //   if (_isInit) {
-  //     setState(() {
-  //       _isLoading = true;
-  //     });
-  //     Provider.of<Games>(context).fetchGameInterests().then((_) {
-  //       setState(() {
-  //         _isLoading = false;
-  //       });
-  //     });
-  //     Provider.of<LiveEvents>(context).fetchLiveEventInterests().then((_) {
-  //       setState(() {
-  //         _isLoading = false;
-  //       });
-  //     });
-  //   }
-  //   _isInit = false;
-  //
-  //   super.didChangeDependencies();
-  // }
-
   void refreshData() {
     id++;
   }
@@ -90,19 +49,10 @@ class _ProfileState extends State<Profile> {
   Widget buildLoading() => Center(child: CircularProgressIndicator());
 
   editInterest() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) =>
-    //         SelectInterestOverview()
-    //   )
-    // ).then(onGoBack);
     Navigator.of(context).pushNamed(SelectInterestOverview.routeName).then(onGoBack);
   }
 
   Future<void> _refreshInterests() async {
-    // await Provider.of<Games>(context, listen: false).fetchGameInterests();
-    // await Provider.of<LiveEvents>(context, listen: false).fetchLiveEventInterests();
     await Provider.of<Interest>(context, listen: false).fetchCurrentUserInterests(user!.uid);
   }
 
@@ -128,17 +78,8 @@ class _ProfileState extends State<Profile> {
   }
 
   viewInterest() {
-    // final games = Provider.of<Games>(context, listen: false).gameItems.map((g) => InterestBox(g.title)).toList();
-    // final liveEvents = Provider.of<LiveEvents>(context, listen: false).eventItems.map((g) => InterestBox(g.title)).toList();
-    // final interests = games + liveEvents;
     final interests = Provider.of<Interest>(context, listen: false).currentUserInterests.map((g) => InterestBox(g.title!)).toList();
 
-    // return _isLoading ? buildLoading() : Wrap(
-    //   spacing: 8,
-    //   runSpacing: 8,
-    //   // direction: Axis.horizontal,
-    //     children: interests,
-    // );
     return interests.length == 0 ? noInterests() : Wrap(
       spacing: 8,
       runSpacing: 8,
@@ -146,39 +87,6 @@ class _ProfileState extends State<Profile> {
       children: interests,
     );
   }
-
-  // viewInterest() {
-  //   final interestData = Provider.of<Interest>(context);
-  //
-  //   return ChangeNotifierProvider(
-  //     create: (context) => Interest(),
-  //     //   child: InterestBox(
-  //     //   // text: 'action games',
-  //     //   // textColor: Color(0xff9933ff),
-  //     //   // backgroundColor: Color(0xfff2e5ff),
-  //     // ),
-  //     child: Flexible(
-  //       child: ListView.builder(
-  //         // scrollDirection: Axis.horizontal,
-  //         itemCount: interestData.items.length,
-  //         shrinkWrap: true,
-  //         itemBuilder: (ctx, i) => Wrap(
-  //           // spacing: 8,
-  //           // runSpacing: 8,
-  //           // direction: Axis.horizontal,
-  //           children: [
-  //             InterestBox(
-  //               interestData.items.values.toList()[i].id,
-  //               interestData.items.keys.toList()[i],
-  //               interestData.items.values.toList()[i].title,
-  //             ),
-  //             SizedBox(height: 30,),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   editProfile() {
     bool isProfileOwner = currentUser!.id == widget.profileID;
@@ -203,30 +111,18 @@ class _ProfileState extends State<Profile> {
           return buildLoading();
         }
         currentUser = UserAccount.fromDocument(snapshot.data!);
-        // age = currentYear.year - int.parse(currentUser.birthDate);
-        // print(DateFormat("y").format(currentUser.birthDate));
-        // formatBirthDate = DateTime.parse(currentUser.birthDate);
-        // age = currentYear.year - formatBirthDate.year;
-        // dateOfBirth = DateFormat('MMMM-dd-yyyy').format(DateTime.parse(currentUser.birthDate));
         if (currentUser!.gender == 'Non-Binary') {
           gender = currentUser!.genderCustom;
         } else {
           gender = currentUser!.gender;
         }
         return Container(
-          // alignment: Alignment.center,
-          // color: Colors.blueGrey.shade900,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(15.0, 5.0, 0, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
-              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Text(
-                //   'Logged In',
-                //   style: TextStyle(color: Colors.black),
-                // ),
                 SizedBox(height: 25.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -247,7 +143,6 @@ class _ProfileState extends State<Profile> {
                         Row(
                           children: <Widget>[
                             Text(
-                              // '$age, ',
                               currentUser!.age.toString(),
                               style: TextStyle(
                                 fontSize: 13.0,
@@ -328,10 +223,6 @@ class _ProfileState extends State<Profile> {
                       child: GestureDetector(
                         onTap: editInterest,
                         child: Container(
-                          // decoration: BoxDecoration(
-                          //   color: Colors.indigo,
-                          //   borderRadius: BorderRadius.circular(7.0),
-                          // ),
                           child: Text(
                             "Edit",
                             style: TextStyle(
@@ -345,76 +236,7 @@ class _ProfileState extends State<Profile> {
                     ),
                   ],
                 ),
-                // Container(
-                //   padding: EdgeInsets.only(top: 0),
-                //   child: RaisedButton(
-                //     onPressed: viewInterests,
-                //     child: Text(
-                //       "View Interests",
-                //       style: TextStyle(
-                //         color: Theme.of(context).primaryColor,
-                //         fontSize: 15.0,
-                //         fontWeight: FontWeight.bold,
-                //       ),
-                //     ),
-                //   ),
-                // ),
                 SizedBox(height: 8),
-                // Consumer<Interest>(
-                //   builder: (_, inter, ch) =>
-                //       Wrap(
-                //         spacing: 8,
-                //         runSpacing: 8,
-                //         children: <Widget>[
-                //           // InterestBox(
-                //           //   text: 'action games',
-                //           //   textColor: Color(0xff9933ff),
-                //           //   backgroundColor: Color(0xfff2e5ff),
-                //           // ),
-                //           // InterestBox(
-                //           //   text: 'first-person shooter games',
-                //           //   textColor: Color(0xff9933ff),
-                //           //   backgroundColor: Color(0xfff2e5ff),
-                //           // ),
-                //           // InterestBox(
-                //           //   text: 'nightclubs',
-                //           //   textColor: Color(0xff9933ff),
-                //           //   backgroundColor: Color(0xfff2e5ff),
-                //           // ),
-                //           // InterestBox(
-                //           //   text: 'Music festival',
-                //           //   textColor: Color(0xff9933ff),
-                //           //   backgroundColor: Color(0xfff2e5ff),
-                //           // ),
-                //           // InterestBox(
-                //           //   text: 'anime movies',
-                //           //   textColor: Color(0xff9933ff),
-                //           //   backgroundColor: Color(0xfff2e5ff),
-                //           // ),
-                //           // InterestBox(
-                //           //   text: 'coffee',
-                //           //   textColor: Color(0xff9933ff),
-                //           //   backgroundColor: Color(0xfff2e5ff),
-                //           // ),
-                //           // InterestBox(
-                //           //   text: 'fries',
-                //           //   textColor: Color(0xff9933ff),
-                //           //   backgroundColor: Color(0xfff2e5ff),
-                //           // ),
-                //           // InterestBox(
-                //           //   text: 'pizza',
-                //           //   textColor: Color(0xff9933ff),
-                //           //   backgroundColor: Color(0xfff2e5ff),
-                //           // ),
-                //           // InterestBox(
-                //           //   text: 'camping',
-                //           //   textColor: Color(0xff9933ff),
-                //           //   backgroundColor: Color(0xfff2e5ff),
-                //           // ),
-                //           viewInterest(),
-                //         ],
-                //       ),
-                // ),
                 interest(),
                 // viewInterest(),
                 SizedBox(height: 15),
@@ -434,10 +256,6 @@ class _ProfileState extends State<Profile> {
                       child: GestureDetector(
                         onTap: editProfile,
                         child: Container(
-                          // decoration: BoxDecoration(
-                          //   color: Colors.indigo,
-                          //   borderRadius: BorderRadius.circular(7.0),
-                          // ),
                           child: Text(
                             "Edit",
                             style: TextStyle(
@@ -554,16 +372,6 @@ class _ProfileState extends State<Profile> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                // SizedBox(height: 40),
-                // ElevatedButton(
-                //   onPressed: () {
-                //     // final provider =
-                //     // Provider.of<GoogleSignInProvider>(context, listen: false);
-                //     // provider.logout();
-                //     logout();
-                //   },
-                //   child: Text('Logout'),
-                // ),
               ],
             ),
           ),

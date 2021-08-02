@@ -19,10 +19,10 @@ class SelectMovies with ChangeNotifier {
   });
 
   factory SelectMovies.fromDocument(DocumentSnapshot doc) {
+    final d = doc.data() as Map;
     return SelectMovies(
-      id: doc.data()!['id'],
-      title: doc.data()!['title'],
-      // isSelected: doc.data()['isSelected'],
+      id: d['id'],
+      title: d['title'],
       selects: doc['selects'],
     );
   }
@@ -34,7 +34,6 @@ class SelectMovies with ChangeNotifier {
     String currentUserID = currentUser.id!;
     final moviesRef = FirebaseFirestore.instance.collection('movies');
     final usersRef = FirebaseFirestore.instance.collection('users');
-    // isSelected = !isSelected;
     isSelected = selects[currentUserID] == true;
     try {
       if (isSelected!) {

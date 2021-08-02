@@ -19,19 +19,13 @@ class SelectGames with ChangeNotifier {
   });
 
   factory SelectGames.fromDocument(DocumentSnapshot doc) {
+    final d = doc.data() as Map;
     return SelectGames(
-      id: doc.data()!['id'],
-      title: doc.data()!['title'],
-      // isSelected: doc.data()['isSelected'],
+      id: d['id'],
+      title: d['title'],
       selects: doc['selects'],
     );
   }
-
-  // factory SelectGames.fromDocument2(DocumentSnapshot doc) {
-  //   return SelectGames(
-  //     title: doc.data()['title'],
-  //   );
-  // }
 
   Future<void> toggleSelectedStatus() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -40,14 +34,8 @@ class SelectGames with ChangeNotifier {
     String currentUserID = currentUser.id!;
     final gamesRef = FirebaseFirestore.instance.collection('games');
     final usersRef = FirebaseFirestore.instance.collection('users');
-    // isSelected = !isSelected;
     isSelected = selects[currentUserID] == true;
     try {
-      // await gamesRef.doc(currentUser.id).collection('gamesSelected').doc(id).set({
-      //   'title': title,
-      //   'isSelected': isSelected,
-      // });
-      // if = true & false; else if = false & true --- IS WORKING FINE EXCEPT THE FIRST TAP THE TOGGLE WONT SELECT BUT VALUE TRUE FALSE IS CORRECT
       if (isSelected!) {
         await gamesRef.doc(id).update({
           'selects.$currentUserID': false,
@@ -66,17 +54,6 @@ class SelectGames with ChangeNotifier {
           'type': 'games',
         });
       }
-
-      // 1) Get usersRef
-      // 2) Create [interests] > [games]
-      // IF (isSelected)
-      // 3) usersRef.[interests].[games].set({
-      //      game_id: id,
-      //      title: title
-      // })
-      // else if (!IsSelected) {
-      //     remove the game nga naa sa [interests].[games]
-      // }
       notifyListeners();
     } catch (error) {
       print(error);

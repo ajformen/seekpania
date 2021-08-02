@@ -47,7 +47,6 @@ class _EditGameScreenState extends State<EditGameScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      // gameId IS NULL FIX THIS!
       final gameId = ModalRoute.of(context)!.settings.arguments as String;
       if (gameId != null) {
         _editedGame = Provider.of<Games>(context, listen: false).findById(gameId);

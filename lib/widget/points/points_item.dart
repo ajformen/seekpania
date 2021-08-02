@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 
 class PointsItem extends StatefulWidget {
   final String id;
-  final int rate;
+  final double rate;
+  final String feedback;
 
-  PointsItem(this.id, this.rate);
+  PointsItem(this.id, this.rate, this.feedback);
 
   @override
   _PointsItemState createState() => _PointsItemState();
 }
 
 class _PointsItemState extends State<PointsItem> {
+  String? formatDate;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -40,6 +42,12 @@ class _PointsItemState extends State<PointsItem> {
                   ),
                 ],
               ),
+            ),
+          ),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: Text(
+              widget.feedback,
             ),
           ),
           onTap: () {

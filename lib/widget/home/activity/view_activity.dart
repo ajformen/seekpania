@@ -1,4 +1,5 @@
-import 'dart:async';
+import 'package:challenge_seekpania/services/message_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +8,9 @@ import 'package:challenge_seekpania/models/select_invite.dart';
 import 'package:challenge_seekpania/models/user_account.dart';
 
 import 'package:provider/provider.dart';
-import 'package:challenge_seekpania/provider/invitations.dart';
 
 import 'package:challenge_seekpania/widget/home/activity/view_users_profile.dart';
 import 'package:challenge_seekpania/widget/home/invitations/invitation_details.dart';
-import 'package:challenge_seekpania/widget/home/activity/my_activity.dart';
-import 'package:challenge_seekpania/widget/account.dart';
 
 class ViewActivity extends StatefulWidget {
   final SelectInvite? user;
@@ -25,16 +23,36 @@ class ViewActivity extends StatefulWidget {
 
 class _ViewActivityState extends State<ViewActivity> {
   final user = FirebaseAuth.instance.currentUser;
+  final usersRef = FirebaseFirestore.instance.collection('users');
   late UserAccount currentUser;
   var _editedActivityInvite;
   var _isLoading = false;
+  bool _hasSearched = false;
+  // bool _hasJoined = false;
+  // String _userName = '';
+  late String chatId;
 
-  // @override
-  // void initState() {
-  //   print('ACTIVITY ID');
-  //   print(widget.user.activityID);
-  //   super.initState();
-  // }
+  late QuerySnapshot _searchResultSnapshot;
+
+  @override
+  void initState() {
+    super.initState();
+    _initiateSearch();
+  }
+
+  void _initiateSearch() async {
+    var snapshot = await MessageService().searchChat(widget.user!.caption!);
+    _searchResultSnapshot = snapshot;
+    setState(() {
+      _isLoading = false;
+      _hasSearched = true;
+    });
+    int index = 0;
+    var chats = _searchResultSnapshot.docs;
+    var chat = chats[index];
+    chatId = chat['chatId'];
+    print(chatId);
+  }
 
   void buildViewScreen() => showModalBottomSheet(
     shape: RoundedRectangleBorder(
@@ -57,7 +75,6 @@ class _ViewActivityState extends State<ViewActivity> {
               'View Profile',
             ),
             onTap: () => {
-              // Navigator.of(context).pop(context),
               Navigator.push(context, MaterialPageRoute(builder: (_) {
                 return ViewUsersProfile(userId: widget.user!.creatorId!);
               }))
@@ -84,7 +101,6 @@ class _ViewActivityState extends State<ViewActivity> {
 
   @override
   Widget build(BuildContext context) {
-    // currentUser = UserAccount(id: user.uid);
     final invite = Provider.of<SelectInvite>(context);
     return Scaffold(
       body: SafeArea(
@@ -100,7 +116,6 @@ class _ViewActivityState extends State<ViewActivity> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.network(
-                      // 'https://i.pinimg.com/originals/40/f2/2d/40f22d2f7b06086fe24527467bf0a8af.jpg',
                       widget.user!.creatorPhoto!,
                       width: 366,
                       height: 550,
@@ -179,7 +194,6 @@ class _ViewActivityState extends State<ViewActivity> {
                     icon: Icon(
                       Icons.cancel,
                       size: 50.0,
-                      // color: Color(0xfffefefe),
                       color: Theme.of(context).errorColor
                     ),
                   ),
@@ -196,7 +210,9 @@ class _ViewActivityState extends State<ViewActivity> {
                         meetUpType: widget.user!.meetUpType,
                         companionType: widget.user!.companionType,
                         participants: widget.user!.participants,
-                        schedule: widget.user!.schedule,
+                        scheduleType: widget.user!.scheduleType,
+                        scheduleDate: widget.user!.scheduleDate,
+                        scheduleTime: widget.user!.scheduleTime,
                         location: widget.user!.location,
                         notes: widget.user!.notes,
                         creatorId: widget.user!.creatorId,
@@ -206,7 +222,9 @@ class _ViewActivityState extends State<ViewActivity> {
                       );
 
                       invite.pressAccepted(_editedActivityInvite, widget.user!.id, currentUser.id);
-                      // invite.pressAccepted(widget.user.creatorId, widget.user.activityID, widget.user.id, currentUser.id);
+                      DocumentSnapshot doc = await usersRef.doc(currentUser.id).get();
+                      currentUser = UserAccount.fromDocument(doc);
+                      MessageService(uid: user!.uid).joinChat(chatId, widget.user!.caption!, currentUser.firstName!);
 
                       setState(() {
                         _isLoading = false;
@@ -222,7 +240,6 @@ class _ViewActivityState extends State<ViewActivity> {
                           fontSize: 13.0
                       );
 
-                      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyActivity()));
                       Navigator.of(context).pop();
                     },
                     icon: Icon(
@@ -245,11 +262,7 @@ class _ViewActivityState extends State<ViewActivity> {
       child: CircularProgressIndicator(),
     ) : Container(
       child: Container(
-        // decoration: BoxDecoration(
-        //     color: Colors.black.withOpacity(0.5),
-        // ),
         child: Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             IconButton(
               onPressed: () {
@@ -258,7 +271,6 @@ class _ViewActivityState extends State<ViewActivity> {
               icon: Icon(
                 Icons.arrow_back_sharp,
                 size: 30.0,
-                // color: Color(0xfffefefe),
                 color: Colors.deepPurple[900],
               ),
             ),

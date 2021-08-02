@@ -1,8 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-
-import 'package:challenge_seekpania/models/user_account.dart';
 
 class SelectActivity with ChangeNotifier {
   final String? id;
@@ -11,6 +8,7 @@ class SelectActivity with ChangeNotifier {
   final String? meetUpType;
   final String? companionType;
   final int? participants;
+  final String? scheduleType;
   final String? scheduleDate;
   final String? scheduleTime;
   final String? location;
@@ -19,8 +17,7 @@ class SelectActivity with ChangeNotifier {
   final String? creatorId;
   final String? creatorName;
   final String? creatorPhoto;
-  final String? type; // 'invitations', 'messaging', 'reminder' ..
-  // final DateTime timestamp;
+  final String? type;
   final dynamic going;
 
   SelectActivity({
@@ -30,6 +27,7 @@ class SelectActivity with ChangeNotifier {
     this.meetUpType,
     this.companionType,
     this.participants,
+    this.scheduleType,
     this.scheduleDate,
     this.scheduleTime,
     this.location,
@@ -39,19 +37,19 @@ class SelectActivity with ChangeNotifier {
     this.creatorName,
     this.creatorPhoto,
     this.type,
-    // this.timestamp,
     this.going,
   });
 
   factory SelectActivity.fromDocument(DocumentSnapshot doc) {
-    final d = doc.data();
+    final d = doc.data() as Map;
     return SelectActivity(
-      id: d!['id'],
+      id: d['id'],
       caption: d['caption'],
       interestName: d['interestName'],
       meetUpType: d['meetUpType'],
       companionType: d['companionType'],
       participants: d['participants'],
+      scheduleType: d['scheduleType'],
       scheduleDate: d['scheduleDate'],
       scheduleTime: d['scheduleTime'],
       location: d['location'],
@@ -61,7 +59,6 @@ class SelectActivity with ChangeNotifier {
       creatorName: d['creatorName'],
       creatorPhoto: d['creatorPhoto'],
       type: d['type'],
-      // timestamp: d['timestamp'],
       going: d['going'],
     );
   }

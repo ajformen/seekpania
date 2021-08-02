@@ -80,16 +80,7 @@ class _SetLocationState extends State<SetLocation> {
       child: Form(
         key: _form,
         child: TextFormField(
-            // decoration: InputDecoration(
-            //   hintText: 'Notes for your companion on how to find you.',
-            //   hintStyle: TextStyle(
-            //       fontStyle: FontStyle.italic,
-            //       fontSize: 14.0
-            //   ),
-            // ),
-            // maxLines: 2,
             keyboardType: TextInputType.multiline,
-            // focusNode: _editNotesFocusNode,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'Please enter location.';

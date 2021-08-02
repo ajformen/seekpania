@@ -47,7 +47,6 @@ class _EditMoviesScreenState extends State<EditMoviesScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      // gameId IS NULL FIX THIS!
       final movieId = ModalRoute.of(context)!.settings.arguments as String;
       if (movieId != null) {
         _editedMovies = Provider.of<Movies>(context, listen: false).findById(movieId);

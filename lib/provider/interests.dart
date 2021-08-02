@@ -26,27 +26,11 @@ class Interests with ChangeNotifier {
     ),
     SelectInterest(
       id: 'select6',
-      title: 'Relationships',
+      title: 'Outdoors',
     ),
     SelectInterest(
       id: 'select7',
-      title: 'Fitness & Wellness',
-    ),
-    SelectInterest(
-      id: 'select8',
-      title: 'Food & Drink',
-    ),
-    SelectInterest(
-      id: 'select9',
-      title: 'Hobbies & Activities',
-    ),
-    SelectInterest(
-      id: 'select10',
-      title: 'Shopping & Fashion',
-    ),
-    SelectInterest(
-      id: 'select11',
-      title: 'Sports & Outdoors',
+      title: 'Sports',
     ),
   ];
 
@@ -59,7 +43,6 @@ class Interests with ChangeNotifier {
   }
 
   void addInterest() {
-    // _items.add(value);
     notifyListeners();
   }
 }

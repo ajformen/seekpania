@@ -1,3 +1,4 @@
+import 'package:challenge_seekpania/models/select_activity.dart';
 import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
@@ -8,19 +9,10 @@ import 'package:challenge_seekpania/provider/activities.dart';
 import 'package:challenge_seekpania/widget/home/activity/people_going.dart';
 
 class ActivityDetails extends StatefulWidget {
-  final String? id;
-  final String? caption;
-  final String? meetUpType;
-  final String? companionType;
-  final int? participants;
-  final String? schedule;
-  final String? location;
-  final String? notes;
-  final String? creatorId, creatorName, creatorPhoto, type;
+  final SelectActivity? info;
 
-  ActivityDetails({this.id, this.caption, this.meetUpType, this.companionType,
-    this.participants, this.schedule, this.location, this.notes,
-    this.creatorId, this.creatorName, this.creatorPhoto, this.type
+  ActivityDetails({
+    this.info,
   });
 
   @override
@@ -28,6 +20,18 @@ class ActivityDetails extends StatefulWidget {
 }
 
 class _ActivityDetailsState extends State<ActivityDetails> {
+
+  late String displaySched;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.info!.scheduleType == 'NOW') {
+      displaySched = 'Wants to meet you NOW';
+    } else {
+      displaySched = '${widget.info!.scheduleDate!} ${widget.info!.scheduleTime}';
+    }
+  }
 
   display(BuildContext context) {
     return Column(
@@ -50,12 +54,11 @@ class _ActivityDetailsState extends State<ActivityDetails> {
               icon: Icon(
                 Icons.arrow_back_sharp,
                 size: 30.0,
-                // color: Color(0xffff3366),
                 color: Colors.deepPurple[900],
               ),
             ),
             Text(
-              widget.caption!,
+              widget.info!.caption!,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -87,9 +90,6 @@ class _ActivityDetailsState extends State<ActivityDetails> {
                   builder: (ctx, activitiesData, _) => Text(
                     activitiesData.specificActivity.length.toString(),
                     style: TextStyle(
-                      // fontSize: 18,
-                      // fontWeight: FontWeight.bold,
-                      // color: Color(0xff4e4b6f),
                     ),
                   ),
                 ),
@@ -99,12 +99,12 @@ class _ActivityDetailsState extends State<ActivityDetails> {
               ],
             ),
             onTap: () {
-              print(widget.id);
+              print(widget.info!.id);
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          PeopleGoing(creatorId: widget.creatorId!, activityId: widget.id!)
+                          PeopleGoing(creatorId: widget.info!.creatorId!, activityId: widget.info!.id!)
                   )
               );
             }
@@ -121,7 +121,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
                 'Need (',
               ),
               Text(
-                widget.participants.toString(),
+                widget.info!.participants.toString(),
               ),
               Text(
                 ')',
@@ -140,7 +140,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
               ),
               SizedBox(width: 20.0,),
               Text(
-                widget.caption!,
+                widget.info!.caption!,
               ),
             ],
           ),
@@ -153,7 +153,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
               ),
               SizedBox(width: 20.0,),
               Text(
-                widget.schedule!,
+                displaySched,
                 style: TextStyle(
                   color: Theme.of(context).errorColor,
                   fontWeight: FontWeight.bold
@@ -180,9 +180,9 @@ class _ActivityDetailsState extends State<ActivityDetails> {
                           style: TextStyle(
                             color: Colors.lightBlue,
                           ),
-                          text: widget.location,
+                          text: widget.info!.location,
                           recognizer: TapGestureRecognizer()..onTap = () async {
-                            var url = widget.location;
+                            var url = widget.info!.location;
                             if (await canLaunch(url!)) {
                               await launch(url);
                             } else {
@@ -210,7 +210,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
               ),
               SizedBox(width: 20.0,),
               Text(
-                widget.companionType!
+                widget.info!.companionType!
               ),
             ],
           ),
@@ -223,7 +223,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
               ),
               SizedBox(width: 20.0,),
               Text(
-                widget.meetUpType!,
+                widget.info!.meetUpType!,
               ),
             ],
           ),
@@ -236,7 +236,7 @@ class _ActivityDetailsState extends State<ActivityDetails> {
               ),
               SizedBox(width: 20.0,),
               Text(
-                widget.notes!,
+                widget.info!.notes!,
               ),
             ],
           ),

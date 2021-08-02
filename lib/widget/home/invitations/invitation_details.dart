@@ -12,6 +12,17 @@ class InvitationDetails extends StatefulWidget {
 }
 
 class _InvitationDetailsState extends State<InvitationDetails> {
+  late String displaySched;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.user!.scheduleType == 'NOW') {
+      displaySched = 'Wants to meet you NOW';
+    } else {
+      displaySched = '${widget.user!.scheduleDate!} ${widget.user!.scheduleTime}';
+    }
+  }
 
   display(BuildContext context) {
     return Column(
@@ -34,7 +45,6 @@ class _InvitationDetailsState extends State<InvitationDetails> {
               icon: Icon(
                 Icons.arrow_back_sharp,
                 size: 30.0,
-                // color: Color(0xffff3366),
                 color: Colors.deepPurple[900],
               ),
             ),
@@ -103,7 +113,7 @@ class _InvitationDetailsState extends State<InvitationDetails> {
               ),
               SizedBox(width: 20.0,),
               Text(
-                widget.user!.schedule!,
+                displaySched,
                 style: TextStyle(
                     color: Theme.of(context).errorColor,
                     fontWeight: FontWeight.bold

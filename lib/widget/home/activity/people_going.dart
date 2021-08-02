@@ -61,7 +61,6 @@ class _PeopleGoingState extends State<PeopleGoing> {
               icon: Icon(
                 Icons.arrow_back_sharp,
                 size: 30.0,
-                // color: Color(0xffff3366),
                 color: Colors.deepPurple[900],
               ),
             ),
